@@ -1,0 +1,78 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Local configuration and verification ###
+.env
+.env.*
+!.env.example
+.local/
+*.log
+
+### Secrets and machine-specific configuration ###
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+.secrets/
+secrets/
+.mvn/settings.xml
+application-local.properties
+application-local.yml
+application-local.yaml
+
+### Local databases, dumps and runtime artifacts ###
+*.db
+*.sqlite
+*.sqlite3
+*.mv.db
+*.trace.db
+*.dump
+*.hprof
+*.class
+hs_err_pid*
+replay_pid*
+/backups/
+/pgdata/
+
+### OS and temporary editor files ###
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
