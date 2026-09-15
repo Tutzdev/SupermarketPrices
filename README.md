@@ -1,53 +1,101 @@
-Supermarket Prices
+# Supermarket Prices API
 
-API REST para comparar preços de supermercados por cidade e calcular o valor de listas de compras.
+API REST para comparação de preços de supermercados, desenvolvida com **Java 21 e Spring Boot**.
 
-Funcionalidades
+O sistema permite consultar produtos, acompanhar preços por cidade e comparar o valor de listas de compras entre estabelecimentos.
 
-Cadastro e login com autenticação Bearer.
+## Funcionalidades
 
-Consulta de produtos, lojas e histórico de preços.
+- Cadastro e autenticação de usuários
+- Consulta de supermercados e produtos
+- Histórico de preços por produto e loja
+- Criação e gerenciamento de listas de compras
+- Comparação de preços por cidade
+- Cálculo de valores conforme as quantidades da lista
+- Validação de preços expirados e promoções
+- Controle de acesso às listas pelo proprietário
 
-Listas de compras individuais com produtos e quantidades.
+## Tecnologias
 
-Comparação por produto ou lista, considerando validade dos preços e promoções.
+- Java 21
+- Spring Boot
+- Spring Security
+- Spring Data JPA / Hibernate
+- Jakarta Bean Validation
+- PostgreSQL
+- Flyway
+- Maven
+- OpenAPI
 
-Estado atual: backend sem frontend e sem coleta externa ativa. O banco inicia com Rio de Janeiro, Volta Redonda, Barra Mansa e Resende, mas sem lojas, produtos ou preços comerciais. A integração de fontes está descrita em docs/data-sources.md.
+## Estado atual
 
-Stack
+O backend possui a estrutura de catálogo, listas e comparação implementada. A integração com fontes externas de preços ainda não está ativa.
 
-Java 21 · Spring Boot 4.1.1 · Spring Security · Spring Data JPA · PostgreSQL 18 · Flyway · Maven
+O banco inicia com **Rio de Janeiro, Volta Redonda, Barra Mansa e Resende**, sem lojas, produtos ou preços comerciais pré-cadastrados.
 
-Executar localmente
+Detalhes sobre integração em [Fontes de dados](docs/data-sources.md).
 
-Requisitos: JDK 21 e Docker com Compose. Os comandos abaixo usam PowerShell.
+## Executando localmente
 
+Requisitos: **Java 21**, **Git** e **Docker com Compose**.
+
+Clone o projeto:
+
+```bash
 git clone https://github.com/Tutzdev/SupermarketPrices.git
 cd SupermarketPrices
-Copy-Item .env.example .env
+```
 
-Defina DATABASE_PASSWORD no .env e suba o banco:
+Copie `.env.example` para `.env`, preencha `DATABASE_PASSWORD` e inicie o PostgreSQL:
 
+```bash
 docker compose --env-file .env up -d --wait
+```
 
-Configure a aplicação com a mesma senha e execute:
+Configure as variáveis da aplicação. No PowerShell:
 
+```powershell
 $env:SPRING_PROFILES_ACTIVE = 'development'
 $env:DATABASE_URL = 'jdbc:postgresql://localhost:5432/prices'
 $env:DATABASE_USERNAME = 'prices'
-$env:DATABASE_PASSWORD = '<mesma senha do .env>'
+$env:DATABASE_PASSWORD = '<mesma senha configurada no .env>'
+
 .\mvnw.cmd spring-boot:run
+```
 
-O Spring Boot não carrega o .env automaticamente. No Linux/macOS, exporte as mesmas variáveis e use ./mvnw spring-boot:run.
+No Linux ou macOS, exporte as mesmas variáveis e execute `./mvnw spring-boot:run`.
 
-API: http://localhost:8080/api/v1
+O Spring Boot não carrega o `.env` automaticamente. As migrations são aplicadas pelo Flyway na inicialização.
 
-OpenAPI JSON: localhost:8080/v3/api-docs
+## API
 
-Não há página inicial nem Swagger UI. O Flyway aplica as migrations ao iniciar.
+Principais endpoints:
 
-Testes
+```http
+POST /api/v1/auth/register
+POST /api/v1/auth/login
+GET  /api/v1/products
+GET  /api/v1/stores
+GET  /api/v1/prices?productId={id}&storeId={id}
+POST /api/v1/shopping-lists
+GET  /api/v1/comparisons/products?productId={id}&cityId={id}
+GET  /api/v1/comparisons/shopping-lists/{id}?cityId={id}
+```
 
-.\mvnw.cmd test
+Rotas privadas utilizam `Authorization: Bearer <token>`.
 
-Os testes de integração exigem PostgreSQL real: disponibilize initdb e pg_ctl no PATH (ou informe PG_BIN), ou configure TEST_DATABASE_URL, TEST_DATABASE_USERNAME e TEST_DATABASE_PASSWORD para um banco dedicado a testes, com permissão para criar schemas.
+Documentação OpenAPI disponível em **http://localhost:8080/v3/api-docs** durante o desenvolvimento. O projeto não inclui frontend nem Swagger UI.
+
+## Testes
+
+```bash
+./mvnw test
+```
+
+No Windows, utilize `.\mvnw.cmd test`.
+
+Os testes de integração utilizam PostgreSQL real. Disponibilize os binários pelo `PATH` ou `PG_BIN`, ou configure um banco dedicado com `TEST_DATABASE_URL`, `TEST_DATABASE_USERNAME` e `TEST_DATABASE_PASSWORD`.
+
+## Autor
+
+Desenvolvido por [Tutzdev](https://github.com/Tutzdev).
