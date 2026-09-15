@@ -47,4 +47,8 @@ public class DataSource {
         verifiedAt = registration.verifiedAt();
         createdAt = now;
     }
+
+    public void changeEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

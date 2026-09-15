@@ -57,7 +57,7 @@ class BearerTokenFilter extends OncePerRequestFilter {
         }
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(UsernamePasswordAuthenticationToken.authenticated(
-                principal.orElseThrow(), null, List.of()));
+                principal.orElseThrow(), null, List.of(principal.orElseThrow().authority())));
         SecurityContextHolder.setContext(context);
         chain.doFilter(request, response);
     }

@@ -28,7 +28,12 @@ public class OpenApiConfiguration {
         return api -> api.getPaths().forEach((path, item) -> {
             if (path.startsWith("/api/v1/shopping-lists") || path.startsWith("/api/v1/users/")
                     || path.startsWith("/api/v1/comparisons/shopping-lists/")
-                    || path.equals("/api/v1/auth/logout")) {
+                    || path.startsWith("/api/v1/contributions")
+                    || path.startsWith("/api/v1/admin")
+                    || path.startsWith("/api/v1/alerts")
+                    || path.startsWith("/api/v1/notifications")
+                    || path.equals("/api/v1/auth/logout")
+                    || path.equals("/api/v1/auth/email-verifications")) {
                 item.readOperations().forEach(operation -> operation.setSecurity(
                         List.of(new SecurityRequirement().addList("bearerAuth"))));
             }

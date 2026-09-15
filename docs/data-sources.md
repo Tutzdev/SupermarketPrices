@@ -7,7 +7,7 @@ As interfaces `ProductDataProvider`, `StoreDataProvider` e `PriceDataProvider` d
 ## Adicionar uma fonte real
 
 1. Confirme a existência da fonte, a autorização de acesso e o que seus dados realmente representam. Registre a documentação e a URL da origem. Uma rede conhecida não comprova a existência de uma unidade em determinada cidade.
-2. Cadastre a fonte pelo serviço interno `DataSourceService`, com sua identificação e URL verificável. Não há endpoint administrativo ou de escrita pública para dados comerciais.
+2. Cadastre a fonte por `POST /api/v1/admin/sources`, com sua identificação e URL verificável. O endpoint é restrito a administradores, delega ao `DataSourceService` e gera uma entrada de auditoria; não há escrita pública de dados comerciais.
 3. Implemente o provider específico em um pacote de integração. `sourceId()` deve identificar a fonte cadastrada. `ProviderRequest` limita o lote a 100 registros e permite paginação por cursor; o adapter deve respeitar também o limite solicitado.
 4. Configure credenciais externamente e defina timeouts de conexão e leitura. Valide a resposta da origem antes de transformá-la em observações. Falhas técnicas devem ser propagadas ou representadas explicitamente como indisponibilidade pelo contrato do provider, sem convertê-las em uma consulta vazia bem-sucedida.
 5. Persista primeiro os registros necessários de catálogo, pelos serviços internos correspondentes, e somente depois envie observações de preços a `PriceService.appendObservation`. Não faça chamadas externas dentro da transação de persistência.
@@ -63,4 +63,12 @@ Nas listas, cada preço conhecido é multiplicado pela quantidade solicitada. O 
 
 `subtotalKnown` é `null` quando nenhuma linha tem preço. `completeShoppingList` indica que todas as linhas de uma lista não vazia possuem preços utilizáveis; não garante estoque quando a origem o declara desconhecido. Uma lista vazia tem subtotal `null` e nunca é marcada completa.
 
-As lojas são paginadas por nome e ID, com até 100 lojas por requisição. Todos os preços da página são consultados em um único lote, limitado às lojas da página e aos produtos da lista. A API não declara uma vencedora global com base em uma página parcial. O frontend deve manter visíveis completude, estoque desconhecido e timestamps ao comparar subtotais.
+As lojas da comparação detalhada são paginadas por nome e ID, com até 100 lojas por requisição. Todos os preços da página são consultados em um único lote, limitado às lojas da página e aos produtos da lista.
+
+A recomendação de compra usa um endpoint separado e consulta em lote todas as lojas elegíveis da cidade. Se a quantidade ultrapassar `RECOMMENDATION_MAX_STORES`, a API retorna 422 em vez de declarar uma vencedora parcial. Somente uma loja com preço utilizável para todos os itens pode ser recomendada; candidatos incompletos são apresentados separadamente como cobertura, nunca como vencedor.
+
+## Contribuições de usuários
+
+Uma contribuição aprovada também precisa de uma origem rastreável. Cadastre uma fonte administrativa que represente a própria plataforma, usando a URL real do ambiente, e configure seu UUID em `CONTRIBUTION_SOURCE_ID`. Não crie uma fonte fictícia em migration.
+
+A aprovação publica a observação por `PriceService`, com `originType=USER_CONTRIBUTION`, uma referência determinística derivada do UUID da contribuição e vínculo único com o preço persistido. Repetir a aprovação não cria uma nova observação. Contribuições pendentes ou rejeitadas nunca chegam a `price_records` e, portanto, não participam das comparações ou alertas.

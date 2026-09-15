@@ -251,6 +251,22 @@ class ApiIntegrationTests {
     }
 
     @Test
+    void regularUserCannotAccessAdministrativeOperations() throws Exception {
+        String token = registerAndLogin();
+
+        perform(post("/api/v1/admin/sources").content("{}"), token)
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("FORBIDDEN"));
+    }
+
+    @Test
+    void healthAndReadinessArePublicButMetricsRequireAdministrator() throws Exception {
+        mvc.perform(get("/actuator/health")).andExpect(status().isOk());
+        mvc.perform(get("/actuator/health/readiness")).andExpect(status().isOk());
+        mvc.perform(get("/actuator/metrics")).andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void corsAcceptsConfiguredFrontendAndRejectsUnknownOrigin() throws Exception {
         mvc.perform(options("/api/v1/users/me")
                         .header(HttpHeaders.ORIGIN, "https://frontend.example.test")

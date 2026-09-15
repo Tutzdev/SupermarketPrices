@@ -1,6 +1,7 @@
 package br.com.supermercados.prices.price;
 
 import br.com.supermercados.prices.common.ApiException;
+import br.com.supermercados.prices.alert.PriceAlertEvaluator;
 import br.com.supermercados.prices.datasource.DataSourceService;
 import br.com.supermercados.prices.product.ProductService;
 import br.com.supermercados.prices.store.StoreRepository;
@@ -41,13 +42,14 @@ class PriceServiceTest {
     @Mock private ProductService products;
     @Mock private StoreRepository stores;
     @Mock private DataSourceService sources;
+    @Mock private PriceAlertEvaluator alertEvaluator;
 
     private PriceService service;
 
     @BeforeEach
     void setUp() {
         service = new PriceService(prices, products, stores, sources, VALIDATORS.getValidator(),
-                Clock.fixed(now, ZoneOffset.UTC));
+                new PriceObservationRules(), alertEvaluator, Clock.fixed(now, ZoneOffset.UTC));
     }
 
     @AfterAll

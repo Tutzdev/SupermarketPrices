@@ -37,6 +37,11 @@ public class DataSourceService {
         }
     }
 
+    public DataSource requireSource(UUID sourceId) {
+        return repository.findById(sourceId)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Fonte de dados não encontrada"));
+    }
+
     @Transactional
     public DataSource registerVerifiedSource(SourceRegistration registration) {
         validator.validate(registration);
@@ -48,6 +53,13 @@ public class DataSourceService {
             throw new ApiException(HttpStatus.CONFLICT, "Código de fonte já cadastrado");
         }
         return repository.save(new DataSource(registration, clock.instant()));
+    }
+
+    @Transactional
+    public DataSourceResponse changeEnabled(UUID sourceId, boolean enabled) {
+        DataSource source = requireSource(sourceId);
+        source.changeEnabled(enabled);
+        return DataSourceResponse.from(source);
     }
 
     private void validateSourceUrl(String baseUrl) {

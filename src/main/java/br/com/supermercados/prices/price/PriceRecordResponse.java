@@ -18,7 +18,9 @@ public record PriceRecordResponse(
         Instant validUntil,
         Instant promotionValidUntil,
         UUID sourceId,
-        String sourceReference
+        String sourceReference,
+        PriceOriginType originType,
+        UUID contributionId
 ) {
     public static PriceRecordResponse from(PriceRecord record) {
         return new PriceRecordResponse(
@@ -34,6 +36,8 @@ public record PriceRecordResponse(
             record.getValidUntil(), 
             record.getPromotionValidUntil(), 
             record.getSourceId(),
-            record.getSourceReference());
+            record.getSourceReference(),
+            record.getOriginType(),
+            record.getContributionId());
     }
 }

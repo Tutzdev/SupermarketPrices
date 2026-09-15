@@ -1,5 +1,6 @@
 package br.com.supermercados.prices.price;
 
+import br.com.supermercados.prices.alert.PriceAlertEvaluator;
 import br.com.supermercados.prices.common.ApiException;
 import br.com.supermercados.prices.common.PageResponse;
 import br.com.supermercados.prices.datasource.DataSourceService;
@@ -7,15 +8,13 @@ import br.com.supermercados.prices.product.ProductService;
 import br.com.supermercados.prices.store.StoreRepository;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
+import java.time.Clock;
+import java.time.Instant;
+import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Clock;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 @Service
 public class PriceService {
@@ -25,15 +24,20 @@ public class PriceService {
     private final StoreRepository stores;
     private final DataSourceService sources;
     private final Validator validator;
+    private final PriceObservationRules observationRules;
+    private final PriceAlertEvaluator alertEvaluator;
     private final Clock clock;
 
     public PriceService(PriceRecordRepository prices, ProductService products, StoreRepository stores,
-                        DataSourceService sources, Validator validator, Clock clock) {
+            DataSourceService sources, Validator validator,
+            PriceObservationRules observationRules, PriceAlertEvaluator alertEvaluator, Clock clock) {
         this.prices = prices;
         this.products = products;
         this.stores = stores;
         this.sources = sources;
         this.validator = validator;
+        this.observationRules = observationRules;
+        this.alertEvaluator = alertEvaluator;
         this.clock = clock;
     }
 
@@ -47,12 +51,26 @@ public class PriceService {
     /** Internal ingestion boundary. Reusing a source reference with changed content is a conflict. */
     @Transactional
     public PriceRecordResponse appendObservation(PriceObservation observation) {
+        return append(observation, null);
+    }
+
+    @Transactional
+    public PriceRecordResponse appendUserContribution(PriceObservation observation, UUID contributionId) {
+        if (contributionId == null) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "A contribuição é obrigatória.");
+        }
+        return append(observation, contributionId);
+    }
+
+    private PriceRecordResponse append(PriceObservation observation, UUID contributionId) {
         Instant now = clock.instant();
         validateObservation(observation, now);
         requireProductAndStore(observation.productId(), observation.storeId());
         sources.requireEnabledSource(observation.sourceId());
 
-        PriceRecord candidate = PriceRecord.from(observation, now);
+        PriceRecord candidate = contributionId == null
+                ? PriceRecord.from(observation, now)
+                : PriceRecord.fromContribution(observation, contributionId, now);
         prices.insertIfAbsent(candidate);
         PriceRecord persisted = prices.findBySourceIdAndSourceReference(
                 candidate.getSourceId(), candidate.getSourceReference()).orElseThrow();
@@ -60,6 +78,7 @@ public class PriceService {
             throw new ApiException(HttpStatus.CONFLICT,
                     "A referência da fonte já identifica outra observação de preço.");
         }
+        alertEvaluator.evaluate(persisted.getId());
         return PriceRecordResponse.from(persisted);
     }
 
@@ -78,27 +97,7 @@ public class PriceService {
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
-        if (observation.collectedAt().isAfter(now)) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "A coleta não pode ocorrer no futuro.");
-        }
-        if (observation.promotionalPrice() != null
-                && observation.promotionalPrice().compareTo(observation.regularPrice()) >= 0) {
-            throw new ApiException(HttpStatus.BAD_REQUEST,
-                    "O preço promocional deve ser menor que o preço regular.");
-        }
-        if (observation.promotionalPrice() == null && observation.promotionValidUntil() != null) {
-            throw new ApiException(HttpStatus.BAD_REQUEST,
-                    "A validade promocional exige um preço promocional.");
-        }
-        requireValidPeriod(observation.collectedAt(), observation.validUntil());
-        requireValidPeriod(observation.collectedAt(), observation.promotionValidUntil());
-    }
-
-    private void requireValidPeriod(Instant collectedAt, Instant validUntil) {
-        if (validUntil != null && !validUntil.truncatedTo(ChronoUnit.MICROS)
-                .isAfter(collectedAt.truncatedTo(ChronoUnit.MICROS))) {
-            throw new ApiException(HttpStatus.BAD_REQUEST,
-                    "A validade deve ser posterior à data de coleta.");
-        }
+        observationRules.validate(observation.regularPrice(), observation.promotionalPrice(),
+                observation.collectedAt(), observation.validUntil(), observation.promotionValidUntil(), now);
     }
 }

@@ -1,14 +1,8 @@
 package br.com.supermercados.prices.auth;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Base64;
-import java.util.HexFormat;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,13 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TokenService {
 
-    private static final int TOKEN_BYTES = 32;
     private static final int TOKEN_LENGTH = 43;
 
     private final AuthTokenRepository tokens;
     private final Clock clock;
     private final Duration tokenTtl;
-    private final SecureRandom secureRandom = new SecureRandom();
 
     public TokenService(AuthTokenRepository tokens, Clock clock,
             @Value("${app.auth.token-ttl:PT12H}") Duration tokenTtl) {
@@ -38,13 +30,11 @@ public class TokenService {
 
     @Transactional
     public IssuedToken issue(UUID userId) {
-        byte[] randomBytes = new byte[TOKEN_BYTES];
-        secureRandom.nextBytes(randomBytes);
-        String rawToken = Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
+        String rawToken = SecureTokenValues.random();
         Instant now = clock.instant();
         Instant expiresAt = now.plus(tokenTtl);
         tokens.deleteExpiredForUser(userId, now);
-        tokens.save(new AuthToken(userId, hash(rawToken), now, expiresAt));
+        tokens.save(new AuthToken(userId, SecureTokenValues.hash(rawToken), now, expiresAt));
         return new IssuedToken(rawToken, expiresAt);
     }
 
@@ -54,23 +44,21 @@ public class TokenService {
                 || !rawToken.matches("[A-Za-z0-9_-]{43}")) {
             return Optional.empty();
         }
-        return tokens.findByTokenHashAndExpiresAtAfter(hash(rawToken), clock.instant())
-                .map(token -> new AuthenticatedUser(token.getUserId()));
+        return tokens.findByTokenHashAndExpiresAtAfter(SecureTokenValues.hash(rawToken), clock.instant())
+                .map(token -> token.getUser() == null
+                        ? new AuthenticatedUser(token.getUserId())
+                        : new AuthenticatedUser(token.getUserId(), token.getUser().getRole(),
+                                token.getUser().isEmailVerified()));
     }
 
     @Transactional
     public void revoke(String rawToken, UUID userId) {
-        tokens.revoke(hash(rawToken), userId);
+        tokens.revoke(SecureTokenValues.hash(rawToken), userId);
     }
 
-    private static String hash(String rawToken) {
-        try {
-            byte[] digest = MessageDigest.getInstance("SHA-256")
-                    .digest(rawToken.getBytes(StandardCharsets.UTF_8));
-            return HexFormat.of().formatHex(digest);
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("The Java runtime must support SHA-256", exception);
-        }
+    @Transactional
+    public void revokeAll(UUID userId) {
+        tokens.revokeAll(userId);
     }
 
     public record IssuedToken(String value, Instant expiresAt) {

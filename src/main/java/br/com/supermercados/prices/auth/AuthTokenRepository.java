@@ -19,4 +19,8 @@ interface AuthTokenRepository extends JpaRepository<AuthToken, UUID> {
     @Modifying
     @Query("delete from AuthToken token where token.userId = :userId and token.expiresAt <= :now")
     void deleteExpiredForUser(@Param("userId") UUID userId, @Param("now") Instant now);
+
+    @Modifying
+    @Query("delete from AuthToken token where token.userId = :userId")
+    void revokeAll(@Param("userId") UUID userId);
 }

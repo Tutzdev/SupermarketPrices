@@ -16,35 +16,40 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
-    private static final int BCRYPT_MAX_BYTES = 72;
-
     private final UserRepository users;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokens;
+    private final PasswordPolicy passwordPolicy;
+    private final AccountService accounts;
     private final Clock clock;
     private final String dummyPasswordHash;
 
-    public AuthService(UserRepository users, PasswordEncoder passwordEncoder, TokenService tokens, Clock clock) {
+    public AuthService(UserRepository users, PasswordEncoder passwordEncoder, TokenService tokens,
+            PasswordPolicy passwordPolicy, AccountService accounts, Clock clock) {
         this.users = users;
         this.passwordEncoder = passwordEncoder;
         this.tokens = tokens;
+        this.passwordPolicy = passwordPolicy;
+        this.accounts = accounts;
         this.clock = clock;
         this.dummyPasswordHash = passwordEncoder.encode(UUID.randomUUID().toString());
     }
 
     @Transactional
     public UserResponse register(RegisterRequest request) {
-        validatePassword(request.password());
+        passwordPolicy.validate(request.password());
         String email = User.normalizeEmail(request.email());
         if (users.existsByEmail(email)) {
             throw new ApiException(HttpStatus.CONFLICT, "E-mail já cadastrado.");
         }
         User user = new User(request.name(), email, passwordEncoder.encode(request.password()), clock.instant());
-        return UserResponse.from(users.saveAndFlush(user));
+        User savedUser = users.saveAndFlush(user);
+        accounts.issueEmailVerification(savedUser);
+        return UserResponse.from(savedUser);
     }
 
     public AuthResponse login(LoginRequest request) {
-        if (request.password().getBytes(StandardCharsets.UTF_8).length > BCRYPT_MAX_BYTES) {
+        if (request.password().getBytes(StandardCharsets.UTF_8).length > PasswordPolicy.BCRYPT_MAX_BYTES) {
             throw invalidCredentials();
         }
         Optional<User> user = users.findByEmail(User.normalizeEmail(request.email()));
@@ -56,14 +61,6 @@ public class AuthService {
         User authenticatedUser = user.orElseThrow();
         TokenService.IssuedToken token = tokens.issue(authenticatedUser.getId());
         return new AuthResponse(token.value(), "Bearer", token.expiresAt(), UserResponse.from(authenticatedUser));
-    }
-
-    private void validatePassword(String password) {
-        if (password == null || password.isBlank() || password.length() < 12
-                || password.getBytes(StandardCharsets.UTF_8).length > BCRYPT_MAX_BYTES) {
-            throw new ApiException(HttpStatus.BAD_REQUEST,
-                    "A senha deve ter ao menos 12 caracteres e no máximo 72 bytes em UTF-8.");
-        }
     }
 
     private ApiException invalidCredentials() {

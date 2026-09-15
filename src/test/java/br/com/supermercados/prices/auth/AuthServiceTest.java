@@ -37,12 +37,16 @@ class AuthServiceTest {
     @Mock
     private TokenService tokens;
 
+    @Mock
+    private AccountService accounts;
+
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(4);
     private AuthService auth;
 
     @BeforeEach
     void setUp() {
-        auth = new AuthService(users, passwordEncoder, tokens, Clock.fixed(NOW, ZoneOffset.UTC));
+        auth = new AuthService(users, passwordEncoder, tokens, new PasswordPolicy(), accounts,
+                Clock.fixed(NOW, ZoneOffset.UTC));
     }
 
     @Test
@@ -53,6 +57,7 @@ class AuthServiceTest {
 
         ArgumentCaptor<User> storedUser = ArgumentCaptor.forClass(User.class);
         verify(users).saveAndFlush(storedUser.capture());
+        verify(accounts).issueEmailVerification(storedUser.getValue());
         assertThat(response.name()).isEqualTo("Test User");
         assertThat(response.email()).isEqualTo("user@example.test");
         assertThat(response.createdAt()).isEqualTo(NOW);

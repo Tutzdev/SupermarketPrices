@@ -47,7 +47,13 @@ public class SecurityConfiguration {
                         .accessDeniedHandler((request, response, exception) -> problems.write(
                                 request, response, HttpStatus.FORBIDDEN, "Acesso não permitido.")))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login",
+                                "/api/v1/auth/email-verifications/confirm",
+                                "/api/v1/auth/password-resets", "/api/v1/auth/password-resets/confirm").permitAll()
+                        .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                        .requestMatchers("/actuator", "/actuator/info", "/actuator/metrics", "/actuator/metrics/**")
+                                .hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/states", "/api/v1/states/**",
                                 "/api/v1/cities", "/api/v1/cities/**",

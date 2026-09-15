@@ -1,5 +1,9 @@
 package br.com.supermercados.prices.price;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -7,12 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 public interface PriceRecordRepository extends Repository<PriceRecord, UUID> {
+
+    Optional<PriceRecord> findById(UUID id);
 
     Page<PriceRecord> findByProductIdAndStoreId(UUID productId, UUID storeId, Pageable pageable);
 
@@ -33,13 +34,14 @@ public interface PriceRecordRepository extends Repository<PriceRecord, UUID> {
             INSERT INTO price_records (
                 id, product_id, store_id, source_id, source_reference,
                 regular_price, promotional_price, currency, collected_at, recorded_at,
-                valid_until, promotion_valid_until, availability
+                valid_until, promotion_valid_until, availability, origin_type, contribution_id
             ) VALUES (
                 :#{#record.id}, :#{#record.productId}, :#{#record.storeId},
                 :#{#record.sourceId}, :#{#record.sourceReference},
                 :#{#record.regularPrice}, :#{#record.promotionalPrice}, :#{#record.currency},
                 :#{#record.collectedAt}, :#{#record.recordedAt}, :#{#record.validUntil},
-                :#{#record.promotionValidUntil}, :#{#record.availability.name()}
+                :#{#record.promotionValidUntil}, :#{#record.availability.name()},
+                :#{#record.originType.name()}, :#{#record.contributionId}
             ) ON CONFLICT (source_id, source_reference) DO NOTHING
             """, nativeQuery = true)
     int insertIfAbsent(@Param("record") PriceRecord record);

@@ -30,6 +30,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -59,7 +60,7 @@ class ShoppingComparisonServiceTest {
     void setUp() {
         PricePolicy policy = new PricePolicy(Duration.ofDays(2));
         comparisons = new ShoppingComparisonService(locations, stores, products, shoppingLists, prices,
-                policy, new ShoppingPriceCalculator(policy), Clock.fixed(now, ZoneOffset.UTC));
+                policy, new ShoppingPriceCalculator(policy), Clock.fixed(now, ZoneOffset.UTC), 500);
     }
 
     @Test
@@ -115,6 +116,75 @@ class ShoppingComparisonServiceTest {
         assertThat(response.stores().content().getFirst().completeShoppingList()).isFalse();
         assertThat(response.stores().content().getFirst().subtotalKnown()).isNull();
         verifyNoInteractions(prices);
+    }
+
+    @Test
+    void incompleteStoreNeverWinsRecommendationBecauseOfItsLowerSubtotal() {
+        UUID firstProduct = UUID.randomUUID();
+        UUID secondProduct = UUID.randomUUID();
+        UUID incompleteStore = UUID.randomUUID();
+        UUID completeStore = UUID.randomUUID();
+        List<ShoppingListItemResponse> items = List.of(item(firstProduct), item(secondProduct));
+        when(shoppingLists.getOwnedList(userId, listId)).thenReturn(shoppingList(items));
+        when(stores.findAllActiveStores(cityId, 500)).thenReturn(List.of(
+                store(incompleteStore, "Incomplete"), store(completeStore, "Complete")));
+        when(prices.findLatestForStoresAndProducts(
+                List.of(incompleteStore, completeStore), List.of(firstProduct, secondProduct)))
+                .thenReturn(List.of(
+                        PriceFixtures.regular(firstProduct, incompleteStore, "1.00", now),
+                        PriceFixtures.regular(firstProduct, completeStore, "5.00", now),
+                        PriceFixtures.regular(secondProduct, completeStore, "5.00", now)));
+
+        ShoppingRecommendationResponse response = comparisons.recommendShoppingList(userId, listId, cityId);
+
+        assertThat(response.status()).isEqualTo(RecommendationStatus.COMPLETE_STORE_FOUND);
+        assertThat(response.recommendation().storeId()).isEqualTo(completeStore);
+        assertThat(response.recommendation().total()).isEqualByComparingTo("20.00");
+        assertThat(response.recommendation().completeShoppingList()).isTrue();
+    }
+
+    @Test
+    void recommendationConsidersStoresBeyondAConventionalFirstPage() {
+        UUID productId = UUID.randomUUID();
+        List<StoreResponse> availableStores = new ArrayList<>();
+        List<br.com.supermercados.prices.price.PriceRecord> observations = new ArrayList<>();
+        for (int index = 0; index < 21; index++) {
+            UUID storeId = UUID.randomUUID();
+            availableStores.add(store(storeId, "Store " + index));
+            observations.add(PriceFixtures.regular(productId, storeId,
+                    index == 20 ? "1.00" : "10.00", now));
+        }
+        UUID lastStoreId = availableStores.getLast().id();
+        when(shoppingLists.getOwnedList(userId, listId))
+                .thenReturn(shoppingList(List.of(item(productId))));
+        when(stores.findAllActiveStores(cityId, 500)).thenReturn(availableStores);
+        when(prices.findLatestForStoresAndProducts(
+                availableStores.stream().map(StoreResponse::id).toList(), List.of(productId)))
+                .thenReturn(observations);
+
+        ShoppingRecommendationResponse response = comparisons.recommendShoppingList(userId, listId, cityId);
+
+        assertThat(response.evaluatedStores()).isEqualTo(21);
+        assertThat(response.recommendation().storeId()).isEqualTo(lastStoreId);
+    }
+
+    @Test
+    void noCompleteStoreIsReportedWithoutDeclaringAnIncompleteWinner() {
+        UUID productId = UUID.randomUUID();
+        UUID storeId = UUID.randomUUID();
+        when(shoppingLists.getOwnedList(userId, listId))
+                .thenReturn(shoppingList(List.of(item(productId), item(UUID.randomUUID()))));
+        when(stores.findAllActiveStores(cityId, 500)).thenReturn(List.of(store(storeId, "Incomplete")));
+        when(prices.findLatestForStoresAndProducts(
+                org.mockito.ArgumentMatchers.eq(List.of(storeId)), org.mockito.ArgumentMatchers.anyList()))
+                .thenReturn(List.of(PriceFixtures.regular(productId, storeId, "3.00", now)));
+
+        ShoppingRecommendationResponse response = comparisons.recommendShoppingList(userId, listId, cityId);
+
+        assertThat(response.status()).isEqualTo(RecommendationStatus.NO_COMPLETE_STORE);
+        assertThat(response.recommendation()).isNull();
+        assertThat(response.closestMatches()).hasSize(1);
+        assertThat(response.closestMatches().getFirst().missingItems()).isEqualTo(1);
     }
 
     private ShoppingListItemResponse item(UUID productId) {
