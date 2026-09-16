@@ -79,7 +79,9 @@ export function AppShell() {
           </div>
           <div className="min-w-0 text-right">
             <p className="truncate text-sm font-semibold text-foreground">{user.name}</p>
-            <p className="text-xs text-muted">{user.role === "ADMIN" ? "Administrador" : "Conta Gomo"}</p>
+            <p className="text-xs text-muted">
+              {user.role === "ADMIN" ? "Administrador" : user.subscriber ? "Assinante Gomo" : "Conta Gomo"}
+            </p>
           </div>
         </header>
 

@@ -7,15 +7,17 @@ import {
   Heart,
   ListChecks,
   MapPin,
-  PackageSearch,
   Search,
   ShieldCheck,
   Store,
   Users,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { BrandLogo } from "@/components/brand-logo";
 import { PublicNavbar } from "@/components/layout/public-navbar";
 import { NativeButton } from "@/components/ui/native-button";
+import { useAuth } from "@/features/auth/auth-context";
 import { BRAND, formatCurrency } from "@/lib/brand";
 
 const steps = [
@@ -45,7 +47,29 @@ const faq = [
   ["Como cancelo a assinatura?", "O fluxo de cancelamento será disponibilizado junto com a integração de cobrança. A Gomo não apresenta pagamento ou cancelamento como concluído sem confirmação do backend."],
 ];
 
+const previewStores = [
+  { name: "Mercado Central", distance: "1,2 km" },
+  { name: "Supermercado Sul", distance: "2,8 km" },
+  { name: "Rede Popular", distance: "3,4 km" },
+];
+
+const previewProducts = [
+  { name: "Arroz tipo 1 · 5 kg", prices: [24.90, 27.49, 29.99] },
+  { name: "Feijão carioca · 1 kg", prices: [8.29, 7.49, 8.99] },
+  { name: "Leite integral · 1 L", prices: [5.19, 4.79, 4.39] },
+  { name: "Café torrado · 500 g", prices: [21.49, 22.99, 18.90] },
+  { name: "Óleo de soja · 900 ml", prices: [6.29, 7.49, 6.89] },
+  { name: "Açúcar refinado · 1 kg", prices: [5.39, 4.59, 4.89] },
+  { name: "Macarrão espaguete · 500 g", prices: [4.29, 4.69, 3.79] },
+  { name: "Detergente neutro · 500 ml", prices: [2.59, 1.99, 2.29] },
+  { name: "Papel higiênico · 12 rolos", prices: [19.99, 21.49, 17.90] },
+  { name: "Sabão em pó · 1,6 kg", prices: [22.39, 18.49, 20.90] },
+];
+
 export function LandingPage() {
+  const { user } = useAuth();
+  const platformPath = user ? "/app" : "/entrar";
+
   return (
     <div className="min-h-screen bg-white text-foreground">
       <a href="#conteudo-principal" className="skip-link">Pular para o conteúdo</a>
@@ -71,7 +95,7 @@ export function LandingPage() {
                   Assinar por {formatCurrency(BRAND.monthlyPrice)}/mês
                   <ArrowRight className="size-4" aria-hidden />
                 </NativeButton>
-                <NativeButton to="/#recursos" variant="secondary" size="lg" className="w-full sm:w-auto">
+                <NativeButton href="#recursos" variant="secondary" size="lg" className="w-full sm:w-auto">
                   Conhecer recursos
                 </NativeButton>
               </div>
@@ -204,7 +228,7 @@ export function LandingPage() {
             <a href="/#recursos" className="hover:text-foreground">Recursos</a>
             <a href="/#preco" className="hover:text-foreground">Preço</a>
             <a href="/#duvidas" className="hover:text-foreground">Dúvidas</a>
-            <a href="/entrar" className="hover:text-foreground">Entrar</a>
+            <Link to={platformPath} className="hover:text-foreground">Acessar plataforma</Link>
           </nav>
         </div>
       </footer>
@@ -221,35 +245,124 @@ function SectionHeading({ eyebrow, title, description, centered = false }: { eye
     </div>
   );
 }
-
 function DashboardPreview() {
+  const [productIndex, setProductIndex] = useState(0);
+  const [isChanging, setIsChanging] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const product = previewProducts[productIndex];
+  const stores = previewStores
+    .map((store, index) => ({ ...store, price: product.prices[index] }))
+    .sort((first, second) => first.price - second.price);
+  const priceDifference = stores[stores.length - 1].price - stores[0].price;
+
+  useEffect(() => {
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotionPreference = () => {
+      setPrefersReducedMotion(motionPreference.matches);
+      if (motionPreference.matches) setIsChanging(false);
+    };
+
+    updateMotionPreference();
+    motionPreference.addEventListener("change", updateMotionPreference);
+    return () => motionPreference.removeEventListener("change", updateMotionPreference);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const fadeTimer = window.setTimeout(() => setIsChanging(true), 5600);
+    const changeTimer = window.setTimeout(() => {
+      setProductIndex((currentIndex) => (currentIndex + 1) % previewProducts.length);
+      setIsChanging(false);
+    }, 5900);
+
+    return () => {
+      window.clearTimeout(fadeTimer);
+      window.clearTimeout(changeTimer);
+    };
+  }, [prefersReducedMotion, productIndex]);
+
   return (
-    <div className="relative mx-auto w-full max-w-xl" aria-label="Prévia da interface de comparação">
+    <section className="relative mx-auto w-full max-w-xl" aria-labelledby="gomo-preview-title">
       <div className="absolute -inset-4 -z-10 rotate-2 rounded-[1.4rem] bg-primary/10" aria-hidden />
-      <div className="overflow-hidden rounded-xl border border-border bg-white shadow-[0_24px_70px_rgba(66,24,21,0.14)]">
-        <div className="flex items-center gap-2 border-b border-border bg-[#fafafa] px-4 py-3">
+      <div className="gomo-live-preview overflow-hidden rounded-xl border border-border bg-white shadow-[0_24px_70px_rgba(66,24,21,0.14)]">
+        <div className="flex items-center gap-3 border-b border-border bg-[#fafafa] px-4 py-3">
           <BrandLogo compact />
-          <div className="ml-auto flex gap-1.5" aria-hidden><span className="size-2 rounded-full bg-border-strong" /><span className="size-2 rounded-full bg-border-strong" /></div>
+          <div className="ml-auto flex items-center gap-1.5" aria-hidden="true">
+            <span className="size-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="size-2.5 rounded-full bg-[#febc2e]" />
+            <span className="size-2.5 rounded-full bg-[#28c840]" />
+          </div>
         </div>
+
         <div className="p-5 sm:p-6">
-          <p className="text-sm font-bold">Compare preços na sua cidade</p>
-          <div className="mt-4 flex min-h-11 items-center gap-3 rounded-lg border border-border-strong px-3 text-sm text-muted">
-            <Search className="size-4" aria-hidden />
-            Busque um produto do catálogo
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-primary">Prévia interativa</p>
+              <h2 id="gomo-preview-title" className="mt-1.5 text-lg font-extrabold tracking-tight">Encontre onde vale mais a pena</h2>
+            </div>
+            <span className="inline-flex items-center gap-1.5 rounded-md bg-surface-strong px-2.5 py-1.5 text-xs font-semibold text-muted">
+              <MapPin className="size-3.5 text-primary" aria-hidden />
+              Volta Redonda
+            </span>
           </div>
-          <div className="mt-5 space-y-3">
-            {["Supermercado e disponibilidade", "Preço observado e promoção", "Data e origem da informação"].map((label, index) => (
-              <div key={label} className="flex items-center gap-3 rounded-lg border border-border p-3.5">
-                <span className={`grid size-9 shrink-0 place-items-center rounded-lg ${index === 0 ? "bg-primary-soft text-primary" : "bg-surface-strong text-muted"}`}>
-                  {index === 0 ? <Store className="size-4" aria-hidden /> : index === 1 ? <CircleDollarSign className="size-4" aria-hidden /> : <PackageSearch className="size-4" aria-hidden />}
-                </span>
-                <span className="text-sm font-semibold">{label}</span>
-                <span className="ml-auto text-sm text-muted">—</span>
+
+          <div className="gomo-preview-cycle" data-changing={isChanging}>
+            <div className="gomo-preview-cycle-content" key={product.name}>
+              <div className="mt-5 flex min-h-12 items-center gap-3 rounded-lg border border-border-strong bg-white px-3.5 shadow-[0_1px_0_rgba(32,33,36,0.02)]">
+                <Search className="size-4 shrink-0 text-muted" aria-hidden />
+                <span className="gomo-preview-query min-w-0 text-sm font-semibold">{product.name}</span>
+                <span className="gomo-preview-cursor h-5 w-px bg-primary" aria-hidden />
+                <span className="ml-auto hidden shrink-0 rounded-md bg-primary-soft px-2 py-1 text-[0.65rem] font-extrabold uppercase tracking-wide text-primary-dark sm:inline">Buscando</span>
               </div>
-            ))}
+
+              <div className="gomo-preview-results relative mt-4 overflow-hidden rounded-xl border border-border bg-[#fcfcfc] p-2">
+                <div className="gomo-scan-line" aria-hidden />
+                <ol className="relative space-y-1.5">
+                  {stores.map((store, index) => (
+                    <li
+                      key={store.name}
+                      className={`gomo-preview-result grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border px-3 py-3 ${index === 0 ? "border-primary/25 bg-primary-soft/70" : "border-transparent bg-white"}`}
+                    >
+                      <span className={`grid size-9 place-items-center rounded-lg ${index === 0 ? "bg-primary text-white" : "bg-surface-strong text-muted"}`}>
+                        <Store className="size-4" aria-hidden />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <span className="truncate text-sm font-bold">{store.name}</span>
+                          {index === 0 ? <span className="rounded-full bg-white px-2 py-0.5 text-[0.62rem] font-extrabold uppercase tracking-wide text-primary-dark">Melhor preço</span> : null}
+                        </span>
+                        <span className="mt-0.5 block text-xs text-muted">Disponível · {store.distance}</span>
+                      </span>
+                      <span className={`text-sm font-extrabold tabular-nums sm:text-base ${index === 0 ? "text-primary-dark" : "text-foreground"}`}>{formatCurrency(store.price)}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              <div className="mt-4 grid gap-3 rounded-xl bg-[#211b1b] p-4 text-white sm:grid-cols-[1fr_auto] sm:items-center">
+                <div className="flex items-center gap-3">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-white/10 text-[#ff746d]">
+                    <CircleDollarSign className="size-4" aria-hidden />
+                  </span>
+                  <div>
+                    <p className="text-xs font-semibold text-white/58">Diferença entre os preços</p>
+                    <p className="mt-0.5 text-lg font-extrabold tracking-tight">Até {formatCurrency(priceDifference)}</p>
+                  </div>
+                </div>
+                <span className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-white px-3 py-2 text-xs font-extrabold text-[#991b16]">
+                  Comparação pronta
+                  <Check className="size-3.5" aria-hidden />
+                </span>
+              </div>
+            </div>
           </div>
+
+          <p className="mt-3 text-center text-[0.68rem] font-medium text-muted">
+            Demonstração visual · produto {productIndex + 1} de {previewProducts.length} · valores ilustrativos
+          </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

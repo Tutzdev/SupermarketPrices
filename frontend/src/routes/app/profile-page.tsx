@@ -49,7 +49,19 @@ export function ProfilePage() {
             <p className="mt-4 text-sm text-muted">Lojas favoritas: <strong className="text-foreground">{preferences.data?.favoriteStoreIds.length ?? 0}</strong></p>
             <NativeButton type="submit" className="mt-5" loading={updateCity.isPending}>Salvar preferência</NativeButton>
           </form>
-          <div className="mt-8 border-t border-border pt-6"><h3 className="font-bold">Assinatura</h3><p className="mt-2 text-sm leading-6 text-muted">O backend ainda não informa status de assinatura. A interface não libera nem simula acesso pago por estado local.</p></div>
+          <div className="mt-8 border-t border-border pt-6">
+            <h3 className="font-bold">Assinatura</h3>
+            <div className="mt-3">
+              <StatusBadge tone={user.subscriber ? "success" : "neutral"}>
+                {user.subscriber ? "Assinatura ativa" : "Sem assinatura ativa"}
+              </StatusBadge>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-muted">
+              {user.subscriber
+                ? "Sua conta possui acesso de assinante aos recursos da Gomo."
+                : "Assine o plano Gomo para liberar os recursos destinados a assinantes."}
+            </p>
+          </div>
           <InlineError>{profileMessage}</InlineError>
         </section>
       </div>

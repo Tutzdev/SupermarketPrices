@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { BrandLogo } from "@/components/brand-logo";
 import { NativeButton } from "@/components/ui/native-button";
 import { Sheet } from "@/components/ui/sheet";
+import { useAuth } from "@/features/auth/auth-context";
 
 const navigation = [
   { label: "Como funciona", href: "/#como-funciona" },
@@ -14,6 +15,8 @@ const navigation = [
 
 export function PublicNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
+  const platformPath = user ? "/app" : "/entrar";
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
@@ -34,14 +37,14 @@ export function PublicNavbar() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 sm:flex">
-          <NativeButton to="/entrar" variant="ghost">Entrar</NativeButton>
+        <div className="hidden items-center gap-2 lg:flex">
+          <NativeButton to={platformPath} variant="ghost">Acessar plataforma</NativeButton>
           <NativeButton to="/assinar" glow>Assinar agora</NativeButton>
         </div>
 
         <button
           type="button"
-          className="icon-button sm:hidden"
+          className="icon-button public-navbar-menu-button"
           aria-label="Abrir navegação"
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen(true)}
@@ -70,7 +73,7 @@ export function PublicNavbar() {
             ))}
           </div>
           <div className="mt-auto grid gap-2 border-t border-border pt-5">
-            <NativeButton to="/entrar" variant="secondary" className="w-full">Entrar</NativeButton>
+            <NativeButton to={platformPath} variant="secondary" className="w-full">Acessar plataforma</NativeButton>
             <NativeButton to="/assinar" glow className="w-full">Assinar agora</NativeButton>
           </div>
         </nav>

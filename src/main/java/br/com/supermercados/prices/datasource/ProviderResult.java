@@ -3,7 +3,7 @@ package br.com.supermercados.prices.datasource;
 import java.util.List;
 import java.util.Objects;
 
-/** Unavailability is explicit and must never be translated into a successful empty collection. */
+// Unavailability is explicit and must never be translated into a successful empty collection.
 public record ProviderResult<T>(Status status, List<T> items, String nextCursor, String message) {
 
     public enum Status { AVAILABLE, UNAVAILABLE }

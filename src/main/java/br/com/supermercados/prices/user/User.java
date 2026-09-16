@@ -34,6 +34,9 @@ public class User {
     @Column(name = "email_verified_at")
     private Instant emailVerifiedAt;
 
+    @Column(nullable = false)
+    private boolean subscriber;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
@@ -52,6 +55,7 @@ public class User {
         this.email = normalizeEmail(email);
         this.passwordHash = passwordHash;
         this.role = UserRole.USER;
+        this.subscriber = false;
         this.createdAt = now;
         this.updatedAt = now;
     }
@@ -75,6 +79,13 @@ public class User {
     public void promoteToAdmin(Instant now) {
         role = UserRole.ADMIN;
         updatedAt = now;
+    }
+
+    public void activateSubscription(Instant now) {
+        if (!subscriber) {
+            subscriber = true;
+            updatedAt = now;
+        }
     }
 
     public void changePassword(String passwordHash, Instant now) {
@@ -108,6 +119,10 @@ public class User {
 
     public boolean isEmailVerified() {
         return emailVerifiedAt != null;
+    }
+
+    public boolean isSubscriber() {
+        return subscriber;
     }
 
     public Instant getCreatedAt() {

@@ -28,6 +28,7 @@ export interface User {
   email: string;
   role: UserRole;
   emailVerified: boolean;
+  subscriber: boolean;
   createdAt: string;
   updatedAt: string;
 }

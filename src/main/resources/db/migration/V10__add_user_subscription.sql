@@ -1,0 +1,2 @@
+ALTER TABLE app_users
+    ADD COLUMN subscriber BOOLEAN NOT NULL DEFAULT FALSE;

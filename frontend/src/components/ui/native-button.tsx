@@ -8,6 +8,7 @@ type NativeButtonSize = "sm" | "md" | "lg" | "icon";
 
 interface NativeButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
+  href?: string;
   loading?: boolean;
   glow?: boolean;
   to?: string;
@@ -39,6 +40,7 @@ export function NativeButton({
   disabled,
   loading = false,
   glow = false,
+  href,
   to,
   type = "button",
   variant = "primary",
@@ -46,10 +48,11 @@ export function NativeButton({
   ...props
 }: NativeButtonProps) {
   const classes = cn(
-    "native-button inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border font-semibold",
+    "native-button inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border font-semibold",
     "transition-[background-color,border-color,color,box-shadow,transform] duration-150",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-55",
+    (disabled || loading) && "pointer-events-none opacity-55",
     variantClasses[variant],
     sizeClasses[size],
     glow && variant === "primary" && "native-button--glow",
@@ -59,9 +62,17 @@ export function NativeButton({
   const content = (
     <>
       {loading ? <LoaderCircle className="size-4 animate-spin motion-reduce:animate-none" aria-hidden /> : null}
-      <span>{children}</span>
+      <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap">{children}</span>
     </>
   );
+
+  if (href) {
+    return (
+      <a href={href} className={classes} aria-disabled={disabled || loading || undefined}>
+        {content}
+      </a>
+    );
+  }
 
   if (to) {
     return (
