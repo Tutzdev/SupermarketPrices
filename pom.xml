@@ -11,7 +11,7 @@
 	<groupId>br.com.supermercados</groupId>
 	<artifactId>prices</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Supermarket Prices API</name>
+	<name>Gomo API</name>
 	<description>Backend de comparação rastreável de preços de supermercados</description>
 	<url/>
 	<licenses>

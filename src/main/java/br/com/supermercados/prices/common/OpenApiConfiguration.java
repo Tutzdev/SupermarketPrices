@@ -16,7 +16,7 @@ public class OpenApiConfiguration {
     @Bean
     OpenAPI pricesOpenApi() {
         return new OpenAPI()
-                .info(new Info().title("Supermarket Prices API").version("v1")
+                .info(new Info().title("Gomo API").version("v1")
                         .description("Preços rastreáveis em BRL. Ausência de preço não informa estoque."))
                 .components(new Components().addSecuritySchemes("bearerAuth",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer")

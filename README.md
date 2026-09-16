@@ -1,8 +1,25 @@
-# Supermarket Prices
+# Gomo
 
 API REST desenvolvida para comparar preços de produtos entre supermercados e ajudar o usuário a encontrar a melhor opção de compra com base na sua cidade e lista de compras.
 
 O projeto foi construído com foco em organização, segurança, regras de negócio bem definidas e facilidade de manutenção.
+
+Stack do backend: Java 21, Spring Boot 4.1.1, Maven Wrapper, Spring MVC, Data JPA, Security, Bean Validation, Actuator, PostgreSQL, Flyway e OpenAPI. A autenticação usa tokens opacos persistidos somente por hash. A interface Gomo fica em `frontend/` e utiliza React, TypeScript, Vite, Tailwind CSS e TanStack Query.
+
+## Frontend Gomo
+
+Com a API disponível em `http://localhost:8080`, execute:
+
+```powershell
+cd frontend
+Copy-Item .env.example .env
+npm install
+npm run dev
+```
+
+A interface fica em `http://localhost:5173`. Para permitir as chamadas locais, configure `CORS_ALLOWED_ORIGINS=http://localhost:5173` no backend. A URL da API pode ser alterada em `frontend/.env` por meio de `VITE_API_BASE_URL`.
+
+O checkout e o paywall visual não simulam pagamento. Para concluir a assinatura, o backend ainda precisa oferecer consulta do status atual, criação e consulta de checkout, portal ou cancelamento e confirmação de pagamentos por webhook.
 
 ## Funcionalidades
 
