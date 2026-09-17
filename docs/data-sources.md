@@ -1,17 +1,45 @@
 # Fontes de dados e ingestão
 
-O banco inicial contém somente o estado e as quatro cidades autorizadas pelo escopo. Não há fontes comerciais, lojas, produtos, estoques ou preços pré-cadastrados. Os registros sintéticos usados nos testes estão exclusivamente em `src/test`.
+O banco inicial contém somente o estado e as quatro cidades autorizadas pelo escopo. Não há fontes comerciais, lojas, produtos, estoques ou preços pré-cadastrados. Uma fonte, rede e loja são criadas somente depois de uma coleta real bem-sucedida. Os registros sintéticos usados nos testes estão exclusivamente em `src/test`.
 
-As interfaces `ProductDataProvider`, `StoreDataProvider` e `PriceDataProvider` definem os pontos de integração. Não há coletor automatizado ou adapter de produção enquanto não existir uma fonte verificável, acessível e autorizada. A ausência de uma integração não é convertida em dados inventados.
+As interfaces `ProductDataProvider`, `StoreDataProvider` e `PriceDataProvider` continuam definindo consultas paginadas. Os coletores automáticos implementam `SupermarketCollector` e entregam um catálogo normalizado ao mesmo domínio de ingestão. A ausência de uma integração não é convertida em dados inventados.
+
+## Integrações investigadas
+
+Situação verificada em 17/09/2026:
+
+| Supermercado | Unidade solicitada | Situação | Fonte e limitação |
+| --- | --- | --- | --- |
+| Nagumo | 036-V.REDONDA, Ponte Alta | Ativa | E-commerce público `https://www.nagumo.com.br`, com seleção explícita da loja 36 e JSON paginado. A fonte estruturada estável encontrada cobre a categoria `MP-GERAL` ("Produtos Nagumo"), não o catálogo inteiro, e não fornece GTIN. |
+| Supermarket | Aterrado | Não automatizada | O encarte oficial público encontrado declara que os preços não valem no Sul Fluminense. Portanto ele não representa a unidade Aterrado. |
+| Royal Supermercados | Aterrado | Não automatizada | O e-commerce público possui produtos estruturados, mas sua lista oficial de retirada não oferece Aterrado; em Volta Redonda, a loja identificada é Retiro. Esses preços não são atribuídos a Aterrado. |
+| Empório Royale | Volta Redonda | Não automatizada | O aplicativo público encontrado está marcado como desativado/em manutenção, aponta para uma operação inativa em Resende e não retorna lojas de retirada. |
+
+O coletor Nagumo primeiro abre uma sessão pública, consulta as lojas, exige correspondência exata de ID, nome, cidade, bairro e endereço, seleciona a loja e somente depois consulta o catálogo. Uma mudança nessa identidade interrompe a coleta em vez de misturar filiais. Preços da bandeira `NGM_36_M` são armazenados com a condição "Meu Nagumo" e não substituem o preço comum na comparação.
+
+Na validação de 17/09/2026, a fonte declarou 117 itens disponíveis e retornou 128 registros no total; os 11 adicionais estavam indisponíveis. O coletor conta os registros realmente recebidos e preserva essa disponibilidade, sem apresentar os itens indisponíveis como ofertas atuais.
+
+## Execução automática e manual
+
+A coleta roda diariamente às 05:30 em `America/Sao_Paulo`. O cron, fuso, intervalo entre coletores, timeouts, tentativas e intervalo entre requisições estão em `application.properties` e podem ser substituídos pelas variáveis documentadas em `.env.example`. Use `PRICE_COLLECTION_ENABLED=false` para desativar apenas o agendamento ou `NAGUMO_COLLECTION_ENABLED=false` para remover o coletor Nagumo.
+
+Um administrador pode iniciar a mesma rotina sem reiniciar a aplicação:
+
+```http
+POST /api/v1/admin/collections
+Authorization: Bearer <token-administrativo>
+```
+
+As execuções podem ser consultadas em `GET /api/v1/admin/collections` e `GET /api/v1/admin/collections/{id}`. Cada registro informa horários, status e contagens encontradas, criadas, atualizadas, ignoradas e com erro. Coletores rodam sequencialmente; uma falha é finalizada como `FAILED` e não impede o próximo coletor.
 
 ## Adicionar uma fonte real
 
 1. Confirme a existência da fonte, a autorização de acesso e o que seus dados realmente representam. Registre a documentação e a URL da origem. Uma rede conhecida não comprova a existência de uma unidade em determinada cidade.
-2. Cadastre a fonte por `POST /api/v1/admin/sources`, com sua identificação e URL verificável. O endpoint é restrito a administradores, delega ao `DataSourceService` e gera uma entrada de auditoria; não há escrita pública de dados comerciais.
-3. Implemente o provider específico em um pacote de integração. `sourceId()` deve identificar a fonte cadastrada. `ProviderRequest` limita o lote a 100 registros e permite paginação por cursor; o adapter deve respeitar também o limite solicitado.
+2. Para uma integração manual, cadastre a fonte por `POST /api/v1/admin/sources`. Um coletor automático pode registrá-la somente depois que a resposta real e a unidade forem validadas, como faz `CollectionCatalogService`.
+3. Implemente `SupermarketCollector` em um pacote próprio da integração. Mantenha o protocolo externo, a seleção de filial e o parsing fora do domínio principal.
 4. Configure credenciais externamente e defina timeouts de conexão e leitura. Valide a resposta da origem antes de transformá-la em observações. Falhas técnicas devem ser propagadas ou representadas explicitamente como indisponibilidade pelo contrato do provider, sem convertê-las em uma consulta vazia bem-sucedida.
 5. Persista primeiro os registros necessários de catálogo, pelos serviços internos correspondentes, e somente depois envie observações de preços a `PriceService.appendObservation`. Não faça chamadas externas dentro da transação de persistência.
-6. Execute testes de contrato com respostas verificadas da fonte e testes de falhas, paginação, duplicação e dados inválidos. Uma futura rotina de coleta poderá usar esses providers; agendamento, retry e gerenciamento operacional não estão implementados nesta versão.
+6. Execute testes de contrato com respostas controladas e verificadas da fonte, cobrindo falhas, paginação, identidade da loja, duplicação e dados inválidos. Adicione o coletor à rotina existente; não crie um scheduler específico para cada rede.
 
 `ProviderResult` distingue `AVAILABLE` e `UNAVAILABLE`. Uma resposta disponível e vazia significa que a consulta foi concluída sem resultados. Uma resposta indisponível exige uma explicação e não pode conter itens ou cursor.
 
@@ -33,6 +61,7 @@ Os campos temporais têm significados distintos:
 | `recordedAt` | Instante em que o backend registrou a observação. |
 | `validUntil` | Validade explícita da observação de preço, quando fornecida. |
 | `promotionValidUntil` | Fim conhecido da promoção, quando fornecido. |
+| `promotionCondition` | Clube, aplicativo, CPF ou outra condição necessária para obter o preço. |
 
 Os timestamps são persistidos em UTC com precisão de microssegundos, compatível com PostgreSQL. A normalização também participa da verificação de idempotência.
 
@@ -46,7 +75,9 @@ A comparação seleciona exatamente uma observação por produto e loja, ordenan
 
 O prazo configurado em `app.prices.max-age` limita a idade aceita do preço; o padrão é `P2D`. Quando `validUntil` informa um prazo menor, prevalece esse prazo. A expiração ocorre no próprio instante limite. O frescor é uma política operacional e não uma garantia de que o estabelecimento ainda praticará aquele preço.
 
-Uma promoção só compõe o preço atual quando `promotionValidUntil` é conhecido e está no futuro. Sem essa informação, o valor promocional permanece no histórico e a comparação usa o valor regular enquanto a observação estiver válida. `promotionApplied` informa a decisão e `expiresAt` informa o limite do preço efetivamente utilizado.
+Uma promoção só compõe o preço atual quando `promotionValidUntil` é conhecido, está no futuro e `promotionCondition` não está preenchido. Sem validade ou com uma condição especial, o valor promocional permanece visível no histórico e a comparação usa o valor regular. `promotionApplied` informa a decisão e `expiresAt` informa o limite do preço efetivamente utilizado.
+
+O coletor gera uma referência determinística com data e conteúdo. Repetir a mesma coleta no mesmo dia não cria histórico duplicado. Uma observação diária nova é necessária mesmo sem alteração de valor porque comprova o instante de atualização e renova a validade diária declarada pela fonte. `collectedAt`, `status` e `expiresAt` permitem ao frontend diferenciar preço atual, expirado e ausente; `PRICE_MAX_AGE` controla o limite de stale quando a fonte não fornece prazo menor.
 
 O contrato de `PriceQuote` diferencia:
 

@@ -98,6 +98,7 @@ public class PriceService {
             throw new ConstraintViolationException(violations);
         }
         observationRules.validate(observation.regularPrice(), observation.promotionalPrice(),
-                observation.collectedAt(), observation.validUntil(), observation.promotionValidUntil(), now);
+                observation.collectedAt(), observation.validUntil(), observation.promotionValidUntil(),
+                observation.promotionCondition(), now);
     }
 }

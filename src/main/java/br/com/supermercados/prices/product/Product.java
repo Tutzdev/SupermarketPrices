@@ -28,8 +28,14 @@ public class Product {
     @Column(nullable = false, length = 200)
     private String name;
 
+    @Column(length = 200)
+    private String normalizedName;
+
     @Column(length = 120)
     private String brand;
+
+    @Column(length = 120)
+    private String normalizedBrand;
 
     @Column(length = 2000)
     private String description;
@@ -42,6 +48,9 @@ public class Product {
 
     @Column(length = 120)
     private String category;
+
+    @Column(length = 120)
+    private String packageDescription;
 
     @Column(nullable = false)
     private UUID sourceId;
@@ -71,12 +80,17 @@ public class Product {
     }
 
     void updateDetails(ProductObservation observation, Instant now) {
+        ProductNormalizer.NormalizedProduct normalized = ProductNormalizer.normalize(observation);
+
         name = observation.name().strip();
+        normalizedName = normalized.name();
         brand = cleanOptional(observation.brand());
+        normalizedBrand = normalized.brand();
         description = cleanOptional(observation.description());
-        unit = cleanOptional(observation.unit());
-        quantity = observation.quantity();
+        unit = normalized.unit();
+        quantity = normalized.quantity();
         category = cleanOptional(observation.category());
+        packageDescription = normalized.packageDescription();
         sourceId = observation.source().sourceId();
         sourceReference = observation.source().sourceReference();
         collectedAt = observation.source().collectedAt();

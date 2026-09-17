@@ -27,6 +27,7 @@ O checkout e o paywall visual não simulam pagamento. Para concluir a assinatura
 * Verificação de e-mail e recuperação de senha
 * Catálogo de produtos, redes e supermercados
 * Histórico e comparação de preços
+* Coleta automática diária de fontes públicas verificadas
 * Criação e gerenciamento de listas de compras
 * Comparação completa de uma lista entre supermercados
 * Recomendação da melhor opção de compra
@@ -37,6 +38,8 @@ O checkout e o paywall visual não simulam pagamento. Para concluir a assinatura
 * Moderação de contribuições
 * Controle de acesso para administradores
 * Auditoria de operações administrativas
+
+As fontes comerciais atualmente verificadas, suas limitações e a operação dos coletores estão descritas em [`docs/data-sources.md`](docs/data-sources.md).
 
 ## Tecnologias
 

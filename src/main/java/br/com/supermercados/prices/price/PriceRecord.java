@@ -65,6 +65,9 @@ public class PriceRecord {
 
     private Instant promotionValidUntil;
 
+    @Column(length = 500)
+    private String promotionCondition;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 16)
     private StockAvailability availability;
@@ -99,6 +102,7 @@ public class PriceRecord {
         record.recordedAt = toDatabasePrecision(recordedAt);
         record.validUntil = toDatabasePrecision(observation.validUntil());
         record.promotionValidUntil = toDatabasePrecision(observation.promotionValidUntil());
+        record.promotionCondition = cleanOptional(observation.promotionCondition());
         record.availability = observation.availability();
 
         return record;
@@ -117,7 +121,12 @@ public class PriceRecord {
                 && collectedAt.equals(other.collectedAt)
                 && Objects.equals(validUntil, other.validUntil)
                 && Objects.equals(promotionValidUntil, other.promotionValidUntil)
+                && Objects.equals(promotionCondition, other.promotionCondition)
                 && availability == other.availability;
+    }
+
+    private static String cleanOptional(String value) {
+        return value == null || value.isBlank() ? null : value.strip();
     }
 
     private static Instant toDatabasePrecision(Instant timestamp) {

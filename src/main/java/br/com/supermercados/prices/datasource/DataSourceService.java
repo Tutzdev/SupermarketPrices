@@ -3,6 +3,7 @@ package br.com.supermercados.prices.datasource;
 import java.net.URI;
 import java.time.Clock;
 import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,10 @@ public class DataSourceService {
     public DataSource requireSource(UUID sourceId) {
         return repository.findById(sourceId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Fonte de dados não encontrada"));
+    }
+
+    public Optional<DataSource> findByCode(String code) {
+        return repository.findByCode(code);
     }
 
     @Transactional

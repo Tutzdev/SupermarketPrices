@@ -23,6 +23,22 @@ public record PriceObservation(
         @NotNull Instant collectedAt,
         Instant validUntil,
         Instant promotionValidUntil,
+        @Size(max = 500) String promotionCondition,
         @NotNull StockAvailability availability
 ) {
+    public PriceObservation(
+            UUID productId,
+            UUID storeId,
+            UUID sourceId,
+            String sourceReference,
+            BigDecimal regularPrice,
+            BigDecimal promotionalPrice,
+            String currency,
+            Instant collectedAt,
+            Instant validUntil,
+            Instant promotionValidUntil,
+            StockAvailability availability) {
+        this(productId, storeId, sourceId, sourceReference, regularPrice, promotionalPrice,
+                currency, collectedAt, validUntil, promotionValidUntil, null, availability);
+    }
 }

@@ -17,6 +17,18 @@ public class PriceObservationRules {
             Instant validUntil,
             Instant promotionValidUntil,
             Instant now) {
+        validate(regularPrice, promotionalPrice, observedAt,
+                validUntil, promotionValidUntil, null, now);
+    }
+
+    public void validate(
+            BigDecimal regularPrice,
+            BigDecimal promotionalPrice,
+            Instant observedAt,
+            Instant validUntil,
+            Instant promotionValidUntil,
+            String promotionCondition,
+            Instant now) {
         if (observedAt.isAfter(now)) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "A coleta não pode ocorrer no futuro.");
         }
@@ -27,6 +39,10 @@ public class PriceObservationRules {
         if (promotionalPrice == null && promotionValidUntil != null) {
             throw new ApiException(HttpStatus.BAD_REQUEST,
                     "A validade promocional exige um preço promocional.");
+        }
+        if (promotionalPrice == null && promotionCondition != null && !promotionCondition.isBlank()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST,
+                    "A condição promocional exige um preço promocional.");
         }
         requireValidPeriod(observedAt, validUntil);
         requireValidPeriod(observedAt, promotionValidUntil);

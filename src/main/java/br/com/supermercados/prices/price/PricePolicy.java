@@ -35,6 +35,7 @@ public class PricePolicy {
         }
         boolean promotionApplied = record.getPromotionalPrice() != null
                 && record.getPromotionValidUntil() != null
+                && record.getPromotionCondition() == null
                 && record.getPromotionValidUntil().isAfter(comparedAt);
         if (promotionApplied && record.getPromotionValidUntil().isBefore(expiresAt)) {
             expiresAt = record.getPromotionValidUntil();

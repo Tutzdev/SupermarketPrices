@@ -55,6 +55,21 @@ class PricePolicyTest {
     }
 
     @Test
+    void conditionalPromotionRemainsVisibleButDoesNotBecomeTheCommonPrice() {
+        PriceRecord record = PriceFixtures.observation(productId, storeId, "10.00", "7.99",
+                now.minusSeconds(60), null, now.plusSeconds(300),
+                "Exclusivo para clientes do clube", StockAvailability.AVAILABLE);
+
+        PriceQuote quote = policy.quote(record, now);
+
+        assertThat(quote.unitPrice()).isEqualByComparingTo("10.00");
+        assertThat(quote.promotionApplied()).isFalse();
+        assertThat(quote.observation().promotionalPrice()).isEqualByComparingTo("7.99");
+        assertThat(quote.observation().promotionCondition())
+                .isEqualTo("Exclusivo para clientes do clube");
+    }
+
+    @Test
     void latestExpiredObservationCannotContributePriceOrAssertCurrentStock() {
         PriceRecord record = PriceFixtures.observation(productId, storeId, "10.00", null,
                 now.minus(Duration.ofDays(2)), null, null, StockAvailability.AVAILABLE);

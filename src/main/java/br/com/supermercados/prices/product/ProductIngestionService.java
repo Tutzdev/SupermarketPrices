@@ -26,6 +26,11 @@ public class ProductIngestionService {
 
     @Transactional
     public ProductResponse ingest(ProductObservation observation) {
+        return ingestWithOutcome(observation).product();
+    }
+
+    @Transactional
+    public ProductIngestionResult ingestWithOutcome(ProductObservation observation) {
         validator.validate(observation);
         dataSourceService.verifyObservation(observation.source());
 
@@ -38,21 +43,24 @@ public class ProductIngestionService {
             return updateReferencedProduct(existingReference.orElseThrow(), observation, gtin);
         }
 
-        Product product = findByGtin(gtin).orElseGet(
+        Optional<Product> identifiedProduct = findByGtin(gtin);
+        Product product = identifiedProduct.orElseGet(
                 () -> productRepository.save(new Product(observation, gtin, clock.instant())));
         referenceRepository.save(new ProductSourceReference(product.getId(), observation.source()));
         
-        return ProductResponse.from(product);
+        ProductIngestionOutcome outcome = identifiedProduct.isPresent()
+                ? ProductIngestionOutcome.LINKED : ProductIngestionOutcome.CREATED;
+        return new ProductIngestionResult(ProductResponse.from(product), outcome);
     }
 
-    private ProductResponse updateReferencedProduct(
+    private ProductIngestionResult updateReferencedProduct(
             ProductSourceReference reference, ProductObservation observation, String gtin) {
         Product product = productRepository.findById(reference.getProductId())
                 .orElseThrow(() -> new IllegalStateException("Product source reference has no product"));
         validateIdentity(product, gtin);
 
         if (!observation.source().collectedAt().isAfter(reference.getCollectedAt())) {
-            return ProductResponse.from(product);
+            return new ProductIngestionResult(ProductResponse.from(product), ProductIngestionOutcome.UNCHANGED);
         }
 
         product.assignGtin(gtin);
@@ -63,7 +71,7 @@ public class ProductIngestionService {
         }
         reference.recordCollection(observation.source().collectedAt());
 
-        return ProductResponse.from(product);
+        return new ProductIngestionResult(ProductResponse.from(product), ProductIngestionOutcome.UPDATED);
     }
 
     private void validateIdentity(Product product, String gtin) {

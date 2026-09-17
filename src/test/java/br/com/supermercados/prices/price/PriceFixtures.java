@@ -18,9 +18,16 @@ public final class PriceFixtures {
     public static PriceRecord observation(UUID productId, UUID storeId, String regular, String promotional,
                                           Instant collectedAt, Instant validUntil, Instant promotionValidUntil,
                                           StockAvailability availability) {
+        return observation(productId, storeId, regular, promotional, collectedAt,
+                validUntil, promotionValidUntil, null, availability);
+    }
+
+    public static PriceRecord observation(UUID productId, UUID storeId, String regular, String promotional,
+                                          Instant collectedAt, Instant validUntil, Instant promotionValidUntil,
+                                          String promotionCondition, StockAvailability availability) {
         return PriceRecord.from(new PriceObservation(productId, storeId, UUID.randomUUID(),
                 "synthetic-observation-" + UUID.randomUUID(), new BigDecimal(regular),
                 promotional == null ? null : new BigDecimal(promotional), "BRL", collectedAt,
-                validUntil, promotionValidUntil, availability), collectedAt);
+                validUntil, promotionValidUntil, promotionCondition, availability), collectedAt);
     }
 }

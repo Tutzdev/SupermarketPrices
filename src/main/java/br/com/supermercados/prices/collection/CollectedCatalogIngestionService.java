@@ -1,0 +1,191 @@
+package br.com.supermercados.prices.collection;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import br.com.supermercados.prices.datasource.SourceObservation;
+import br.com.supermercados.prices.price.PriceObservation;
+import br.com.supermercados.prices.price.PriceRecord;
+import br.com.supermercados.prices.price.PriceRecordRepository;
+import br.com.supermercados.prices.price.PriceService;
+import br.com.supermercados.prices.product.ProductIngestionOutcome;
+import br.com.supermercados.prices.product.ProductIngestionResult;
+import br.com.supermercados.prices.product.ProductIngestionService;
+import br.com.supermercados.prices.product.ProductObservation;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class CollectedCatalogIngestionService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CollectedCatalogIngestionService.class);
+
+    private final CollectionCatalogService catalogs;
+    private final ProductIngestionService products;
+    private final PriceService prices;
+    private final PriceRecordRepository priceRecords;
+    private final PriceChangeGuard priceChangeGuard;
+    private final PriceObservationReference observationReferences;
+
+    public CollectionResult ingest(CollectorMetadata metadata, CollectedCatalog collectedCatalog) {
+        CollectionCatalog catalog = catalogs.ensureCatalog(
+                metadata, collectedCatalog.store(), collectedCatalog.collectedAt());
+        MutableResult result = new MutableResult(collectedCatalog.foundCount());
+        collectedCatalog.warnings().forEach(result::addSkippedError);
+
+        List<ProductPrice> collectedPrices = ingestProducts(
+                metadata, collectedCatalog, catalog.sourceId(), result);
+        ingestPrices(metadata, collectedCatalog, catalog, collectedPrices, result);
+
+        return result.toResult(catalog.sourceId(), catalog.storeId());
+    }
+
+    private List<ProductPrice> ingestProducts(
+            CollectorMetadata metadata,
+            CollectedCatalog catalog,
+            UUID sourceId,
+            MutableResult result) {
+        List<ProductPrice> collectedPrices = new ArrayList<>();
+
+        for (CollectedProduct collectedProduct : catalog.products()) {
+            try {
+                SourceObservation source = new SourceObservation(
+                        sourceId, collectedProduct.sourceReference(), catalog.collectedAt());
+                ProductObservation observation = new ProductObservation(
+                        collectedProduct.gtin(), collectedProduct.name(), collectedProduct.brand(),
+                        collectedProduct.description(), null, null, collectedProduct.category(), source);
+                ProductIngestionResult ingestion = products.ingestWithOutcome(observation);
+                if (ingestion.outcome() == ProductIngestionOutcome.CREATED) {
+                    result.createdCount++;
+                }
+                collectedPrices.add(new ProductPrice(ingestion.product().id(), collectedProduct));
+            } catch (RuntimeException exception) {
+                result.addSkippedError("Produto " + collectedProduct.sourceReference() + " ignorado: "
+                        + safeMessage(exception));
+                LOGGER.warn("Coletor {} ignorou produto {}: {}", metadata.code(),
+                        collectedProduct.sourceReference(), safeMessage(exception));
+            }
+        }
+        return collectedPrices;
+    }
+
+    private void ingestPrices(
+            CollectorMetadata metadata,
+            CollectedCatalog collectedCatalog,
+            CollectionCatalog catalog,
+            List<ProductPrice> collectedPrices,
+            MutableResult result) {
+        if (collectedPrices.isEmpty()) {
+            return;
+        }
+
+        Map<UUID, PriceRecord> latestPrices = latestPrices(catalog, collectedPrices);
+        Map<ProductPrice, String> references = new LinkedHashMap<>();
+        for (ProductPrice collectedPrice : collectedPrices) {
+            references.put(collectedPrice, observationReferences.create(
+                    metadata.code(), metadata.storeSourceReference(),
+                    collectedPrice.collectedProduct(), collectedCatalog.collectedAt()));
+        }
+        Set<String> existingReferences = existingReferences(catalog.sourceId(), references.values());
+
+        for (Map.Entry<ProductPrice, String> entry : references.entrySet()) {
+            ProductPrice collectedPrice = entry.getKey();
+            CollectedProduct product = collectedPrice.collectedProduct();
+            String sourceReference = entry.getValue();
+            PriceRecord previous = latestPrices.get(collectedPrice.productId());
+            if (observationReferences.isSameDailyObservation(
+                    previous, product, collectedCatalog.collectedAt())) {
+                result.skippedCount++;
+                continue;
+            }
+            if (existingReferences.contains(sourceReference)) {
+                sourceReference = observationReferences.createAfter(
+                        metadata.code(), metadata.storeSourceReference(), product,
+                        collectedCatalog.collectedAt(), previous);
+            }
+            if (priceChangeGuard.isSuspicious(product.regularPrice(), previous)) {
+                result.skippedCount++;
+                result.addError("Variação suspeita no produto " + product.sourceReference());
+                LOGGER.warn("Coletor {} rejeitou variação suspeita do produto {}",
+                        metadata.code(), product.sourceReference());
+                continue;
+            }
+
+            try {
+                prices.appendObservation(new PriceObservation(
+                        collectedPrice.productId(), catalog.storeId(), catalog.sourceId(), sourceReference,
+                        product.regularPrice(), product.promotionalPrice(), "BRL",
+                        collectedCatalog.collectedAt(), product.validUntil(),
+                        product.promotionValidUntil(), product.promotionCondition(), product.availability()));
+                result.updatedCount++;
+            } catch (RuntimeException exception) {
+                result.addSkippedError("Preço do produto " + product.sourceReference() + " ignorado: "
+                        + safeMessage(exception));
+                LOGGER.warn("Coletor {} ignorou preço do produto {}: {}", metadata.code(),
+                        product.sourceReference(), safeMessage(exception));
+            }
+        }
+    }
+
+    private Map<UUID, PriceRecord> latestPrices(CollectionCatalog catalog, List<ProductPrice> collectedPrices) {
+        Set<UUID> productIds = new HashSet<>();
+        collectedPrices.forEach(product -> productIds.add(product.productId()));
+        Map<UUID, PriceRecord> latestPrices = new HashMap<>();
+        priceRecords.findLatestForSourceStoreAndProducts(
+                catalog.sourceId(), catalog.storeId(), productIds)
+                .forEach(record -> latestPrices.put(record.getProductId(), record));
+        return latestPrices;
+    }
+
+    private Set<String> existingReferences(UUID sourceId, java.util.Collection<String> references) {
+        Set<String> existing = new HashSet<>();
+        priceRecords.findAllBySourceIdAndSourceReferenceIn(sourceId, references)
+                .forEach(record -> existing.add(record.getSourceReference()));
+        return existing;
+    }
+
+    private String safeMessage(RuntimeException exception) {
+        return exception.getMessage() == null ? exception.getClass().getSimpleName() : exception.getMessage();
+    }
+
+    private record ProductPrice(UUID productId, CollectedProduct collectedProduct) {
+    }
+
+    private static final class MutableResult {
+
+        private final int foundCount;
+        private final List<String> errors = new ArrayList<>();
+        private int createdCount;
+        private int updatedCount;
+        private int skippedCount;
+
+        private MutableResult(int foundCount) {
+            this.foundCount = foundCount;
+        }
+
+        private void addError(String message) {
+            errors.add(message);
+        }
+
+        private void addSkippedError(String message) {
+            skippedCount++;
+            addError(message);
+        }
+
+        private CollectionResult toResult(UUID sourceId, UUID storeId) {
+            String errorMessage = errors.isEmpty() ? null : String.join(" | ", errors);
+            return new CollectionResult(sourceId, storeId, foundCount, createdCount,
+                    updatedCount, skippedCount, errors.size(), errorMessage);
+        }
+    }
+}
