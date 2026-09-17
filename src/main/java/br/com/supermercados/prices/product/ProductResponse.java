@@ -23,20 +23,20 @@ public record ProductResponse(
 
     public static ProductResponse from(Product product) {
         return new ProductResponse(
-        product.getId(), 
-        product.getGtin(), 
-        product.getName(), 
-        product.getNormalizedName(),
-        product.getBrand(),
-        product.getNormalizedBrand(),
-        product.getDescription(), 
-        product.getUnit(), 
-        product.getQuantity(), 
-        product.getPackageDescription(),
-        product.getCategory(),
-        product.getSourceId(), 
-        product.getSourceReference(), 
-        product.getCollectedAt(), 
-        product.getUpdatedAt());
+                product.getId(),
+                product.getGtin(),
+                product.getName(),
+                product.getNormalizedName(),
+                product.getBrand(),
+                product.getNormalizedBrand(),
+                product.getDescription(),
+                product.getUnit(),
+                product.getQuantity(),
+                product.getPackageDescription(),
+                product.getCategory(),
+                product.getSourceId(),
+                product.getSourceReference(),
+                product.getCollectedAt(),
+                product.getUpdatedAt());
     }
 }

@@ -7,8 +7,7 @@ import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoCon
 @SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
 public class PricesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PricesApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(PricesApplication.class, args);
+    }
 }

@@ -1,9 +1,9 @@
 package br.com.supermercados.prices.comparison;
 
-import br.com.supermercados.prices.common.PageResponse;
-
 import java.time.Instant;
 import java.util.UUID;
+
+import br.com.supermercados.prices.common.PageResponse;
 
 public record ProductComparisonResponse(
         UUID productId,
@@ -11,6 +11,5 @@ public record ProductComparisonResponse(
         UUID cityId,
         String currency,
         Instant comparedAt,
-        PageResponse<ProductStoreComparison> stores
-) {
+        PageResponse<ProductStoreComparison> stores) {
 }

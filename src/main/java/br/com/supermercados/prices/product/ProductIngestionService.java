@@ -13,7 +13,6 @@ import br.com.supermercados.prices.datasource.DataSourceService;
 import br.com.supermercados.prices.datasource.ObservationValidator;
 import lombok.RequiredArgsConstructor;
 
-
 @Service
 @RequiredArgsConstructor
 public class ProductIngestionService {
@@ -47,7 +46,7 @@ public class ProductIngestionService {
         Product product = identifiedProduct.orElseGet(
                 () -> productRepository.save(new Product(observation, gtin, clock.instant())));
         referenceRepository.save(new ProductSourceReference(product.getId(), observation.source()));
-        
+
         ProductIngestionOutcome outcome = identifiedProduct.isPresent()
                 ? ProductIngestionOutcome.LINKED : ProductIngestionOutcome.CREATED;
         return new ProductIngestionResult(ProductResponse.from(product), outcome);
@@ -75,15 +74,15 @@ public class ProductIngestionService {
     }
 
     private void validateIdentity(Product product, String gtin) {
-        if (gtin == null) { return; }
+        if (gtin == null) {
+            return;
+        }
 
         boolean changedGtin = product.getGtin() != null && !Objects.equals(product.getGtin(), gtin);
         boolean anotherProductOwnsGtin = findByGtin(gtin)
-                .filter(existing -> !existing.getId()
-                .equals(product.getId()))
-                .isPresent(
-                );
-                
+                .filter(existing -> !existing.getId().equals(product.getId()))
+                .isPresent();
+
         if (changedGtin || anotherProductOwnsGtin) {
             throw new ApiException(HttpStatus.CONFLICT,
                     "Identidade de produto conflitante; associação exige revisão da fonte");

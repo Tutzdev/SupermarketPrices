@@ -39,7 +39,7 @@ public class ShoppingListService {
     @Transactional
     public ShoppingListResponse create(UUID userId, ShoppingListRequest request) {
         var list = new ShoppingList(userId, request.name(), request.shoppingType(), clock.instant());
-        
+
         return response(lists.saveAndFlush(list));
     }
 

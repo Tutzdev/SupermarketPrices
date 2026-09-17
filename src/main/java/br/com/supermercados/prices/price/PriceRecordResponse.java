@@ -21,25 +21,25 @@ public record PriceRecordResponse(
         UUID sourceId,
         String sourceReference,
         PriceOriginType originType,
-        UUID contributionId
-) {
+        UUID contributionId) {
+
     public static PriceRecordResponse from(PriceRecord record) {
         return new PriceRecordResponse(
-            record.getId(), 
-            record.getProductId(), 
-            record.getStoreId(),
-            record.getRegularPrice(), 
-            record.getPromotionalPrice(), 
-            record.getCurrency(),
-            record.getAvailability(), 
-            record.getCollectedAt(), 
-            record.getRecordedAt(),
-            record.getValidUntil(), 
-            record.getPromotionValidUntil(), 
-            record.getPromotionCondition(),
-            record.getSourceId(),
-            record.getSourceReference(),
-            record.getOriginType(),
-            record.getContributionId());
+                record.getId(),
+                record.getProductId(),
+                record.getStoreId(),
+                record.getRegularPrice(),
+                record.getPromotionalPrice(),
+                record.getCurrency(),
+                record.getAvailability(),
+                record.getCollectedAt(),
+                record.getRecordedAt(),
+                record.getValidUntil(),
+                record.getPromotionValidUntil(),
+                record.getPromotionCondition(),
+                record.getSourceId(),
+                record.getSourceReference(),
+                record.getOriginType(),
+                record.getContributionId());
     }
 }

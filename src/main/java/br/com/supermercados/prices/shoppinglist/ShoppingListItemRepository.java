@@ -15,7 +15,6 @@ public interface ShoppingListItemRepository extends JpaRepository<ShoppingListIt
             where item.shoppingListId = :listId
             order by product.name, item.id
             """)
-            
     List<ShoppingListItemResponse> findItems(UUID listId);
 
     Optional<ShoppingListItem> findByIdAndShoppingListId(UUID id, UUID shoppingListId);

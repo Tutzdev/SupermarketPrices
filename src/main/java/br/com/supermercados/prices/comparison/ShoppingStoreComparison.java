@@ -13,8 +13,8 @@ public record ShoppingStoreComparison(
         int missingItems,
         BigDecimal subtotalKnown,
         boolean completeShoppingList,
-        List<ComparisonItemResponse> items
-) {
+        List<ComparisonItemResponse> items) {
+
     public ShoppingStoreComparison {
         items = List.copyOf(items);
     }

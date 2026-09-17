@@ -1,17 +1,19 @@
 package br.com.supermercados.prices.comparison;
 
-import br.com.supermercados.prices.price.PricePolicy;
-import br.com.supermercados.prices.price.PriceQuote;
-import br.com.supermercados.prices.price.PriceRecord;
-import br.com.supermercados.prices.shoppinglist.ShoppingListItemResponse;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+
+import org.springframework.stereotype.Component;
+
+import br.com.supermercados.prices.price.PricePolicy;
+import br.com.supermercados.prices.price.PriceQuote;
+import br.com.supermercados.prices.price.PriceRecord;
+import br.com.supermercados.prices.shoppinglist.ShoppingListItemResponse;
 
 @Component
 public class ShoppingPriceCalculator {
@@ -31,7 +33,7 @@ public class ShoppingPriceCalculator {
         int pricedItems = (int) items.stream().filter(item -> item.lineTotal() != null).count();
         BigDecimal subtotal = pricedItems == 0 ? null : items.stream()
                 .map(ComparisonItemResponse::lineTotal)
-                .filter(java.util.Objects::nonNull)
+                .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO.setScale(2), BigDecimal::add);
         return new ShoppingStoreComparison(storeId, storeName, items.size(), pricedItems,
                 items.size() - pricedItems, subtotal, !items.isEmpty() && pricedItems == items.size(), items);

@@ -1,15 +1,15 @@
 package br.com.supermercados.prices.price;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.UUID;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.UUID;
 
 /** A source reference identifies one immutable observation, not a mutable product page. */
 public record PriceObservation(
@@ -24,8 +24,8 @@ public record PriceObservation(
         Instant validUntil,
         Instant promotionValidUntil,
         @Size(max = 500) String promotionCondition,
-        @NotNull StockAvailability availability
-) {
+        @NotNull StockAvailability availability) {
+
     public PriceObservation(
             UUID productId,
             UUID storeId,

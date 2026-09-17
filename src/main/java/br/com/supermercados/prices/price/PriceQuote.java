@@ -9,8 +9,8 @@ public record PriceQuote(
         BigDecimal unitPrice,
         boolean promotionApplied,
         Instant expiresAt,
-        PriceRecordResponse observation
-) {
+        PriceRecordResponse observation) {
+
     public static PriceQuote missing() {
         return new PriceQuote(PriceStatus.NO_OBSERVATION, StockAvailability.UNKNOWN,
                 null, false, null, null);
