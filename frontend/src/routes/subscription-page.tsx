@@ -28,10 +28,10 @@ export function SubscriptionPage() {
             <p className="text-sm font-semibold text-white/65">Assinatura mensal</p>
             <p className="mt-3 text-4xl font-extrabold">{formatCurrency(BRAND.monthlyPrice)}<span className="text-base text-white/65">/mês</span></p>
             <div className="mt-8 rounded-lg border border-white/15 bg-white/6 p-4">
-              <div className="flex gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-[#ff746d]" aria-hidden /><div><p className="font-bold">Checkout ainda não conectado</p><p className="mt-1 text-sm leading-6 text-white/65">O backend atual não possui cobrança nem status de assinatura. Nenhum pagamento será simulado.</p></div></div>
+              <div className="flex gap-3"><LockKeyhole className="mt-0.5 size-5 shrink-0 text-[#ff746d]" aria-hidden /><div><p className="font-bold">Checkout ainda não conectado</p><p className="mt-1 text-sm leading-6 text-white/65">O backend registra o acesso de assinante, mas a cobrança automatizada ainda não foi integrada. Nenhum pagamento será simulado.</p></div></div>
             </div>
             <NativeButton to="/entrar?modo=cadastro" className="mt-6 w-full" glow>Criar conta Gomo</NativeButton>
-            <p className="mt-3 text-center text-xs text-white/55">O acesso pago será liberado somente após confirmação segura do backend.</p>
+            <p className="mt-3 text-center text-xs text-white/55">A ativação é feita pelo backend enquanto a integração de pagamentos não está disponível.</p>
           </aside>
         </div>
       </div>

@@ -1,61 +1,129 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
-import { AppShell } from "@/components/layout/app-shell";
-import { LoadingState } from "@/components/ui/feedback";
-import { EmailConfirmationPage, AuthPage, PasswordResetConfirmPage, PasswordResetRequestPage } from "@/features/auth/auth-page";
-import { useAuth } from "@/features/auth/auth-context";
-import { AdminPage } from "@/routes/app/admin-page";
-import { AlertsPage } from "@/routes/app/alerts-page";
-import { ComparisonPage } from "@/routes/app/comparison-page";
-import { ContributionsPage } from "@/routes/app/contributions-page";
-import { NotificationsPage } from "@/routes/app/notifications-page";
-import { OverviewPage } from "@/routes/app/overview-page";
-import { ProductDetailPage } from "@/routes/app/product-detail-page";
-import { ProductsPage } from "@/routes/app/products-page";
-import { ProfilePage } from "@/routes/app/profile-page";
-import { ShoppingListDetailPage } from "@/routes/app/shopping-list-detail-page";
-import { ShoppingListsPage } from "@/routes/app/shopping-lists-page";
-import { StoresPage } from "@/routes/app/stores-page";
-import { AccessDeniedPage, NotFoundPage } from "@/routes/error-pages";
-import { LandingPage } from "@/routes/landing-page";
-import { SubscriptionPage } from "@/routes/subscription-page";
+import { createBrowserRouter } from "react-router-dom";
+import { RouteLoadingPage } from "@/app/route-loading-page";
 
-function ProtectedLayout() {
-  const { user, loading } = useAuth();
-  if (loading) return <main className="grid min-h-screen place-items-center p-4"><LoadingState label="Carregando sua conta…" /></main>;
-  if (!user) return <Navigate to="/entrar" replace />;
-  return <AppShell />;
-}
-
-function AdminGuard() {
-  const { user } = useAuth();
-  return user?.role === "ADMIN" ? <AdminPage /> : <Navigate to="/acesso-negado" replace />;
-}
+const hydrateFallbackElement = <RouteLoadingPage />;
 
 export const router = createBrowserRouter([
-  { path: "/", element: <LandingPage /> },
-  { path: "/entrar", element: <AuthPage /> },
-  { path: "/recuperar-senha", element: <PasswordResetRequestPage /> },
-  { path: "/redefinir-senha", element: <PasswordResetConfirmPage /> },
-  { path: "/confirmar-email", element: <EmailConfirmationPage /> },
-  { path: "/assinar", element: <SubscriptionPage /> },
-  { path: "/acesso-negado", element: <AccessDeniedPage /> },
+  {
+    path: "/",
+    hydrateFallbackElement,
+    lazy: () => import("@/routes/landing-page").then(({ LandingPage }) => ({ Component: LandingPage })),
+  },
+  {
+    path: "/entrar",
+    hydrateFallbackElement,
+    lazy: () => import("@/features/auth/auth-page").then(({ AuthPage }) => ({ Component: AuthPage })),
+  },
+  {
+    path: "/recuperar-senha",
+    hydrateFallbackElement,
+    lazy: () => import("@/features/auth/auth-page").then(({ PasswordResetRequestPage }) => ({
+      Component: PasswordResetRequestPage,
+    })),
+  },
+  {
+    path: "/redefinir-senha",
+    hydrateFallbackElement,
+    lazy: () => import("@/features/auth/auth-page").then(({ PasswordResetConfirmPage }) => ({
+      Component: PasswordResetConfirmPage,
+    })),
+  },
+  {
+    path: "/confirmar-email",
+    hydrateFallbackElement,
+    lazy: () => import("@/features/auth/auth-page").then(({ EmailConfirmationPage }) => ({
+      Component: EmailConfirmationPage,
+    })),
+  },
+  {
+    path: "/assinar",
+    hydrateFallbackElement,
+    lazy: () => import("@/routes/subscription-page").then(({ SubscriptionPage }) => ({
+      Component: SubscriptionPage,
+    })),
+  },
+  {
+    path: "/acesso-negado",
+    hydrateFallbackElement,
+    lazy: () => import("@/routes/error-pages").then(({ AccessDeniedPage }) => ({
+      Component: AccessDeniedPage,
+    })),
+  },
   {
     path: "/app",
-    element: <ProtectedLayout />,
+    hydrateFallbackElement,
+    lazy: () => import("@/app/route-guards").then(({ ProtectedLayout }) => ({ Component: ProtectedLayout })),
     children: [
-      { index: true, element: <OverviewPage /> },
-      { path: "comparar", element: <ComparisonPage /> },
-      { path: "produtos", element: <ProductsPage /> },
-      { path: "produtos/:id", element: <ProductDetailPage /> },
-      { path: "supermercados", element: <StoresPage /> },
-      { path: "listas", element: <ShoppingListsPage /> },
-      { path: "listas/:id", element: <ShoppingListDetailPage /> },
-      { path: "alertas", element: <AlertsPage /> },
-      { path: "contribuir", element: <ContributionsPage /> },
-      { path: "notificacoes", element: <NotificationsPage /> },
-      { path: "perfil", element: <ProfilePage /> },
-      { path: "admin", element: <AdminGuard /> },
+      {
+        index: true,
+        lazy: () => import("@/routes/app/overview-page").then(({ OverviewPage }) => ({ Component: OverviewPage })),
+      },
+      {
+        path: "comparar",
+        lazy: () => import("@/routes/app/comparison-page").then(({ ComparisonPage }) => ({
+          Component: ComparisonPage,
+        })),
+      },
+      {
+        path: "produtos",
+        lazy: () => import("@/routes/app/products-page").then(({ ProductsPage }) => ({ Component: ProductsPage })),
+      },
+      {
+        path: "produtos/:id",
+        lazy: () => import("@/routes/app/product-detail-page").then(({ ProductDetailPage }) => ({
+          Component: ProductDetailPage,
+        })),
+      },
+      {
+        path: "supermercados",
+        lazy: () => import("@/routes/app/stores-page").then(({ StoresPage }) => ({ Component: StoresPage })),
+      },
+      {
+        path: "listas",
+        lazy: () => import("@/routes/app/shopping-lists-page").then(({ ShoppingListsPage }) => ({
+          Component: ShoppingListsPage,
+        })),
+      },
+      {
+        path: "listas/:id",
+        lazy: () => import("@/routes/app/shopping-list-detail-page").then(({ ShoppingListDetailPage }) => ({
+          Component: ShoppingListDetailPage,
+        })),
+      },
+      {
+        path: "alertas",
+        lazy: () => import("@/routes/app/alerts-page").then(({ AlertsPage }) => ({ Component: AlertsPage })),
+      },
+      {
+        path: "contribuir",
+        lazy: () => import("@/routes/app/contributions-page").then(({ ContributionsPage }) => ({
+          Component: ContributionsPage,
+        })),
+      },
+      {
+        path: "notificacoes",
+        lazy: () => import("@/routes/app/notifications-page").then(({ NotificationsPage }) => ({
+          Component: NotificationsPage,
+        })),
+      },
+      {
+        path: "perfil",
+        lazy: () => import("@/routes/app/profile-page").then(({ ProfilePage }) => ({ Component: ProfilePage })),
+      },
+      {
+        lazy: () => import("@/app/route-guards").then(({ AdminGuard }) => ({ Component: AdminGuard })),
+        children: [
+          {
+            path: "admin",
+            lazy: () => import("@/routes/app/admin-page").then(({ AdminPage }) => ({ Component: AdminPage })),
+          },
+        ],
+      },
     ],
   },
-  { path: "*", element: <NotFoundPage /> },
+  {
+    path: "*",
+    hydrateFallbackElement,
+    lazy: () => import("@/routes/error-pages").then(({ NotFoundPage }) => ({ Component: NotFoundPage })),
+  },
 ]);

@@ -36,7 +36,7 @@ class NagumoProductParser {
                     warnings.add("Produto duplicado na resposta da Nagumo: " + product.sourceReference());
                 }
             } catch (RuntimeException exception) {
-                String id = externalProduct.path("id").asText("sem identificador");
+                String id = externalProduct.path("id").asString("sem identificador");
                 warnings.add("Produto Nagumo " + id + " ignorado: " + safeMessage(exception));
             }
         }
@@ -88,7 +88,7 @@ class NagumoProductParser {
             return null;
         }
         for (JsonNode flag : flags) {
-            if (properties.getPromotionFlag().equals(flag.path("flagType").asText())) {
+            if (properties.getPromotionFlag().equals(flag.path("flagType").asString())) {
                 BigDecimal price = optionalPrice(flag.path("valueFlag"));
                 if (price == null) {
                     throw new IllegalArgumentException("preço Meu Nagumo ausente");
@@ -141,10 +141,10 @@ class NagumoProductParser {
 
     private String optionalText(JsonNode product, String field) {
         JsonNode value = product.path(field);
-        if (!value.isTextual() || value.asText().isBlank()) {
+        if (!value.isString() || value.asString().isBlank()) {
             return null;
         }
-        return value.asText().strip();
+        return value.asString().strip();
     }
 
     private String firstText(JsonNode product, String... fields) {

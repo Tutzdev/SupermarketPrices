@@ -19,7 +19,7 @@ npm run dev
 
 A interface fica em `http://localhost:5173`. Para permitir as chamadas locais, configure `CORS_ALLOWED_ORIGINS=http://localhost:5173` no backend. A URL da API pode ser alterada em `frontend/.env` por meio de `VITE_API_BASE_URL`.
 
-O checkout e o paywall visual não simulam pagamento. Para concluir a assinatura, o backend ainda precisa oferecer consulta do status atual, criação e consulta de checkout, portal ou cancelamento e confirmação de pagamentos por webhook.
+O checkout e o paywall visual não simulam pagamento. Enquanto a integração de cobrança não estiver disponível, uma conta existente pode receber acesso de assinante por meio de `SUBSCRIBER_BOOTSTRAP_EMAIL`; o Docker Compose encaminha essa variável ao backend. Checkout, portal, cancelamento e confirmação de pagamentos por webhook ainda precisam ser integrados.
 
 ## Funcionalidades
 

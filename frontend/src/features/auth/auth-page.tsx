@@ -10,6 +10,7 @@ import { TextField } from "@/components/ui/form-field";
 import { NativeButton } from "@/components/ui/native-button";
 import { useAuth } from "@/features/auth/auth-context";
 import { ApiError } from "@/lib/api";
+import { authApi } from "@/services/gomo-api";
 
 const loginSchema = z.object({
   email: z.email("Informe um e-mail válido."),
@@ -170,7 +171,7 @@ export function PasswordResetRequestPage() {
     <AuthFrame compact>
       <form className="mx-auto max-w-sm" noValidate onSubmit={handleSubmit(async ({ email }) => {
         setApiError(null);
-        try { const { authApi } = await import("@/services/gomo-api"); await authApi.requestPasswordReset(email); setSent(true); } catch (error) { setApiError(error instanceof ApiError ? error.message : "Não foi possível enviar a solicitação."); }
+        try { await authApi.requestPasswordReset(email); setSent(true); } catch (error) { setApiError(error instanceof ApiError ? error.message : "Não foi possível enviar a solicitação."); }
       })}>
         <span className="grid size-11 place-items-center rounded-lg bg-primary-soft text-primary"><Mail className="size-5" aria-hidden /></span>
         <h1 className="mt-5 text-3xl font-extrabold tracking-tight">Recupere sua senha</h1>
@@ -201,7 +202,7 @@ function TokenActionPage({ kind }: { kind: "password" | "email" }) {
   useEffect(() => {
     if (kind !== "email") return;
     if (!token) { setStatus("error"); setMessage("Token de verificação ausente."); return; }
-    void import("@/services/gomo-api").then(({ authApi }) => authApi.confirmEmail(token)).then(() => { setStatus("success"); setMessage("E-mail verificado com sucesso."); }).catch((error: unknown) => { setStatus("error"); setMessage(error instanceof ApiError ? error.message : "Não foi possível verificar o e-mail."); });
+    void authApi.confirmEmail(token).then(() => { setStatus("success"); setMessage("E-mail verificado com sucesso."); }).catch((error: unknown) => { setStatus("error"); setMessage(error instanceof ApiError ? error.message : "Não foi possível verificar o e-mail."); });
   }, [kind, token]);
 
   return (
@@ -215,7 +216,7 @@ function TokenActionPage({ kind }: { kind: "password" | "email" }) {
           <form className="mt-6" noValidate onSubmit={handleSubmit(async ({ password }) => {
             if (!token) { setStatus("error"); setMessage("Token de redefinição ausente."); return; }
             setMessage(null);
-            try { const { authApi } = await import("@/services/gomo-api"); await authApi.resetPassword(token, password); setStatus("success"); setMessage("Senha alterada. Você já pode entrar."); } catch (error) { setStatus("error"); setMessage(error instanceof ApiError ? error.message : "Não foi possível alterar a senha."); }
+            try { await authApi.resetPassword(token, password); setStatus("success"); setMessage("Senha alterada. Você já pode entrar."); } catch (error) { setStatus("error"); setMessage(error instanceof ApiError ? error.message : "Não foi possível alterar a senha."); }
           })}>
             {status === "success" ? <><p className="rounded-lg bg-success-soft p-4 text-sm text-success" role="status">{message}</p><NativeButton to="/entrar" className="mt-5 w-full">Entrar</NativeButton></> : <><TextField id="new-password" label="Nova senha" type="password" autoComplete="new-password" hint="Use de 12 a 72 caracteres." error={errors.password?.message} {...register("password")} /><InlineError>{message}</InlineError><NativeButton type="submit" className="mt-5 w-full" loading={isSubmitting}>Salvar nova senha</NativeButton></>}
           </form>

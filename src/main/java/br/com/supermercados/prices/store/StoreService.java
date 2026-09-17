@@ -43,7 +43,7 @@ public class StoreService {
         PageRequest request = PageRequest.of(0, maximumStores, Sort.by("name", "id"));
         Page<Store> page = storeRepository.findByCityIdAndActiveTrue(cityId, request);
         if (page.getTotalElements() > maximumStores) {
-            throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY,
+            throw new ApiException(HttpStatus.UNPROCESSABLE_CONTENT,
                     "A cidade possui mais lojas elegíveis que o limite seguro para uma recomendação completa.");
         }
         return page.getContent().stream().map(StoreResponse::from).toList();

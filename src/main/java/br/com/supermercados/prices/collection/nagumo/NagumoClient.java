@@ -112,7 +112,7 @@ class NagumoClient {
 
         JsonNode match = null;
         for (JsonNode store : stores) {
-            if (properties.getStoreId().equals(store.path("storeId").asText())) {
+            if (properties.getStoreId().equals(store.path("storeId").asString())) {
                 if (match != null) {
                     throw new IllegalStateException("A Nagumo retornou a loja configurada mais de uma vez");
                 }
@@ -153,7 +153,7 @@ class NagumoClient {
     }
 
     private String requiredText(JsonNode object, String field) {
-        String value = object.path(field).asText("").strip();
+        String value = object.path(field).asString("").strip();
         if (value.isEmpty()) {
             throw new IllegalStateException("Resposta da Nagumo sem o campo " + field);
         }
