@@ -1,0 +1,33 @@
+{
+  "action": "Stores-AvailableStores",
+  "queryString": "",
+  "locale": "pt_BR",
+  "dataPath": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/",
+  "stores": [
+    {
+      "storeName": "036-V.REDONDA",
+      "storeId": "36",
+      "imgUrl": null,
+      "active": false,
+      "operation": true,
+      "address": "VIA SERGIO BRAGA, PONTE ALTA, VOLTA REDONDA, RJ",
+      "city": "VOLTA REDONDA",
+      "district": "PONTE ALTA",
+      "phone": null,
+      "businessHours": null,
+      "waze": null,
+      "googleMaps": null,
+      "services": []
+    }
+  ],
+  "storeModalValues": {
+    "retirada": {
+      "valor_minimo": 50,
+      "taxa_entrega": 15
+    },
+    "entrega": {
+      "valor_minimo": 100,
+      "taxa_entrega": 15
+    }
+  }
+}

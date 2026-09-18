@@ -12,7 +12,8 @@ public record ShoppingRecommendationResponse(
         int evaluatedStores,
         RecommendationStatus status,
         StoreRecommendationCandidate recommendation,
-        List<StoreRecommendationCandidate> closestMatches) {
+        List<StoreRecommendationCandidate> closestMatches,
+        ShoppingCombinationResponse combination) {
 
     public ShoppingRecommendationResponse {
         closestMatches = List.copyOf(closestMatches);

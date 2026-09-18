@@ -1,0 +1,1069 @@
+{
+  "productSearch": {
+    "pageSize": 50,
+    "productSearch": {},
+    "isSearchSuggestionsAvailable": false,
+    "pageNumber": 0,
+    "count": 19,
+    "isCategorySearch": true,
+    "isRefinedCategorySearch": false,
+    "searchKeywords": null,
+    "showIsOutOfStockProducts": true,
+    "showIsPromotionProducts": true,
+    "resetLink": {},
+    "bannerImageUrl": null,
+    "productIds": [
+      {
+        "productID": "676519",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "209574",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "220251",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "209575",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "679657",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "181471",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "382403",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "149303",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "284431",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "250884",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "149327",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "284486",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "149556",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "149570",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "215614",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "149563",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "215613",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "215611",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "275002",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "210782",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "270866",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "274963",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "250097",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "260127",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "263729",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "590020",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "245402",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "253740",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "249221",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "242440",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "590013",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "255916",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "232290",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "245403",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "590082",
+        "productSearchHit": {}
+      }
+    ],
+    "productSort": {
+      "options": [
+        {
+          "displayName": "Menor Preço",
+          "id": "Price Ascending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=PARCEIRO-COCA-COLA&srule=Menor%20Pre%C3%A7o&start=0&sz=35"
+        },
+        {
+          "displayName": "Maior Preço",
+          "id": "Price Descending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=PARCEIRO-COCA-COLA&srule=Maior%20Pre%C3%A7o&start=0&sz=35"
+        },
+        {
+          "displayName": "A - Z",
+          "id": "Name Ascending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=PARCEIRO-COCA-COLA&srule=product-name-ascending&start=0&sz=35"
+        },
+        {
+          "displayName": "Z - A",
+          "id": "Name Descending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=PARCEIRO-COCA-COLA&srule=product-name-descending&start=0&sz=35"
+        },
+        {
+          "displayName": "Mais Vendidos",
+          "id": "Best Sellers",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=PARCEIRO-COCA-COLA&srule=Best%20Sellers&start=0&sz=35"
+        },
+        {
+          "displayName": "Mais Recentes",
+          "id": "New Products",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=PARCEIRO-COCA-COLA&srule=New%20Products&start=0&sz=35"
+        },
+        {
+          "displayName": "Relevância",
+          "id": "Relevance",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=PARCEIRO-COCA-COLA&srule=Relevance&start=0&sz=35"
+        }
+      ],
+      "ruleId": "Relevance"
+    },
+    "showMoreUrl": "finished",
+    "permalink": "https://www.nagumo.com.br/busca?cgid=PARCEIRO-COCA-COLA&start=0&sz=50",
+    "category": {
+      "name": "Coca-Cola",
+      "id": "PARCEIRO-COCA-COLA",
+      "pageTitle": null,
+      "pageDescription": null,
+      "pageKeywords": null
+    },
+    "pageMetaTags": [],
+    "productsRangePrices": {
+      "minPrice": 2.59,
+      "maxPrice": 23.49
+    },
+    "refinementPrices": "default"
+  },
+  "productsSearchResult": [
+    {
+      "id": "676519",
+      "productName": "Coca-Cola Sem Açúcar 2L",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 11.98,
+          "currency": "BRL",
+          "formatted": "R$ 11,98",
+          "decimalPrice": "11.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "209574",
+      "productName": "Kit Coca-Cola Original + Fanta Guaraná 2L Cada",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 17.98,
+          "currency": "BRL",
+          "formatted": "R$ 17,98",
+          "decimalPrice": "17.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      },
+      "flagtypes": [
+        {
+          "flagType": "NGM_36_M",
+          "valueFlagType": "R$ 14,98",
+          "valueFlag": 14.98,
+          "unitValueFlagType": null
+        }
+      ]
+    },
+    {
+      "id": "220251",
+      "productName": "Coca Cola Sem Açúcar 200Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 2.29,
+          "currency": "BRL",
+          "formatted": "R$ 2,29",
+          "decimalPrice": "2.29"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "209575",
+      "productName": "Kit 1 Coca-Cola Original 2L + 1 Fanta Laranja 2L",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 19.79,
+          "currency": "BRL",
+          "formatted": "R$ 19,79",
+          "decimalPrice": "19.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "679657",
+      "productName": "Coca-Cola Sem Açúcar 1,5L",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 9.98,
+          "currency": "BRL",
+          "formatted": "R$ 9,98",
+          "decimalPrice": "9.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "181471",
+      "productName": "Refrigerante Original Coca Cola 2L",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 11.98,
+          "currency": "BRL",
+          "formatted": "R$ 11,98",
+          "decimalPrice": "11.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "382403",
+      "productName": "Refrigerante Original Coca Cola 1,5L",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 9.98,
+          "currency": "BRL",
+          "formatted": "R$ 9,98",
+          "decimalPrice": "9.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "149303",
+      "productName": "Coca Cola Original 200Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 2.29,
+          "currency": "BRL",
+          "formatted": "R$ 2,29",
+          "decimalPrice": "2.29"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "284431",
+      "productName": "Refrigerante Coca Cola 350Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 4.49,
+          "currency": "BRL",
+          "formatted": "R$ 4,49",
+          "decimalPrice": "4.49"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      },
+      "flagtypes": [
+        {
+          "flagType": "NGM_36_M",
+          "valueFlagType": "R$ 3,79",
+          "valueFlag": 3.79,
+          "unitValueFlagType": null
+        }
+      ]
+    },
+    {
+      "id": "250884",
+      "productName": "Kit Coca-Cola Original 2L + Sprite Limão 2L",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 19.79,
+          "currency": "BRL",
+          "formatted": "R$ 19,79",
+          "decimalPrice": "19.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "149327",
+      "productName": "Coca-Cola Sem Açúcar 310Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 4.09,
+          "currency": "BRL",
+          "formatted": "R$ 4,09",
+          "decimalPrice": "4.09"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "284486",
+      "productName": "Refrigerante Coca Cola 600Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 5.98,
+          "currency": "BRL",
+          "formatted": "R$ 5,98",
+          "decimalPrice": "5.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "149556",
+      "productName": "Coca-Cola Original 310Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 4.09,
+          "currency": "BRL",
+          "formatted": "R$ 4,09",
+          "decimalPrice": "4.09"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "149570",
+      "productName": "Refrigerante Sem Açúcar Coca Cola 220Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 3.25,
+          "currency": "BRL",
+          "formatted": "R$ 3,25",
+          "decimalPrice": "3.25"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "215614",
+      "productName": "Coca-Cola Sem Açúcar 250Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 4.49,
+          "currency": "BRL",
+          "formatted": "R$ 4,49",
+          "decimalPrice": "4.49"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "149563",
+      "productName": "Coca-Cola Original 220 Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 3.25,
+          "currency": "BRL",
+          "formatted": "R$ 3,25",
+          "decimalPrice": "3.25"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "215613",
+      "productName": "Coca-Cola Original 250Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 4.49,
+          "currency": "BRL",
+          "formatted": "R$ 4,49",
+          "decimalPrice": "4.49"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "215611",
+      "productName": "Refrigerante Sabor Café Espresso Coca Cola 220Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 3.25,
+          "currency": "BRL",
+          "formatted": "R$ 3,25",
+          "decimalPrice": "3.25"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "275002",
+      "productName": "Pack Refrigerante Menos Açúcar Coca-Cola 2 Unidades 2l Leve Mais Pague Menos",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 23.49,
+          "currency": "BRL",
+          "formatted": "R$ 23,49",
+          "decimalPrice": "23.49"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "210782",
+      "productName": "Refrigerante Coca Cola 2,5L.",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 13.49,
+          "currency": "BRL",
+          "formatted": "R$ 13,49",
+          "decimalPrice": "13.49"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "270866",
+      "productName": "Refrigerante Coca-Cola Original Garrafa 2,25l",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 11.98,
+          "currency": "BRL",
+          "formatted": "R$ 11,98",
+          "decimalPrice": "11.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "274963",
+      "productName": "Kit Coca Cola Zero Açúcar 2L Sprite Zero Açúcar 2L Leve Mais Pague Menos",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 19.79,
+          "currency": "BRL",
+          "formatted": "R$ 19,79",
+          "decimalPrice": "19.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "250097",
+      "productName": "Refrigerante Coca Cola Melancia Mor Zero 310Ml ",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": null,
+          "currency": null,
+          "formatted": null
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "260127",
+      "productName": "Refrigerante Sem Açúcar K-Wave Fruity Fantasy Coca-Cola 310Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 3.69,
+          "currency": "BRL",
+          "formatted": "R$ 3,69",
+          "decimalPrice": "3.69"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "263729",
+      "productName": "Refrigerante Oreo Fizzy Cookie Sem Açúcar Coca Cola 310Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 3.89,
+          "currency": "BRL",
+          "formatted": "R$ 3,89",
+          "decimalPrice": "3.89"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "590020",
+      "productName": "Refrigerante Coca Cola Stevia 1,5L ",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 5.99,
+          "currency": "BRL",
+          "formatted": "R$ 5,99",
+          "decimalPrice": "5.99"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "245402",
+      "productName": "Kit Coca-Cola Original + Fanta Laranja 350Ml com 4Un",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 19.59,
+          "currency": "BRL",
+          "formatted": "R$ 19,59",
+          "decimalPrice": "19.59"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "253740",
+      "productName": "Refrigerante Movement sem Açúcar Rosália Creations Coca-Cola 310Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 3.59,
+          "currency": "BRL",
+          "formatted": "R$ 3,59",
+          "decimalPrice": "3.59"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "249221",
+      "productName": "Refr Coca Cola Lt 310ml Byte Ed Lim",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": null,
+          "currency": null,
+          "formatted": null
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "242440",
+      "productName": "Kit 6 Coca-Cola + 3 Fanta Guaraná + 3 Fanta Laranja 200ml Leve Mais Pague Menos",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 17.98,
+          "currency": "BRL",
+          "formatted": "R$ 17,98",
+          "decimalPrice": "17.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "590013",
+      "productName": "Refrigerante Coca Cola Com Stevia Lata 350Ml ",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 2.59,
+          "currency": "BRL",
+          "formatted": "R$ 2,59",
+          "decimalPrice": "2.59"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "255916",
+      "productName": "Refrigerante +XP sem Açúcar League of Legends Coca-Cola Creations Lata 310ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 3.79,
+          "currency": "BRL",
+          "formatted": "R$ 3,79",
+          "decimalPrice": "3.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "232290",
+      "productName": "Kit Coca-Cola Original + Coca-Cola Sem Açúcar 2L",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 21.49,
+          "currency": "BRL",
+          "formatted": "R$ 21,49",
+          "decimalPrice": "21.49"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "245403",
+      "productName": "Cola-Cola Original + 2 Fanta Guaraná 350Ml Caixa com 6Un",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 18.99,
+          "currency": "BRL",
+          "formatted": "R$ 18,99",
+          "decimalPrice": "18.99"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "590082",
+      "productName": "Coca-Cola Vanilla 310Ml",
+      "brand": "COCA COLA",
+      "productAdditionalInfo": null,
+      "available": false,
+      "price": {
+        "sales": {
+          "value": 4.49,
+          "currency": "BRL",
+          "formatted": "R$ 4,49",
+          "decimalPrice": "4.49"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    }
+  ]
+}

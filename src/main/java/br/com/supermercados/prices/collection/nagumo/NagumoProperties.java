@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.time.Duration;
 import java.time.ZoneId;
+import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -20,6 +21,7 @@ public class NagumoProperties {
     private BigDecimal latitude = new BigDecimal("-22.5295573");
     private BigDecimal longitude = new BigDecimal("-44.1360020");
     private String categoryId = "MP-GERAL";
+    private List<String> additionalCategoryIds = List.of();
     private String promotionFlag = "NGM_36_M";
     private int pageSize = 50;
     private Duration requestDelay = Duration.ofSeconds(1);
@@ -111,6 +113,14 @@ public class NagumoProperties {
 
     public String getPromotionFlag() {
         return promotionFlag;
+    }
+
+    public List<String> getAdditionalCategoryIds() {
+        return additionalCategoryIds;
+    }
+
+    public void setAdditionalCategoryIds(List<String> additionalCategoryIds) {
+        this.additionalCategoryIds = List.copyOf(additionalCategoryIds);
     }
 
     public void setPromotionFlag(String promotionFlag) {

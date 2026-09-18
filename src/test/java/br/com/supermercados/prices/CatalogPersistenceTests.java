@@ -62,6 +62,17 @@ class CatalogPersistenceTests {
     }
 
     @Test
+    void accentInsensitiveSearchFindsProductsBeyondInitialPages() {
+        var coffee = ingestion.ingest(observation("Z Café torrado", null, SOURCE_ID, "coffee", COLLECTED_AT));
+        flushAndClear();
+
+        var result = products.search(new ProductSearch("cafe", null, null, null), PageRequest.of(0, 1));
+
+        assertThat(result.getContent()).extracting(ProductResponse::id).containsExactly(coffee.id());
+        assertThat(result.getTotalElements()).isEqualTo(1);
+    }
+
+    @Test
     void textSearchIgnoresCaseAndRespectsPagination() {
         var result = products.search(new ProductSearch("aLpHa", null, null, null), PAGE);
 

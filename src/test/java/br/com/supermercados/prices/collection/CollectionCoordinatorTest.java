@@ -20,6 +20,23 @@ class CollectionCoordinatorTest {
     private final CollectionRunService runs = mock(CollectionRunService.class);
 
     @Test
+    void retriesOnlyTheRequestedCollectorAndRejectsUnknownCodes() {
+        TestCollector selected = new TestCollector("selected", false);
+        TestCollector untouched = new TestCollector("untouched", false);
+        when(runs.start(selected.metadata())).thenReturn(response(selected.metadata(), CollectionStatus.RUNNING));
+        when(ingestion.ingest(any(), any())).thenReturn(new CollectionResult(
+                UUID.randomUUID(), UUID.randomUUID(), 0, 0, 0, 0, 0, null));
+        when(runs.finish(any(), any())).thenReturn(response(selected.metadata(), CollectionStatus.SUCCESS));
+        var coordinator = new CollectionCoordinator(List.of(selected, untouched), ingestion, runs, Duration.ZERO);
+
+        assertThat(coordinator.collectSelected("selected")).hasSize(1);
+        assertThat(selected.collected).isTrue();
+        assertThat(untouched.collected).isFalse();
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> coordinator.collectSelected("missing"))
+                .isInstanceOf(br.com.supermercados.prices.common.ApiException.class);
+    }
+
+    @Test
     void failureInOneCollectorDoesNotPreventTheNextCollector() {
         TestCollector failing = new TestCollector("failing", true);
         TestCollector successful = new TestCollector("successful", false);

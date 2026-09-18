@@ -17,13 +17,22 @@ import lombok.RequiredArgsConstructor;
 public class ProductService {
 
     private final ProductRepository repository;
+    private final ProductSearchRepository searchRepository;
 
     public Page<ProductResponse> search(ProductSearch search, Pageable pageable) {
-        return repository.findAll(search.specification(), pageable).map(ProductResponse::from);
+        return searchRepository.search(search, pageable);
+    }
+
+    public ProductSearchFacets searchFacets(ProductSearch search) {
+        return searchRepository.facets(search);
     }
 
     public ProductResponse findProduct(UUID productId) {
         return ProductResponse.from(requireProduct(productId));
+    }
+
+    public Page<ProductResponse> searchInStore(UUID storeId, ProductSearch search, Pageable pageable) {
+        return searchRepository.search(search.inStore(storeId), pageable);
     }
 
     public Product requireProduct(UUID productId) {

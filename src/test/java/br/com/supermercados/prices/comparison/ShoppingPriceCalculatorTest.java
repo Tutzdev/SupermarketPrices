@@ -102,4 +102,52 @@ class ShoppingPriceCalculatorTest {
         return new ShoppingListItemResponse(UUID.randomUUID(), productId, "Synthetic test product",
                 new BigDecimal(quantity));
     }
+
+    @Test
+    void combinesCheapestItemsWithQuantitiesAndComputesSavingsAgainstACompleteStore() {
+        UUID first = UUID.randomUUID();
+        UUID second = UUID.randomUUID();
+        UUID otherStore = UUID.randomUUID();
+        var items = List.of(item(first, "2.000"), item(second, "1.500"));
+        var complete = calculator.calculate(storeId, "Complete", items, Map.of(
+                first, PriceFixtures.regular(first, storeId, "4.00", now),
+                second, PriceFixtures.regular(second, storeId, "6.00", now)), now);
+        var partial = calculator.calculate(otherStore, "Partial", items, Map.of(
+                second, PriceFixtures.regular(second, otherStore, "2.00", now)), now);
+        var winner = new StoreRecommendationCandidate(storeId, "Complete", new BigDecimal("17.00"),
+                2, 2, 0, List.of(), true, false);
+
+        var result = calculator.combine(items, List.of(complete, partial), winner);
+
+        assertThat(result.completeShoppingList()).isTrue();
+        assertThat(result.subtotalKnown()).isEqualByComparingTo("11.00");
+        assertThat(result.savingsAgainstCompleteStore()).isEqualByComparingTo("6.00");
+        assertThat(result.stores()).hasSize(2);
+        assertThat(result.stores().get(1).items()).singleElement().satisfies(item -> {
+            assertThat(item.productId()).isEqualTo(second);
+            assertThat(item.quantity()).isEqualByComparingTo("1.500");
+            assertThat(item.lineTotal()).isEqualByComparingTo("3.00");
+        });
+    }
+
+    @Test
+    void combinationRetainsMissingItemsAndNeverClaimsPartialSavings() {
+        UUID first = UUID.randomUUID();
+        UUID missing = UUID.randomUUID();
+        var items = List.of(item(first, "2.000"), item(missing, "1.000"));
+        var partial = calculator.calculate(storeId, "Partial", items, Map.of(
+                first, PriceFixtures.regular(first, storeId, "3.00", now),
+                missing, PriceFixtures.regular(missing, storeId, "1.00", now.minus(Duration.ofDays(3)))), now);
+
+        var result = calculator.combine(items, List.of(partial), null);
+
+        assertThat(result.completeShoppingList()).isFalse();
+        assertThat(result.subtotalKnown()).isEqualByComparingTo("6.00");
+        assertThat(result.missingProductIds()).containsExactly(missing);
+        assertThat(result.savingsAgainstCompleteStore()).isNull();
+        var noPrices = calculator.combine(items, List.of(), null);
+        assertThat(noPrices.subtotalKnown()).isNull();
+        assertThat(noPrices.missingProductIds()).containsExactly(first, missing);
+        assertThat(calculator.combine(List.of(), List.of(), null).completeShoppingList()).isFalse();
+    }
 }

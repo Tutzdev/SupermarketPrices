@@ -110,21 +110,24 @@ public class ShoppingComparisonService {
         List<UUID> productIds = shoppingList.items().stream()
                 .map(ShoppingListItemResponse::productId).toList();
         Map<UUID, Map<UUID, PriceRecord>> latestPricesByStore = latestPrices(availableStores, productIds);
-        List<StoreRecommendationCandidate> candidates = availableStores.stream()
+        List<ShoppingStoreComparison> comparisons = availableStores.stream()
                 .map(store -> calculator.calculate(store.id(), store.name(), shoppingList.items(),
                         latestPricesByStore.getOrDefault(store.id(), Map.of()), comparedAt))
-                .map(StoreRecommendationCandidate::from)
                 .toList();
+        List<StoreRecommendationCandidate> candidates = comparisons.stream()
+                .map(StoreRecommendationCandidate::from).toList();
 
         StoreRecommendationCandidate recommendation = findCompleteRecommendation(candidates);
+        ShoppingCombinationResponse combination = calculator.combine(
+                shoppingList.items(), comparisons, recommendation);
         if (recommendation != null) {
             return new ShoppingRecommendationResponse(listId, cityId, CURRENCY, comparedAt, candidates.size(),
-                    RecommendationStatus.COMPLETE_STORE_FOUND, recommendation, List.of());
+                    RecommendationStatus.COMPLETE_STORE_FOUND, recommendation, List.of(), combination);
         }
 
         List<StoreRecommendationCandidate> closestMatches = findClosestMatches(candidates);
         return new ShoppingRecommendationResponse(listId, cityId, CURRENCY, comparedAt, candidates.size(),
-                RecommendationStatus.NO_COMPLETE_STORE, null, closestMatches);
+                RecommendationStatus.NO_COMPLETE_STORE, null, closestMatches, combination);
     }
 
     private StoreRecommendationCandidate findCompleteRecommendation(
@@ -142,6 +145,9 @@ public class ShoppingComparisonService {
     private List<StoreRecommendationCandidate> findClosestMatches(
             List<StoreRecommendationCandidate> candidates) {
         int bestCoverage = candidates.stream().mapToInt(StoreRecommendationCandidate::pricedItems).max().orElse(0);
+        if (bestCoverage == 0) {
+            return List.of();
+        }
         Comparator<StoreRecommendationCandidate> coverageOrder = Comparator
                 .comparing(StoreRecommendationCandidate::total,
                         Comparator.nullsLast(BigDecimal::compareTo))

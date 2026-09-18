@@ -59,6 +59,18 @@ public class CollectionRun {
     @Column(nullable = false)
     private int errorCount;
 
+    @Column(nullable = false)
+    private int availableCount;
+
+    @Column(nullable = false)
+    private int unavailableCount;
+
+    @Column(nullable = false)
+    private int unknownAvailabilityCount;
+
+    @Column(nullable = false)
+    private int productsUpdatedCount;
+
     @Column(length = 2000)
     private String errorMessage;
 
@@ -79,6 +91,10 @@ public class CollectionRun {
         updatedCount = result.updatedCount();
         skippedCount = result.skippedCount();
         errorCount = result.errorCount();
+        availableCount = result.availableCount();
+        unavailableCount = result.unavailableCount();
+        unknownAvailabilityCount = result.unknownAvailabilityCount();
+        productsUpdatedCount = result.productsUpdatedCount();
         errorMessage = cleanMessage(result.errorMessage());
         status = errorCount == 0 ? CollectionStatus.SUCCESS : CollectionStatus.PARTIAL;
         this.finishedAt = finishedAt;

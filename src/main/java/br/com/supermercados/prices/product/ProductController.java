@@ -1,6 +1,7 @@
 package br.com.supermercados.prices.product;
 
 import java.util.UUID;
+import java.math.BigDecimal;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +27,20 @@ public class ProductController {
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) String gtin,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) UUID storeId,
+            @RequestParam(required = false) String unit,
+            @RequestParam(required = false) BigDecimal quantity,
+            @RequestParam(defaultValue = "relevance") String sort,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        return PageResponse.from(productService.search(new ProductSearch(query, brand, gtin, category),
+        return PageResponse.from(productService.search(new ProductSearch(query, brand, gtin, category,
+                storeId, unit, quantity, sort),
                 PageRequests.create(page, size, Sort.by("name", "id"))));
+    }
+
+    @GetMapping("/filters")
+    public ProductSearchFacets filters(@RequestParam(required = false) String query) {
+        return productService.searchFacets(new ProductSearch(query, null, null, null));
     }
 
     @GetMapping("/{id}")

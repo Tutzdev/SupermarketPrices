@@ -12,9 +12,12 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import tools.jackson.databind.JsonNode;
@@ -22,6 +25,8 @@ import tools.jackson.databind.ObjectMapper;
 
 @Component
 class NagumoClient {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NagumoClient.class);
 
     private static final String STORES_PATH =
             "/on/demandware.store/Sites-Nagumo-Site/pt_BR/Stores-AvailableStores";
@@ -40,7 +45,7 @@ class NagumoClient {
         validateProperties();
     }
 
-    NagumoCatalogResponse fetch() {
+    List<NagumoCatalogResponse> fetch() {
         CookieManager cookies = new CookieManager(null, CookiePolicy.ACCEPT_ORIGINAL_SERVER);
         HttpClient httpClient = HttpClient.newBuilder()
                 .cookieHandler(cookies)
@@ -53,20 +58,28 @@ class NagumoClient {
         requireExpectedStore(session.get(resolve(STORES_PATH), true), false);
         selectStore(session);
         JsonNode store = requireExpectedStore(session.get(resolve(STORES_PATH), true), true);
-        return fetchCatalog(session, store);
+        List<String> categories = new ArrayList<>();
+        categories.add(properties.getCategoryId());
+        categories.addAll(properties.getAdditionalCategoryIds());
+        List<NagumoCatalogResponse> catalogs = new ArrayList<>();
+        for (String category : categories.stream().distinct().toList()) {
+            catalogs.add(fetchCatalog(session, store, category));
+        }
+        requireExpectedStore(session.get(resolve(STORES_PATH), true), true);
+        return List.copyOf(catalogs);
     }
 
-    private NagumoCatalogResponse fetchCatalog(RequestSession session, JsonNode store) {
+    private NagumoCatalogResponse fetchCatalog(RequestSession session, JsonNode store, String categoryId) {
         List<JsonNode> products = new ArrayList<>();
         String categoryName = null;
         int sourceCount = -1;
-        int maximumPages = Integer.MAX_VALUE;
+        Set<String> pageSignatures = new HashSet<>();
 
         for (int pageNumber = 0, start = 0; ; pageNumber++, start += properties.getPageSize()) {
-            if (pageNumber >= maximumPages) {
+            if (pageNumber >= 10000) {
                 throw new IllegalStateException("Paginação da Nagumo excedeu o limite esperado");
             }
-            URI uri = resolve(SEARCH_PATH + "?cgid=" + encode(properties.getCategoryId())
+            URI uri = resolve(SEARCH_PATH + "?cgid=" + encode(categoryId)
                     + "&start=" + start + "&sz=" + properties.getPageSize());
             JsonNode response = session.get(uri, true);
             int responseCount = response.path("productSearch").path("count").asInt(-1);
@@ -75,11 +88,8 @@ class NagumoClient {
             }
             if (sourceCount < 0) {
                 sourceCount = responseCount;
-                maximumPages = Math.max(2,
-                        (int) Math.ceil((double) sourceCount / properties.getPageSize()) + 2);
-                categoryName = requiredText(response.path("productSearch").path("category"), "name");
-            } else if (sourceCount != responseCount) {
-                throw new IllegalStateException("Catálogo da Nagumo mudou durante a paginação");
+                categoryName = responseCount == 0 && response.path("productsSearchResult").isEmpty()
+                        ? null : requiredText(response.path("productSearch").path("category"), "name");
             }
 
             JsonNode page = response.path("productsSearchResult");
@@ -89,18 +99,20 @@ class NagumoClient {
             if (page.isEmpty()) {
                 break;
             }
+            // The declared count excludes some unavailable products; it is not a pagination bound.
+            if (!pageSignatures.add(page.toString())) {
+                throw new IllegalStateException("A Nagumo repetiu uma página durante a coleta");
+            }
             page.forEach(products::add);
-            if (page.size() < properties.getPageSize()) {
+            if ("finished".equals(response.path("productSearch").path("showMoreUrl").asString())
+                    || (response.path("productSearch").path("showMoreUrl").isMissingNode()
+                        && page.size() < properties.getPageSize())) {
                 break;
             }
         }
 
-        if (sourceCount <= 0 || products.isEmpty()) {
-            throw new IllegalStateException("A Nagumo retornou um catálogo vazio");
-        }
-        if (products.size() < sourceCount) {
-            throw new IllegalStateException("A Nagumo retornou menos produtos que o total declarado");
-        }
+        // The source counts indexed hits before branch filtering; follow its explicit end marker.
+        LOGGER.info("Nagumo: departamento {} concluído, {} registros recebidos", categoryId, products.size());
         return new NagumoCatalogResponse(store, categoryName, products.size(), products);
     }
 

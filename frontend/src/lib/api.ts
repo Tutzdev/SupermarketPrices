@@ -61,10 +61,18 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
 
   if (!response.ok) {
     const problem = (await response.json().catch(() => ({}))) as ApiProblem;
+    problem.detail ??= `O servidor respondeu HTTP ${response.status}. Tente novamente.`;
     throw new ApiError(response.status, problem);
   }
 
   if (response.status === 204) return undefined as T;
+
+  if (!response.headers.get("Content-Type")?.includes("json")) {
+    throw new ApiError(response.status, {
+      title: "Resposta inesperada",
+      detail: "O servidor não retornou os dados esperados. Tente novamente mais tarde.",
+    });
+  }
 
   return (await response.json()) as T;
 }

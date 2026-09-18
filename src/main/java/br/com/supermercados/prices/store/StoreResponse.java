@@ -16,11 +16,17 @@ public record StoreResponse(
         UUID sourceId,
         String sourceReference,
         Instant collectedAt,
-        Instant updatedAt) {
+        Instant updatedAt,
+        Instant lastPriceCollectedAt) {
 
     public static StoreResponse from(Store store) {
+        return from(store, null);
+    }
+
+    public static StoreResponse from(Store store, Instant lastPriceCollectedAt) {
         return new StoreResponse(store.getId(), store.getSupermarketChainId(), store.getCityId(), store.getName(),
                 store.getAddress(), store.getLatitude(), store.getLongitude(), store.isActive(),
-                store.getSourceId(), store.getSourceReference(), store.getCollectedAt(), store.getUpdatedAt());
+                store.getSourceId(), store.getSourceReference(), store.getCollectedAt(), store.getUpdatedAt(),
+                lastPriceCollectedAt);
     }
 }

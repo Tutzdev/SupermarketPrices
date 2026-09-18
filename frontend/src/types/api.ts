@@ -61,6 +61,7 @@ export interface Product {
   unit: string | null;
   quantity: number | null;
   category: string | null;
+  packageDescription: string | null;
   sourceId: string;
   sourceReference: string;
   collectedAt: string;
@@ -80,6 +81,7 @@ export interface Store {
   sourceReference: string;
   collectedAt: string;
   updatedAt: string;
+  lastPriceCollectedAt: string | null;
 }
 
 export interface PriceRecord {
@@ -94,6 +96,7 @@ export interface PriceRecord {
   recordedAt: string;
   validUntil: string | null;
   promotionValidUntil: string | null;
+  promotionCondition: string | null;
   sourceId: string;
   sourceReference: string;
   originType: "SOURCE" | "USER_CONTRIBUTION";
@@ -156,7 +159,7 @@ export interface ShoppingStoreComparison {
   requestedItems: number;
   pricedItems: number;
   missingItems: number;
-  subtotalKnown: number;
+  subtotalKnown: number | null;
   completeShoppingList: boolean;
   items: ShoppingComparisonItem[];
 }
@@ -172,7 +175,7 @@ export interface ShoppingListComparison {
 export interface StoreRecommendationCandidate {
   storeId: string;
   storeName: string;
-  total: number;
+  total: number | null;
   requestedItems: number;
   pricedItems: number;
   missingItems: number;
@@ -190,6 +193,29 @@ export interface ShoppingRecommendation {
   status: RecommendationStatus;
   recommendation: StoreRecommendationCandidate | null;
   closestMatches: StoreRecommendationCandidate[];
+  combination: ShoppingCombination;
+}
+
+export interface ProductSearchFacets {
+  brands: string[];
+  categories: string[];
+  measurements: Array<{ unit: string; quantity: number }>;
+  markets: Array<{ id: string; name: string }>;
+}
+
+export interface ShoppingCombination {
+  requestedItems: number;
+  pricedItems: number;
+  missingProductIds: string[];
+  subtotalKnown: number | null;
+  completeShoppingList: boolean;
+  savingsAgainstCompleteStore: number | null;
+  stores: Array<{ storeId: string; storeName: string; subtotal: number; items: ShoppingComparisonItem[] }>;
+}
+
+export interface StoreProduct {
+  product: Product;
+  price: PriceQuote;
 }
 
 export interface PriceAlert {

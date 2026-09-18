@@ -48,10 +48,35 @@ class PricePersistenceTests {
     @Autowired ShoppingListService lists;
     @Autowired ProductService products;
     @Autowired JdbcTemplate jdbc;
+    @Autowired br.com.supermercados.prices.store.StoreCatalogService storeCatalog;
 
     @DynamicPropertySource
     static void database(DynamicPropertyRegistry registry) {
         PostgresTestDatabase.register(registry);
+    }
+
+    @Test
+    void storeCatalogPaginatesUniqueProductsAndUsesOnlyTheLatestObservation() {
+        Instant now = Instant.now().minusSeconds(5);
+        prices.appendObservation(observation(STORE_A, PRODUCT_A, "catalog-old", "2.00", now.minusSeconds(60)));
+        prices.appendObservation(observation(STORE_A, PRODUCT_A, "catalog-new", "3.00", now));
+        prices.appendObservation(observation(STORE_A, PRODUCT_B, "catalog-other", "4.00", now));
+        var search = new br.com.supermercados.prices.product.ProductSearch(null, null, null, null);
+
+        var first = storeCatalog.findProducts(STORE_A, search, PageRequest.of(0, 1, Sort.by("name", "id")));
+        var second = storeCatalog.findProducts(STORE_A, search, PageRequest.of(1, 1, Sort.by("name", "id")));
+
+        assertThat(first.getTotalElements()).isEqualTo(2);
+        assertThat(first.getContent()).singleElement().satisfies(item -> {
+            assertThat(item.product().id()).isEqualTo(PRODUCT_A);
+            assertThat(item.price().unitPrice()).isEqualByComparingTo("3.00");
+        });
+        assertThat(second.getContent()).singleElement().satisfies(item ->
+                assertThat(item.product().id()).isEqualTo(PRODUCT_B));
+        assertThat(storeCatalog.findProducts(STORE_B, search, storePage())).isEmpty();
+        var filtered = storeCatalog.findProducts(STORE_A,
+                new br.com.supermercados.prices.product.ProductSearch("beta", null, null, null), storePage());
+        assertThat(filtered.getTotalElements()).isEqualTo(1);
     }
 
     @Test

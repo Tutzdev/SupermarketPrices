@@ -1,0 +1,66 @@
+{
+  "productSearch": {
+    "pageSize": 50,
+    "productSearch": {},
+    "isSearchSuggestionsAvailable": false,
+    "pageNumber": 0,
+    "count": 0,
+    "isCategorySearch": false,
+    "isRefinedCategorySearch": false,
+    "searchKeywords": "gomosemresultados20260917",
+    "showIsOutOfStockProducts": true,
+    "showIsPromotionProducts": false,
+    "resetLink": {},
+    "bannerImageUrl": null,
+    "productIds": [],
+    "productSort": {
+      "options": [
+        {
+          "displayName": "Menor Preço",
+          "id": "Price Ascending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?q=gomosemresultados20260917&srule=Menor%20Pre%C3%A7o&start=0"
+        },
+        {
+          "displayName": "Maior Preço",
+          "id": "Price Descending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?q=gomosemresultados20260917&srule=Maior%20Pre%C3%A7o&start=0"
+        },
+        {
+          "displayName": "A - Z",
+          "id": "Name Ascending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?q=gomosemresultados20260917&srule=product-name-ascending&start=0"
+        },
+        {
+          "displayName": "Z - A",
+          "id": "Name Descending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?q=gomosemresultados20260917&srule=product-name-descending&start=0"
+        },
+        {
+          "displayName": "Mais Vendidos",
+          "id": "Best Sellers",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?q=gomosemresultados20260917&srule=Best%20Sellers&start=0"
+        },
+        {
+          "displayName": "Mais Recentes",
+          "id": "New Products",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?q=gomosemresultados20260917&srule=New%20Products&start=0"
+        },
+        {
+          "displayName": "Relevância",
+          "id": "Relevance",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?q=gomosemresultados20260917&srule=Relevance&start=0"
+        }
+      ],
+      "ruleId": "Relevance"
+    },
+    "showMoreUrl": "finished",
+    "permalink": "https://www.nagumo.com.br/busca?q=gomosemresultados20260917&start=0&sz=50",
+    "pageMetaTags": [],
+    "productsRangePrices": {
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    "refinementPrices": "default"
+  },
+  "productsSearchResult": []
+}

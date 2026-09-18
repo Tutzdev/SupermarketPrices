@@ -4,6 +4,11 @@ import br.com.supermercados.prices.common.ApiException;
 import br.com.supermercados.prices.location.LocationService;
 import java.util.List;
 import java.util.UUID;
+import java.time.Instant;
+import java.util.Map;
+import java.util.stream.Collectors;
+import br.com.supermercados.prices.price.PriceRecordRepository;
+import br.com.supermercados.prices.price.StorePriceUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +26,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final ChainRepository chainRepository;
     private final LocationService locationService;
+    private final PriceRecordRepository prices;
 
     public Page<ChainResponse> findChains(Pageable pageable) {
         return chainRepository.findAll(pageable).map(ChainResponse::from);
@@ -28,14 +34,27 @@ public class StoreService {
 
     public Page<StoreResponse> findActiveStores(UUID cityId, Pageable pageable) {
         if (cityId == null) {
-            return storeRepository.findByActiveTrue(pageable).map(StoreResponse::from);
+            return withPriceUpdates(storeRepository.findByActiveTrue(pageable));
         }
         locationService.requireCity(cityId);
-        return storeRepository.findByCityIdAndActiveTrue(cityId, pageable).map(StoreResponse::from);
+        return withPriceUpdates(storeRepository.findByCityIdAndActiveTrue(cityId, pageable));
     }
 
     public StoreResponse findStore(UUID storeId) {
-        return StoreResponse.from(requireStore(storeId));
+        Store store = requireStore(storeId);
+        Instant lastUpdate = prices.findStoreUpdates(List.of(storeId)).stream()
+                .map(StorePriceUpdate::collectedAt).findFirst().orElse(null);
+        return StoreResponse.from(store, lastUpdate);
+    }
+
+    private Page<StoreResponse> withPriceUpdates(Page<Store> stores) {
+        if (stores.isEmpty()) {
+            return stores.map(StoreResponse::from);
+        }
+        List<UUID> storeIds = stores.stream().map(Store::getId).toList();
+        Map<UUID, Instant> updates = prices.findStoreUpdates(storeIds).stream()
+                .collect(Collectors.toMap(StorePriceUpdate::storeId, StorePriceUpdate::collectedAt));
+        return stores.map(store -> StoreResponse.from(store, updates.get(store.getId())));
     }
 
     public List<StoreResponse> findAllActiveStores(UUID cityId, int maximumStores) {

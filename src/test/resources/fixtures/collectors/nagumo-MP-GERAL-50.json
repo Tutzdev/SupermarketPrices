@@ -1,0 +1,1499 @@
+{
+  "productSearch": {
+    "pageSize": 50,
+    "productSearch": {},
+    "isSearchSuggestionsAvailable": false,
+    "pageNumber": 1,
+    "count": 118,
+    "isCategorySearch": true,
+    "isRefinedCategorySearch": false,
+    "searchKeywords": null,
+    "showIsOutOfStockProducts": true,
+    "showIsPromotionProducts": true,
+    "resetLink": {},
+    "bannerImageUrl": {},
+    "productIds": [
+      {
+        "productID": "261165",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "259036",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "258818",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "262577",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "271265",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "270041",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "261447",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "261164",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "264875",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "262579",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "264878",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "267633",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "259037",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "270677",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "262580",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "254613",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "267631",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "270944",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "254617",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "271266",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "267632",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "270949",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "266092",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "266050",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "268700",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "271890",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "266095",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "271891",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "271893",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "276201",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272198",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272199",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "273252",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "273255",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "273248",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272846",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "273250",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "273249",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272911",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272966",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272345",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272965",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272526",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "274817",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272963",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "271472",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272961",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272962",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "272847",
+        "productSearchHit": {}
+      },
+      {
+        "productID": "271467",
+        "productSearchHit": {}
+      }
+    ],
+    "productSort": {
+      "options": [
+        {
+          "displayName": "Menor Preço",
+          "id": "Price Ascending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=MP-GERAL&srule=Menor%20Pre%C3%A7o&start=0&sz=100"
+        },
+        {
+          "displayName": "Maior Preço",
+          "id": "Price Descending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=MP-GERAL&srule=Maior%20Pre%C3%A7o&start=0&sz=100"
+        },
+        {
+          "displayName": "A - Z",
+          "id": "Name Ascending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=MP-GERAL&srule=product-name-ascending&start=0&sz=100"
+        },
+        {
+          "displayName": "Z - A",
+          "id": "Name Descending",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=MP-GERAL&srule=product-name-descending&start=0&sz=100"
+        },
+        {
+          "displayName": "Mais Vendidos",
+          "id": "Best Sellers",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=MP-GERAL&srule=Best%20Sellers&start=0&sz=100"
+        },
+        {
+          "displayName": "Mais Recentes",
+          "id": "New Products",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=MP-GERAL&srule=New%20Products&start=0&sz=100"
+        },
+        {
+          "displayName": "Relevância",
+          "id": "Relevance",
+          "url": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=MP-GERAL&srule=Relevance&start=0&sz=100"
+        }
+      ],
+      "ruleId": "Relevance"
+    },
+    "showMoreUrl": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Search-UpdateGrid?cgid=MP-GERAL&start=50&sz=20",
+    "permalink": "https://www.nagumo.com.br/busca?cgid=MP-GERAL&start=0&sz=100",
+    "category": {
+      "name": "Produtos Nagumo",
+      "id": "MP-GERAL",
+      "pageTitle": "TÍTULO",
+      "pageDescription": "DESCRIÇÃO",
+      "pageKeywords": null
+    },
+    "pageMetaTags": [],
+    "productsRangePrices": {
+      "minPrice": 1.79,
+      "maxPrice": 79.98
+    },
+    "refinementPrices": "default"
+  },
+  "productsSearchResult": [
+    {
+      "id": "261165",
+      "productName": "Hastes Flexíveis Nagumo 75Un",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 2.98,
+          "currency": "BRL",
+          "formatted": "R$ 2,98",
+          "decimalPrice": "2.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "259036",
+      "productName": "Batata Chips Tradicional Tubo Nagumo 110G",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 12.98,
+          "currency": "BRL",
+          "formatted": "R$ 12,98",
+          "decimalPrice": "12.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "258818",
+      "productName": "Toalhas Umedecidas Naguminho 20X15Cm 50Un",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 8.98,
+          "currency": "BRL",
+          "formatted": "R$ 8,98",
+          "decimalPrice": "8.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "262577",
+      "productName": "Lámen Sabor Carne Nagumo 85G",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 1.98,
+          "currency": "BRL",
+          "formatted": "R$ 1,98",
+          "decimalPrice": "1.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "271265",
+      "productName": "Queijo Minas Frescal Nagumo Pote",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 56.9,
+          "currency": "BRL",
+          "formatted": "R$ 56,90",
+          "decimalPrice": "56.90"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 25.61,
+        "quantityValueFormatted": "R$ 25,61"
+      }
+    },
+    {
+      "id": "270041",
+      "productName": "Pão com Linguiça e Queijo Choripan Nagumo 330g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 21.98,
+          "currency": "BRL",
+          "formatted": "R$ 21,98",
+          "decimalPrice": "21.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "261447",
+      "productName": "Geleia De Laranja Nagumo 380G",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 21.98,
+          "currency": "BRL",
+          "formatted": "R$ 21,98",
+          "decimalPrice": "21.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      },
+      "flagtypes": [
+        {
+          "flagType": "NGM_36_M",
+          "valueFlagType": "R$ 14,98",
+          "valueFlag": 14.98,
+          "unitValueFlagType": null
+        }
+      ]
+    },
+    {
+      "id": "261164",
+      "productName": "Bolas de Algodão Nagumo 50G",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 4.98,
+          "currency": "BRL",
+          "formatted": "R$ 4,98",
+          "decimalPrice": "4.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "264875",
+      "productName": "Arroz Branco Tipo 1 Nagumo 1Kg",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 5.39,
+          "currency": "BRL",
+          "formatted": "R$ 5,39",
+          "decimalPrice": "5.39"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "262579",
+      "productName": "Lámen Sabor Galinha Nagumo 85G",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 1.98,
+          "currency": "BRL",
+          "formatted": "R$ 1,98",
+          "decimalPrice": "1.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "264878",
+      "productName": "Arroz Parboilizado Nagumo 1Kg",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 5.39,
+          "currency": "BRL",
+          "formatted": "R$ 5,39",
+          "decimalPrice": "5.39"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "267633",
+      "productName": "Fraldas Descartáveis Naguminho XXG com 20",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 39.98,
+          "currency": "BRL",
+          "formatted": "R$ 39,98",
+          "decimalPrice": "39.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "259037",
+      "productName": "Batata Chips Queijo Tubo Nagumo 110G",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 12.98,
+          "currency": "BRL",
+          "formatted": "R$ 12,98",
+          "decimalPrice": "12.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "270677",
+      "productName": "Palmito de Pupunha Em Conserva Picado Nagumo 300g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 19.98,
+          "currency": "BRL",
+          "formatted": "R$ 19,98",
+          "decimalPrice": "19.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "262580",
+      "productName": "Lámen Sabor Galinha Caipira Nagumo 85G",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 1.98,
+          "currency": "BRL",
+          "formatted": "R$ 1,98",
+          "decimalPrice": "1.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "254613",
+      "productName": "Batata Ondulada Chips Nagumo 45G Original",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 3.98,
+          "currency": "BRL",
+          "formatted": "R$ 3,98",
+          "decimalPrice": "3.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "267631",
+      "productName": "Fraldas Descartáveis Naguminho M com 32",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 39.98,
+          "currency": "BRL",
+          "formatted": "R$ 39,98",
+          "decimalPrice": "39.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "270944",
+      "productName": "Lava Roupa Líquido Azul Sachê Nagumo 900ml",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 13.98,
+          "currency": "BRL",
+          "formatted": "R$ 13,98",
+          "decimalPrice": "13.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "254617",
+      "productName": "Batata Ondulada Chips Nagumo 45g Churrasco",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 3.98,
+          "currency": "BRL",
+          "formatted": "R$ 3,98",
+          "decimalPrice": "3.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "271266",
+      "productName": "Queijo Fresco Fracionado Nagumo",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 79.98,
+          "currency": "BRL",
+          "formatted": "R$ 79,98",
+          "decimalPrice": "79.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 47.99,
+        "quantityValueFormatted": "R$ 47,99"
+      }
+    },
+    {
+      "id": "267632",
+      "productName": "Fraldas Descartáveis Naguminho P com 36",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 39.98,
+          "currency": "BRL",
+          "formatted": "R$ 39,98",
+          "decimalPrice": "39.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "270949",
+      "productName": "Lava Roupa Líquido Coco Sachê Nagumo 900ml",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 13.98,
+          "currency": "BRL",
+          "formatted": "R$ 13,98",
+          "decimalPrice": "13.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "266092",
+      "productName": "Sal Nagumo Parrilla Com Alho 370G Para Churrasco",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 17.98,
+          "currency": "BRL",
+          "formatted": "R$ 17,98",
+          "decimalPrice": "17.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "266050",
+      "productName": "Sal De Parrilla Nagumo 500G.Tradicional Para Churrasco",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 17.49,
+          "currency": "BRL",
+          "formatted": "R$ 17,49",
+          "decimalPrice": "17.49"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "268700",
+      "productName": "Preparado Açai Nagumo 500G",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 11.98,
+          "currency": "BRL",
+          "formatted": "R$ 11,98",
+          "decimalPrice": "11.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "271890",
+      "productName": "Salgadinho Cebola e Salsa Nagumo 80g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 3.98,
+          "currency": "BRL",
+          "formatted": "R$ 3,98",
+          "decimalPrice": "3.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "266095",
+      "productName": "Sal Nagumo Parrilla Chimichurri 300G Para Churrasco",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 17.98,
+          "currency": "BRL",
+          "formatted": "R$ 17,98",
+          "decimalPrice": "17.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "271891",
+      "productName": "Salgadinho Bacon Liso Nagumo 80g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 3.98,
+          "currency": "BRL",
+          "formatted": "R$ 3,98",
+          "decimalPrice": "3.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "271893",
+      "productName": "Salgadinho Requeijão Nagumo 80g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 3.98,
+          "currency": "BRL",
+          "formatted": "R$ 3,98",
+          "decimalPrice": "3.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "276201",
+      "productName": "Queijo Parmesão Ralado Nagumo 40g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 6.39,
+          "currency": "BRL",
+          "formatted": "R$ 6,39",
+          "decimalPrice": "6.39"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      },
+      "flagtypes": [
+        {
+          "flagType": "NGM_36_M",
+          "valueFlagType": "R$ 5,98",
+          "valueFlag": 5.98,
+          "unitValueFlagType": null
+        }
+      ]
+    },
+    {
+      "id": "272198",
+      "productName": "Uva Vitória Sem Sementes Nagumo 500g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 9.98,
+          "currency": "BRL",
+          "formatted": "R$ 9,98",
+          "decimalPrice": "9.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272199",
+      "productName": "Uva Thompson Nagumo 500g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 12.98,
+          "currency": "BRL",
+          "formatted": "R$ 12,98",
+          "decimalPrice": "12.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "273252",
+      "productName": "Saco De Lixo Preto Nagumo 20 Unidades 50L",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 16.98,
+          "currency": "BRL",
+          "formatted": "R$ 16,98",
+          "decimalPrice": "16.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "273255",
+      "productName": "Biscoito De Polvilho Salgado Nagumo 30g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 1.79,
+          "currency": "BRL",
+          "formatted": "R$ 1,79",
+          "decimalPrice": "1.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "273248",
+      "productName": "Saco De Lixo Preto Nagumo 10 Unidades 110L",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 16.98,
+          "currency": "BRL",
+          "formatted": "R$ 16,98",
+          "decimalPrice": "16.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272846",
+      "productName": "Toalhas De Papel Folha Dupla Nagumo 3 Unidades 120 Folhas",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 17.98,
+          "currency": "BRL",
+          "formatted": "R$ 17,98",
+          "decimalPrice": "17.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "273250",
+      "productName": "Saco De Lixo Preto Nagumo 20 Unidades 30L",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 16.98,
+          "currency": "BRL",
+          "formatted": "R$ 16,98",
+          "decimalPrice": "16.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "273249",
+      "productName": "Saco De Lixo Preto Nagumo 30 Unidades 15L",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 16.98,
+          "currency": "BRL",
+          "formatted": "R$ 16,98",
+          "decimalPrice": "16.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272911",
+      "productName": "Passata de Tomate Tradicional Nagumo 680g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 19.98,
+          "currency": "BRL",
+          "formatted": "R$ 19,98",
+          "decimalPrice": "19.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272966",
+      "productName": "Gelatina Em Po Abacaxi Nagumo",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 1.79,
+          "currency": "BRL",
+          "formatted": "R$ 1,79",
+          "decimalPrice": "1.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272345",
+      "productName": "Fermento Químico em Pó Nagumo 100g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 4.49,
+          "currency": "BRL",
+          "formatted": "R$ 4,49",
+          "decimalPrice": "4.49"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272965",
+      "productName": "Gelatina Em Po Morango Nagumo 20g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 1.79,
+          "currency": "BRL",
+          "formatted": "R$ 1,79",
+          "decimalPrice": "1.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272526",
+      "productName": "Goma de Tapioca Nagumo 1kg",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 15.98,
+          "currency": "BRL",
+          "formatted": "R$ 15,98",
+          "decimalPrice": "15.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      },
+      "flagtypes": [
+        {
+          "flagType": "NGM_36_M",
+          "valueFlagType": "R$ 14,98",
+          "valueFlag": 14.98,
+          "unitValueFlagType": null
+        }
+      ]
+    },
+    {
+      "id": "274817",
+      "productName": "Coco Ralado Úmido e Adoçado Nagumo 100g ",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 5.98,
+          "currency": "BRL",
+          "formatted": "R$ 5,98",
+          "decimalPrice": "5.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272963",
+      "productName": "Gelatina Em Po Maracuja Nagumo 20g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 1.79,
+          "currency": "BRL",
+          "formatted": "R$ 1,79",
+          "decimalPrice": "1.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "271472",
+      "productName": "Azeitonas Pretas Fatiadas Nagumo 80g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 5.29,
+          "currency": "BRL",
+          "formatted": "R$ 5,29",
+          "decimalPrice": "5.29"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272961",
+      "productName": "Gelatina em Po Limao Nagumo 20g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 1.79,
+          "currency": "BRL",
+          "formatted": "R$ 1,79",
+          "decimalPrice": "1.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272962",
+      "productName": "Gelatina Em Po Uva Nagumo 20g",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 1.79,
+          "currency": "BRL",
+          "formatted": "R$ 1,79",
+          "decimalPrice": "1.79"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "272847",
+      "productName": "Papel Higiênico Folha Dupla Nagumo 24Un 30M",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 42.98,
+          "currency": "BRL",
+          "formatted": "R$ 42,98",
+          "decimalPrice": "42.98"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    },
+    {
+      "id": "271467",
+      "productName": "Azeitonas Pretas Inteira Sem Caroço Nagumo 80g.",
+      "brand": "NAGUMO",
+      "productAdditionalInfo": null,
+      "available": true,
+      "price": {
+        "sales": {
+          "value": 6.29,
+          "currency": "BRL",
+          "formatted": "R$ 6,29",
+          "decimalPrice": "6.29"
+        },
+        "list": null,
+        "priceDiff": {
+          "value": 0,
+          "currency": "BRL",
+          "formatted": "R$ 0,00",
+          "decimalPrice": "0.00"
+        },
+        "quantityValue": 0,
+        "quantityValueFormatted": "0.0"
+      }
+    }
+  ]
+}

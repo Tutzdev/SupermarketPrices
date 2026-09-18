@@ -1,0 +1,9 @@
+{
+  "postgresBin": "C:/Program Files/PostgreSQL/18/bin",
+  "postgresData": ".local/mvp/pgdata",
+  "passwordFile": ".local/mvp/pg-password",
+  "databasePort": 55433,
+  "databaseName": "gomo_acceptance",
+  "databaseUsername": "gomo_mvp",
+  "backendPort": 8081
+}

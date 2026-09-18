@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "data": {
+    "busca_id": "3311",
+    "produtos": [],
+    "digitado": "gomosemresultados20260917",
+    "termo": "gomosemresultados20260917",
+    "filtros": null
+  },
+  "paginator": {
+    "page": 1,
+    "items_per_page": 20,
+    "total_pages": 0,
+    "total_items": 0
+  },
+  "isRedirect": false
+}

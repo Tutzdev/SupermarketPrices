@@ -41,6 +41,13 @@ public class CollectedCatalogIngestionService {
         CollectionCatalog catalog = catalogs.ensureCatalog(
                 metadata, collectedCatalog.store(), collectedCatalog.collectedAt());
         MutableResult result = new MutableResult(collectedCatalog.foundCount());
+        collectedCatalog.products().forEach(product -> {
+            switch (product.availability()) {
+                case AVAILABLE -> result.availableCount++;
+                case UNAVAILABLE -> result.unavailableCount++;
+                case UNKNOWN -> result.unknownAvailabilityCount++;
+            }
+        });
         collectedCatalog.warnings().forEach(result::addSkippedError);
 
         List<ProductPrice> collectedPrices = ingestProducts(
@@ -67,6 +74,8 @@ public class CollectedCatalogIngestionService {
                 ProductIngestionResult ingestion = products.ingestWithOutcome(observation);
                 if (ingestion.outcome() == ProductIngestionOutcome.CREATED) {
                     result.createdCount++;
+                } else if (ingestion.outcome() == ProductIngestionOutcome.UPDATED) {
+                    result.productsUpdatedCount++;
                 }
                 collectedPrices.add(new ProductPrice(ingestion.product().id(), collectedProduct));
             } catch (RuntimeException exception) {
@@ -103,17 +112,8 @@ public class CollectedCatalogIngestionService {
             CollectedProduct product = collectedPrice.collectedProduct();
             String sourceReference = entry.getValue();
             PriceRecord previous = latestPrices.get(collectedPrice.productId());
-            if (observationReferences.isSameDailyObservation(
-                    previous, product, collectedCatalog.collectedAt())) {
-                result.skippedCount++;
-                continue;
-            }
-            if (existingReferences.contains(sourceReference)) {
-                sourceReference = observationReferences.createAfter(
-                        metadata.code(), metadata.storeSourceReference(), product,
-                        collectedCatalog.collectedAt(), previous);
-            }
-            if (priceChangeGuard.isSuspicious(product.regularPrice(), previous)) {
+            if (!existingReferences.contains(sourceReference)
+                    && priceChangeGuard.isSuspicious(product.regularPrice(), previous)) {
                 result.skippedCount++;
                 result.addError("Variação suspeita no produto " + product.sourceReference());
                 LOGGER.warn("Coletor {} rejeitou variação suspeita do produto {}",
@@ -127,7 +127,12 @@ public class CollectedCatalogIngestionService {
                         product.regularPrice(), product.promotionalPrice(), "BRL",
                         collectedCatalog.collectedAt(), product.validUntil(),
                         product.promotionValidUntil(), product.promotionCondition(), product.availability()));
-                result.updatedCount++;
+                if (existingReferences.contains(sourceReference)) {
+                    result.skippedCount++;
+                } else {
+                    result.updatedCount++;
+                    existingReferences.add(sourceReference);
+                }
             } catch (RuntimeException exception) {
                 result.addSkippedError("Preço do produto " + product.sourceReference() + " ignorado: "
                         + safeMessage(exception));
@@ -168,6 +173,10 @@ public class CollectedCatalogIngestionService {
         private int createdCount;
         private int updatedCount;
         private int skippedCount;
+        private int availableCount;
+        private int unavailableCount;
+        private int unknownAvailabilityCount;
+        private int productsUpdatedCount;
 
         private MutableResult(int foundCount) {
             this.foundCount = foundCount;
@@ -185,7 +194,8 @@ public class CollectedCatalogIngestionService {
         private CollectionResult toResult(UUID sourceId, UUID storeId) {
             String errorMessage = errors.isEmpty() ? null : String.join(" | ", errors);
             return new CollectionResult(sourceId, storeId, foundCount, createdCount,
-                    updatedCount, skippedCount, errors.size(), errorMessage);
+                    updatedCount, skippedCount, errors.size(), errorMessage,
+                    availableCount, unavailableCount, unknownAvailabilityCount, productsUpdatedCount);
         }
     }
 }

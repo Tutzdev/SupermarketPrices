@@ -37,8 +37,9 @@ public class CollectionAdminController {
 
     @PostMapping
     public List<CollectionRunResponse> collect(
+            @RequestParam(required = false) String collectorCode,
             @AuthenticationPrincipal AuthenticatedUser actor) {
-        List<CollectionRunResponse> results = coordinator.collectAll();
+        List<CollectionRunResponse> results = coordinator.collectSelected(collectorCode);
         results.forEach(result -> audit.record(
                 actor.id(), AdminAction.COLLECTION_TRIGGERED, "COLLECTION_RUN", result.id()));
         return results;

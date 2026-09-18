@@ -1,39 +1,33 @@
 import { useQuery } from "@tanstack/react-query";
-import { Search } from "lucide-react";
+import { Package } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EmptyState, ErrorState, SkeletonRows } from "@/components/ui/feedback";
-import { TextField } from "@/components/ui/form-field";
-import { NativeButton } from "@/components/ui/native-button";
 import { PageHeading, Pagination } from "@/components/page/page-elements";
+import { ProductPicker } from "@/features/catalog/product-picker";
+import { productMetadata } from "@/features/catalog/product-label";
 import { catalogApi } from "@/services/gomo-api";
 
 export function ProductsPage() {
+  const navigate = useNavigate();
   const [page, setPage] = useState(0);
-  const [draft, setDraft] = useState("");
-  const [query, setQuery] = useState("");
-  const products = useQuery({ queryKey: ["products", { query, page }], queryFn: () => catalogApi.products({ query, page, size: 20 }) });
+  const [searching, setSearching] = useState(false);
+  const products = useQuery({ queryKey: ["products", "browse", page], queryFn: ({ signal }) => catalogApi.products({ page, size: 20, sort: "name" }, signal), enabled: !searching });
 
-  return (
-    <>
-      <PageHeading title="Produtos" description="Pesquise no catálogo real por nome, marca, GTIN ou categoria." />
-      <form className="surface mb-5 flex flex-col gap-3 p-4 sm:flex-row sm:items-end" onSubmit={(event) => { event.preventDefault(); setPage(0); setQuery(draft.trim()); }}>
-        <div className="flex-1"><TextField id="product-search" label="Buscar produto" value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Nome, marca, GTIN ou categoria" /></div>
-        <NativeButton type="submit"><Search className="size-4" aria-hidden />Buscar</NativeButton>
-      </form>
-
-      {products.isLoading ? <SkeletonRows rows={7} /> : products.isError ? <ErrorState retry={() => void products.refetch()} /> : !products.data?.content.length ? <EmptyState title="Nenhum produto encontrado" description="Revise o termo ou tente uma busca mais ampla." /> : (
-        <>
-          <div className="surface overflow-x-auto">
-            <table className="data-table min-w-[46rem]">
-              <caption className="sr-only">Produtos encontrados no catálogo</caption>
-              <thead><tr><th>Produto</th><th>Marca</th><th>Categoria</th><th>GTIN</th><th><span className="sr-only">Ações</span></th></tr></thead>
-              <tbody>{products.data.content.map((product) => <tr key={product.id}><td><p className="font-semibold">{product.name}</p><p className="mt-1 max-w-xs truncate text-xs text-muted">{product.quantity ? `${product.quantity} ${product.unit ?? ""}` : product.description ?? "Sem descrição"}</p></td><td>{product.brand ?? "—"}</td><td>{product.category ?? "—"}</td><td className="font-mono text-xs">{product.gtin ?? "—"}</td><td className="text-right"><Link to={`/app/produtos/${product.id}`} className="font-semibold text-primary hover:underline">Ver detalhes</Link></td></tr>)}</tbody>
-            </table>
-          </div>
-          <Pagination page={products.data.page} totalPages={products.data.totalPages} onChange={setPage} />
-        </>
-      )}
-    </>
-  );
+  return <>
+    <PageHeading title="Produtos" description="Encontre o que precisa por nome, marca ou tamanho da embalagem." />
+    <section className="surface mb-6 max-w-3xl p-4 sm:p-5" aria-label="Pesquisa no catálogo">
+      <ProductPicker id="catalog-product" value="" onChange={(id) => { if (id) navigate(`/app/produtos/${id}`); }} onSearchChange={(text) => setSearching(text.trim().length >= 2)} />
+    </section>
+    {!searching ? <>
+      <div className="mb-4 flex items-center justify-between gap-3"><h2 className="font-semibold">Explorar o catálogo</h2><span className="text-xs text-muted">{products.data?.totalElements.toLocaleString("pt-BR")} produtos</span></div>
+      {products.isLoading ? <SkeletonRows rows={5} /> : products.isError ? <ErrorState retry={() => void products.refetch()} /> : !products.data?.content.length ? <EmptyState title="Catálogo vazio" description="Os produtos aparecerão após a coleta das lojas." /> : <>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">{products.data.content.map((product) => <Link key={product.id} to={`/app/produtos/${product.id}`} className="surface flex items-start gap-3 p-4 transition-colors hover:bg-surface-strong focus-visible:outline-2 focus-visible:outline-focus">
+          <span className="grid size-10 shrink-0 place-items-center rounded-md bg-surface-strong text-muted"><Package className="size-5" aria-hidden /></span>
+          <span className="min-w-0"><span className="block text-sm font-semibold leading-6">{product.name}</span><span className="mt-1 block text-xs leading-5 text-muted">{productMetadata(product)}</span></span>
+        </Link>)}</div>
+        <Pagination page={page} totalPages={products.data.totalPages} onChange={setPage} />
+      </>}
+    </> : null}
+  </>;
 }

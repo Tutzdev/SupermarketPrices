@@ -9,6 +9,7 @@ import type {
   PriceContribution,
   PriceRecord,
   Product,
+  ProductSearchFacets,
   ProductComparison,
   ShoppingList,
   ShoppingListComparison,
@@ -18,6 +19,7 @@ import type {
   State,
   StockAvailability,
   Store,
+  StoreProduct,
   User,
   UserPreference,
 } from "@/types/api";
@@ -29,6 +31,10 @@ export interface ProductFilters {
   category?: string;
   page?: number;
   size?: number;
+  storeId?: string;
+  unit?: string;
+  quantity?: number;
+  sort?: string;
 }
 
 export const authApi = {
@@ -67,16 +73,21 @@ export const catalogApi = {
     apiRequest<PageResponse<City>>(`/cities?${queryString({ stateId, page, size })}`, {
       authenticated: false,
     }),
-  products: (filters: ProductFilters = {}) =>
+  products: (filters: ProductFilters = {}, signal?: AbortSignal) =>
     apiRequest<PageResponse<Product>>(`/products?${queryString({ size: 20, ...filters })}`, {
       authenticated: false,
+      signal,
     }),
+  productFilters: (query: string, signal?: AbortSignal) =>
+    apiRequest<ProductSearchFacets>(`/products/filters?${queryString({ query })}`, { authenticated: false, signal }),
   product: (id: string) => apiRequest<Product>(`/products/${id}`, { authenticated: false }),
   stores: (cityId?: string, page = 0, size = 100) =>
     apiRequest<PageResponse<Store>>(`/stores?${queryString({ cityId, page, size })}`, {
       authenticated: false,
     }),
   store: (id: string) => apiRequest<Store>(`/stores/${id}`, { authenticated: false }),
+  storeProducts: (id: string, query: string, page = 0) =>
+    apiRequest<PageResponse<StoreProduct>>(`/stores/${id}/products?${queryString({ query, page, size: 30 })}`, { authenticated: false }),
   priceHistory: (productId: string, storeId: string, page = 0, size = 20) =>
     apiRequest<PageResponse<PriceRecord>>(
       `/prices?${queryString({ productId, storeId, page, size })}`,

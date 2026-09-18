@@ -4,24 +4,57 @@ O banco inicial contém somente o estado e as quatro cidades autorizadas pelo es
 
 As interfaces `ProductDataProvider`, `StoreDataProvider` e `PriceDataProvider` continuam definindo consultas paginadas. Os coletores automáticos implementam `SupermarketCollector` e entregam um catálogo normalizado ao mesmo domínio de ingestão. A ausência de uma integração não é convertida em dados inventados.
 
-## Integrações investigadas
+## Fontes ativas do MVP
 
-Situação verificada em 17/09/2026:
+O recorte inicial foi validado em **17/09/2026**; suas evidências históricas estão em [mvp-data-check.md](mvp-data-check.md). A configuração atual percorre os departamentos públicos das duas fontes e preserva o banco existente. Contagens variam conforme a loja publica seu estoque.
 
-| Supermercado | Unidade solicitada | Situação | Fonte e limitação |
-| --- | --- | --- | --- |
-| Nagumo | 036-V.REDONDA, Ponte Alta | Ativa | E-commerce público `https://www.nagumo.com.br`, com seleção explícita da loja 36 e JSON paginado. A fonte estruturada estável encontrada cobre a categoria `MP-GERAL` ("Produtos Nagumo"), não o catálogo inteiro, e não fornece GTIN. |
-| Supermarket | Aterrado | Não automatizada | O encarte oficial público encontrado declara que os preços não valem no Sul Fluminense. Portanto ele não representa a unidade Aterrado. |
-| Royal Supermercados | Aterrado | Não automatizada | O e-commerce público possui produtos estruturados, mas sua lista oficial de retirada não oferece Aterrado; em Volta Redonda, a loja identificada é Retiro. Esses preços não são atribuídos a Aterrado. |
-| Empório Royale | Volta Redonda | Não automatizada | O aplicativo público encontrado está marcado como desativado/em manutenção, aponta para uma operação inativa em Resende e não retorna lojas de retirada. |
+### Nagumo Ponte Alta
 
-O coletor Nagumo primeiro abre uma sessão pública, consulta as lojas, exige correspondência exata de ID, nome, cidade, bairro e endereço, seleciona a loja e somente depois consulta o catálogo. Uma mudança nessa identidade interrompe a coleta em vez de misturar filiais. Preços da bandeira `NGM_36_M` são armazenados com a condição "Meu Nagumo" e não substituem o preço comum na comparação.
+- Rede Nagumo, unidade **036-V.REDONDA**, external ID **36**.
+- Endereço cadastrado: Via Sérgio Braga, 951, Ponte Alta, Volta Redonda/RJ. A resposta pública identifica via, bairro e cidade, mas **não informa o número 951**; ele é o endereço configurado da unidade, não um campo extraído do JSON.
+- Fonte: <https://www.nagumo.com.br>, JSON público do próprio e-commerce.
+- `NagumoCollector`, código `nagumo_volta_redonda`, fonte `nagumo_delivery`. Flag: `NAGUMO_COLLECTION_ENABLED`.
+- Abre sessão pública; consulta `Stores-AvailableStores`; exige ID, nome, cidade, bairro, endereço e operação; seleciona por `Stores-SelectStore?storeId=36`; confirma a seleção antes e depois do catálogo. Nunca seleciona a primeira loja da cidade.
+- Consulta `Search-UpdateGrid?cgid=<categoria>&start=<posição>&sz=50`, sob `/on/demandware.store/Sites-Nagumo-Site/pt_BR/`. Percorre MP-GERAL e 15 departamentos verificados nos links públicos: açougue, básicos e matinais, bazar, bebidas, frios e laticínios, hortifruti, limpeza, padaria, peixaria, pet shop, mercearia doce, mercearia salgada, higiene, jardinagem e orientais. `NAGUMO_ADDITIONAL_CATEGORY_IDS` configura esse escopo. Não afirma cobrir produtos que a fonte não publica.
+- A contagem de busca e as páginas podem divergir por filtragem da filial e atualização do índice. A coleta segue `showMoreUrl` até `finished`, sem parar prematuramente numa página curta; detecta páginas repetidas e falhas HTTP. Cada produto observado mantém seu próprio identificador.
+- Produtos pesáveis recebem a indicação “preço de 1 kg” somente quando preço por kg × peso médio reproduz o preço da porção declarado pela fonte. A quantidade da lista representa kg nesses itens. Casos sem base de cálculo confirmada são descartados com motivo.
+- Preserva ID, nome, marca, categoria, conteúdo descritivo, preço normal, preço promocional e disponibilidade. O total declarado conta disponíveis, mas as páginas também trazem indisponíveis; `foundCount` conta todos os registros recebidos.
+- **GTIN não fornecido.** Quando um canônico recebe GTIN do Royal por vínculo revisado, isso não significa que o Nagumo o forneceu.
+- Estoque: `available=true/false` vira `AVAILABLE/UNAVAILABLE`; ausência vira `UNKNOWN`.
+- Bandeira `NGM_36_M`: preço condicionado a **Meu Nagumo**, preservado separadamente. Não há validade explícita: `validUntil` e `promotionValidUntil` ficam nulos. Não se fabrica prazo diário.
+- No recorte inicial: 472 registros, 462 preços válidos, 10 descartados por preço normal ausente/inválido. Esses números são históricos; consulte as execuções administrativas para a coleta atual.
 
-Na validação de 17/09/2026, a fonte declarou 117 itens disponíveis e retornou 128 registros no total; os 11 adicionais estavam indisponíveis. O coletor conta os registros realmente recebidos e preserva essa disponibilidade, sem apresentar os itens indisponíveis como ofertas atuais.
+### Royal Retiro
+
+- Rede Royal Supermercados, **Royal Supermercados - Retiro**, Avenida Antônio de Almeida, **1477**, Retiro, Volta Redonda/RJ, CEP 27277-330.
+- Identidade: organização **255**, aplicação pública **290**, filial **2**, centro de distribuição **1**, ID VipCommerce **959**, CNPJ **39553144000100**. **Não é Aterrado.**
+- Loja oficial: <https://www.royalsupermercados.com.br>. API contratada e utilizada pelo próprio frontend: <https://services.vipcommerce.com.br>. Não é agregador de preços.
+- `RoyalCollector`, código `royal_retiro`, fonte `royal_delivery`, referência `royal:store:255:2:1`. Flag: `ROYAL_COLLECTION_ENABLED`.
+- Consulta `/api-admin/v1/organizacoes/filiais/dominio/royalsupermercados.com.br`; valida organização, aplicação, nome, operação e domínio técnico `royaleemporio.com.br`.
+- O storefront inicia uma **sessão anônima de loja**, sem conta de consumidor: baixa o JavaScript público de configuração e envia os mesmos campos `lojaUser`/`lojaAuthJWT` em `POST /api-admin/v1/org/255/auth/loja/login`. A chave pública é lida a cada coleta, nunca gravada no código. Não usa credenciais de cliente nem contorna proteção.
+- Consulta `/api-admin/v1/org/255/filial/2/loja/centros_distribuicoes/retiradas`, exige exatamente o CD 1 e valida nome, CNPJ, IDs, endereço completo e operação. Revalida `/api-admin/v1/org/255/loja/centros_distribuicoes/1` antes e depois do catálogo.
+- A seleção é explícita no caminho `/api-admin/v1/org/255/filial/2/centro_distribuicao/1/loja/`. Com `ROYAL_FULL_CATALOG=true` (padrão), lê `classificacoes_mercadologicas/departamentos/arvore` e percorre todas as páginas de cada departamento em `classificacoes_mercadologicas/departamentos/<id>/produtos?page=<n>`.
+- Confere `paginator.page`, `total_pages` e `total_items`. O modo limitado por `ROYAL_SEARCH_TERMS` permanece disponível apenas quando `ROYAL_FULL_CATALOG=false`; não há fallback silencioso para o recorte antigo.
+- ID estável: **produto_id**, não o identificador da linha de estoque. Descrição pode vir abreviada; marca/categoria nem sempre são declaradas. `codigo_barras` é aceito somente como GTIN válido; códigos internos curtos permanecem sem GTIN. Estoque explícito preservado; ausência = `UNKNOWN`.
+- Preço e `oferta` fornecem regular/promocional, tipo e quantidade mínima quando existentes. Condições preservadas. Sem validade comprovada, a promoção não substitui o preço regular na comparação. Unidades fracionárias/alternativas não suportadas são rejeitadas, sem conversão presumida.
+- No recorte inicial: 225 registros/preços válidos; 179 disponíveis e 46 indisponíveis. Consulte as execuções administrativas para a coleta atual.
+- `ROYAL_PUBLIC_CONFIGURATION_PATH` aponta para o bundle público observado (`/chunk-TLHOSSIT.js`). Um deploy do fornecedor pode alterar esse caminho ou contrato; a coleta falha explicitamente e exige revalidar a configuração pública. Timeouts, intervalos, tentativas e limites são configuráveis. Bloqueios não são contornados.
+
+### Identidade canônica revisada
+
+Os vínculos persistidos continuam em `product_source_references`. [`nagumo-royal.json`](../src/main/resources/product-mappings/nagumo-royal.json) contém **20 pares revisados**, IDs de ambas as fontes, nomes exatos, GTIN fornecido pelo Royal, data, páginas e imagens públicas usadas na revisão de marca, variante, conteúdo e embalagem. Não contém preços nem seeds comerciais.
+
+`VerifiedProductMappings` aceita apenas os IDs/fontes revisados e confere nomes/GTIN. Mudança exige revisão e gera erro; não há fuzzy match. Produtos sem correspondência continuam separados. Dois canônicos já existentes separadamente exigem revisão dos históricos, sem mesclagem automática. O fluxo limpo é Nagumo seguido de Royal. Pares com divergência de peso na imagem ou de variante foram excluídos.
+
+As duas coletas reais produziram 20 canônicos compartilhados; **14 tinham preço utilizável nas duas lojas** naquele momento. Nos outros seis, pelo menos uma fonte informou indisponibilidade.
+
+### Outras investigações
+
+Aterrado não integra este MVP. O encarte oficial Supermarket anteriormente investigado excluía Sul Fluminense; o e-commerce Royal não oferecia Aterrado para retirada. Não se atribuem a essas unidades os preços de Retiro. O fallback não foi necessário: Royal Retiro foi coletado ao vivo.
 
 ## Execução automática e manual
 
-A coleta roda diariamente às 05:30 em `America/Sao_Paulo`. O cron, fuso, intervalo entre coletores, timeouts, tentativas e intervalo entre requisições estão em `application.properties` e podem ser substituídos pelas variáveis documentadas em `.env.example`. Use `PRICE_COLLECTION_ENABLED=false` para desativar apenas o agendamento ou `NAGUMO_COLLECTION_ENABLED=false` para remover o coletor Nagumo.
+A coleta roda diariamente às 05:30 em `America/Sao_Paulo`. O cron, fuso, intervalo entre coletores, timeouts, tentativas e intervalo entre requisições estão em `application.properties` e podem ser substituídos pelas variáveis documentadas em `.env.example`. Use `PRICE_COLLECTION_ENABLED=false` para desativar apenas o agendamento ou as flags `NAGUMO_COLLECTION_ENABLED=false` / `ROYAL_COLLECTION_ENABLED=false` para desativar cada coletor.
 
 Um administrador pode iniciar a mesma rotina sem reiniciar a aplicação:
 
@@ -30,7 +63,9 @@ POST /api/v1/admin/collections
 Authorization: Bearer <token-administrativo>
 ```
 
-As execuções podem ser consultadas em `GET /api/v1/admin/collections` e `GET /api/v1/admin/collections/{id}`. Cada registro informa horários, status e contagens encontradas, criadas, atualizadas, ignoradas e com erro. Coletores rodam sequencialmente; uma falha é finalizada como `FAILED` e não impede o próximo coletor.
+As execuções podem ser consultadas em `GET /api/v1/admin/collections` e `GET /api/v1/admin/collections/{id}`. Nagumo (`@Order(10)`) roda antes de Royal (`@Order(20)`); uma falha é finalizada como `FAILED` e não impede o próximo coletor.
+
+Contagens: `createdCount` = produtos criados; `updatedCount` / `observationsInsertedCount` = observações inseridas; `skippedCount` = descartes com erro + observações idempotentes; `observationsSkippedCount` = observações idempotentes; `productsUpdatedCount` = cadastros/referências temporais atualizados. `availableCount`, `unavailableCount` e `unknownAvailabilityCount` contam os produtos normalizados com preço válido, não os registros rejeitados pelo parser. Vincular outro ID de fonte ao canônico existente não cria produto. `errorMessage` identifica descartes; falha externa não vira catálogo vazio.
 
 ## Adicionar uma fonte real
 
@@ -77,7 +112,7 @@ O prazo configurado em `app.prices.max-age` limita a idade aceita do preço; o p
 
 Uma promoção só compõe o preço atual quando `promotionValidUntil` é conhecido, está no futuro e `promotionCondition` não está preenchido. Sem validade ou com uma condição especial, o valor promocional permanece visível no histórico e a comparação usa o valor regular. `promotionApplied` informa a decisão e `expiresAt` informa o limite do preço efetivamente utilizado.
 
-O coletor gera uma referência determinística com data e conteúdo. Repetir a mesma coleta no mesmo dia não cria histórico duplicado. Uma observação diária nova é necessária mesmo sem alteração de valor porque comprova o instante de atualização e renova a validade diária declarada pela fonte. `collectedAt`, `status` e `expiresAt` permitem ao frontend diferenciar preço atual, expirado e ausente; `PRICE_MAX_AGE` controla o limite de stale quando a fonte não fornece prazo menor.
+O coletor gera uma referência determinística com coletor, filial, ID externo do produto e instante UTC da coleta normalizado a microssegundos. Reprocessar o mesmo catálogo com o mesmo instante não duplica observações; conteúdo diferente para a mesma referência gera conflito. Uma nova consulta temporal gera outra observação, mesmo no mesmo dia e sem mudança de valor. Não há validade diária inventada. `collectedAt`, `status` e `expiresAt` permitem ao frontend diferenciar preço atual, expirado e ausente; `PRICE_MAX_AGE` controla o limite de stale quando a fonte não fornece prazo menor.
 
 O contrato de `PriceQuote` diferencia:
 
@@ -97,6 +132,16 @@ Nas listas, cada preço conhecido é multiplicado pela quantidade solicitada. O 
 As lojas da comparação detalhada são paginadas por nome e ID, com até 100 lojas por requisição. Todos os preços da página são consultados em um único lote, limitado às lojas da página e aos produtos da lista.
 
 A recomendação de compra usa um endpoint separado e consulta em lote todas as lojas elegíveis da cidade. Se a quantidade ultrapassar `RECOMMENDATION_MAX_STORES`, a API retorna 422 em vez de declarar uma vencedora parcial. Somente uma loja com preço utilizável para todos os itens pode ser recomendada; candidatos incompletos são apresentados separadamente como cobertura, nunca como vencedor.
+
+## Catálogo por loja e compra dividida
+
+`GET /api/v1/stores/{id}/products?query=...&page=0&size=30` consulta somente produtos com observações naquela loja. A paginação ocorre no banco; um `EXISTS` evita duplicar produtos com vários registros históricos. Os preços da página são carregados em lote e passam pela mesma `PricePolicy` das comparações. O catálogo inclui itens indisponíveis ou desatualizados, identificados pelo status.
+
+A busca geral e por loja aceita texto sem acentos. As migrations V13 e V14 criam índices de ordenação e trigramas para as colunas pesquisadas. O limite por página continua 100; não existe um limite global de produtos da lista de seleção. O frontend solicita 30 resultados por página e permite pesquisar o catálogo inteiro.
+
+O campo `combination` da recomendação escolhe a menor linha válida de cada produto, já multiplicada pela quantidade e arredondada. Agrupa os itens por loja e informa os produtos ausentes. Somente uma combinação completa pode ter `savingsAgainstCompleteStore`, calculada contra a loja mais barata com a mesma lista completa. Não se compara subtotal parcial com total completo; frete e deslocamento não entram no cálculo. Empates favorecem a loja vencedora completa para evitar divisões sem economia.
+
+É possível repetir uma única fonte por `POST /api/v1/admin/collections?collectorCode=nagumo_volta_redonda` ou `royal_retiro`. O bloqueio de coleta simultânea continua valendo; código desconhecido retorna 404. Sem parâmetro, ambas são executadas sequencialmente.
 
 ## Contribuições de usuários
 

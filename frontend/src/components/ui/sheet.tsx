@@ -10,6 +10,8 @@ interface SheetProps {
   description?: string;
   children: ReactNode;
   side?: "left" | "right";
+  onCloseAutoFocus?: (event: Event) => void;
+  bodyClassName?: string;
 }
 
 export function Sheet({
@@ -19,19 +21,22 @@ export function Sheet({
   description,
   children,
   side = "right",
+  onCloseAutoFocus,
+  bodyClassName,
 }: SheetProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/45 data-[state=closed]:animate-out data-[state=open]:animate-in motion-reduce:animate-none" />
         <Dialog.Content
+          onCloseAutoFocus={onCloseAutoFocus}
           className={cn(
             "fixed inset-y-0 z-50 flex w-[min(88vw,22rem)] flex-col bg-white p-5 shadow-2xl",
             "focus:outline-none motion-safe:duration-200",
             side === "right" ? "right-0 border-l border-border" : "left-0 border-r border-border",
           )}
         >
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex shrink-0 items-start justify-between gap-4">
             <div>
               <Dialog.Title className="font-semibold text-foreground">{title}</Dialog.Title>
               {description ? (
@@ -42,7 +47,7 @@ export function Sheet({
               <X className="size-5" aria-hidden />
             </Dialog.Close>
           </div>
-          <div className="mt-6 min-h-0 flex-1 overflow-y-auto">{children}</div>
+          <div className={cn("min-h-0 flex-1", bodyClassName ?? "mt-6 overflow-y-auto")}>{children}</div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

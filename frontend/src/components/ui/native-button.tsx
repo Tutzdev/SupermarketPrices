@@ -68,7 +68,12 @@ export function NativeButton({
 
   if (href) {
     return (
-      <a href={href} className={classes} aria-disabled={disabled || loading || undefined}>
+      <a
+        href={href}
+        className={classes}
+        data-variant={variant}
+        aria-disabled={disabled || loading || undefined}
+      >
         {content}
       </a>
     );
@@ -76,7 +81,12 @@ export function NativeButton({
 
   if (to) {
     return (
-      <Link to={to} className={classes} aria-disabled={disabled || loading || undefined}>
+      <Link
+        to={to}
+        className={classes}
+        data-variant={variant}
+        aria-disabled={disabled || loading || undefined}
+      >
         {content}
       </Link>
     );
@@ -87,6 +97,7 @@ export function NativeButton({
       {...props}
       type={type}
       className={classes}
+      data-variant={variant}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
     >

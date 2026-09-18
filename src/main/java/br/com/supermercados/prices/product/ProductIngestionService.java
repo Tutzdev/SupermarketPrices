@@ -22,6 +22,7 @@ public class ProductIngestionService {
     private final DataSourceService dataSourceService;
     private final ObservationValidator validator;
     private final Clock clock;
+    private final VerifiedProductMappings verifiedMappings;
 
     @Transactional
     public ProductResponse ingest(ProductObservation observation) {
@@ -34,17 +35,25 @@ public class ProductIngestionService {
         dataSourceService.verifyObservation(observation.source());
 
         String gtin = Gtin.normalize(observation.gtin());
+        Optional<Product> verifiedProduct = verifiedMappings.findVerifiedProduct(observation);
         Optional<ProductSourceReference> existingReference = referenceRepository.findBySourceIdAndSourceReference(
                 observation.source().sourceId(),
                 observation.source().sourceReference());
 
         if (existingReference.isPresent()) {
+            if (verifiedProduct.isPresent() && !verifiedProduct.orElseThrow().getId()
+                    .equals(existingReference.orElseThrow().getProductId())) {
+                throw new ApiException(HttpStatus.CONFLICT,
+                        "Produtos já cadastrados separadamente exigem revisão antes de vincular históricos");
+            }
             return updateReferencedProduct(existingReference.orElseThrow(), observation, gtin);
         }
 
-        Optional<Product> identifiedProduct = findByGtin(gtin);
+        Optional<Product> identifiedProduct = verifiedProduct.or(() -> findByGtin(gtin));
+        identifiedProduct.ifPresent(product -> validateIdentity(product, gtin));
         Product product = identifiedProduct.orElseGet(
                 () -> productRepository.save(new Product(observation, gtin, clock.instant())));
+        product.assignGtin(gtin);
         referenceRepository.save(new ProductSourceReference(product.getId(), observation.source()));
 
         ProductIngestionOutcome outcome = identifiedProduct.isPresent()

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.supermercados.prices.common.PageRequests;
 import br.com.supermercados.prices.common.PageResponse;
+import br.com.supermercados.prices.product.ProductSearch;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class StoreController {
 
     private final StoreService storeService;
+    private final StoreCatalogService catalog;
 
     @GetMapping("/chains")
     public PageResponse<ChainResponse> findChains(
@@ -40,5 +42,14 @@ public class StoreController {
     @GetMapping("/stores/{id}")
     public StoreResponse findStore(@PathVariable UUID id) {
         return storeService.findStore(id);
+    }
+
+    @GetMapping("/stores/{id}/products")
+    public PageResponse<StoreProductResponse> findProducts(@PathVariable UUID id,
+            @RequestParam(required = false) String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "30") int size) {
+        return PageResponse.from(catalog.findProducts(id, new ProductSearch(query, null, null, null),
+                PageRequests.create(page, size, Sort.by("name", "id"))));
     }
 }

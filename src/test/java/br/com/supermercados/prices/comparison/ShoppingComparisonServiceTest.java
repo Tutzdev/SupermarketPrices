@@ -198,6 +198,6 @@ class ShoppingComparisonServiceTest {
 
     private StoreResponse store(UUID id, String name) {
         return new StoreResponse(id, null, cityId, name, null, null, null, true,
-                UUID.randomUUID(), "synthetic-store-" + id, now, now);
+                UUID.randomUUID(), "synthetic-store-" + id, now, now, null);
     }
 }

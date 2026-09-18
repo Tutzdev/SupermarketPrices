@@ -1,0 +1,39 @@
+{
+  "success": true,
+  "data": {
+    "nome": "Royal Supermercados - Retiro",
+    "nome_site": "Royal Supermercados - Retiro ",
+    "cnpj": "39553144000100",
+    "inscricao_estadual": "",
+    "coordenada_geografica": {
+      "latitude": "-22.50047200",
+      "longitude": "-44.12627700"
+    },
+    "endereco": {
+      "cep": "27277330",
+      "logradouro": "Avenida Antônio de Almeida",
+      "numero": "1477",
+      "complemento": "",
+      "bairro": "Retiro",
+      "cidade": "Volta Redonda",
+      "estado": "Rio de Janeiro"
+    },
+    "tipo_exibicao_retirada": 1,
+    "observacao_retirada": "",
+    "ativo": true,
+    "exclusivo_televendas": null,
+    "relacionamento_cliente": {
+      "email": "ouvidoria@rederoyal.com.br",
+      "telefone": "(24) 4009-3342",
+      "whatsapp": "(24) 99307-0373",
+      "link_whatsapp": "1",
+      "mensagem_whatsapp": "Olá! Estou com uma dúvida em relação ao *Royal Delivery*, poderia me ajudar? Caso seja algo relacionado à Ouvidoria, você também pode entrar em contato pelo Whatsapp (24) 99322-3683."
+    },
+    "limite_itens_carrinho": null,
+    "loja_autonoma": false,
+    "vipcommerce_centro_distribuicao_id": 959,
+    "id": 1,
+    "created": "2023-10-20 20:53:42",
+    "modified": "2025-09-22 11:41:13"
+  }
+}

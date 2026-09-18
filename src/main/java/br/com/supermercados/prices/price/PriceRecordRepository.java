@@ -15,6 +15,12 @@ public interface PriceRecordRepository extends Repository<PriceRecord, UUID> {
 
     Optional<PriceRecord> findById(UUID id);
 
+    @Query("""
+            SELECT new br.com.supermercados.prices.price.StorePriceUpdate(p.storeId, max(p.collectedAt))
+            FROM PriceRecord p WHERE p.storeId IN :storeIds GROUP BY p.storeId
+            """)
+    List<StorePriceUpdate> findStoreUpdates(@Param("storeIds") Collection<UUID> storeIds);
+
     Page<PriceRecord> findByProductIdAndStoreId(UUID productId, UUID storeId, Pageable pageable);
 
     Optional<PriceRecord> findBySourceIdAndSourceReference(UUID sourceId, String sourceReference);

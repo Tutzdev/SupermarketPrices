@@ -39,17 +39,26 @@ public class CollectionCoordinator {
     }
 
     public List<CollectionRunResponse> collectAll() {
+        return collectSelected(null);
+    }
+
+    public List<CollectionRunResponse> collectSelected(String collectorCode) {
+        List<SupermarketCollector> selected = collectorCode == null ? collectors : collectors.stream()
+                .filter(collector -> collector.metadata().code().equals(collectorCode)).toList();
+        if (selected.isEmpty() && collectorCode != null) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "Coletor não encontrado");
+        }
         if (!running.compareAndSet(false, true)) {
             throw new ApiException(HttpStatus.CONFLICT, "Já existe uma coleta em andamento");
         }
 
         try {
             List<CollectionRunResponse> results = new ArrayList<>();
-            for (int index = 0; index < collectors.size(); index++) {
+            for (int index = 0; index < selected.size(); index++) {
                 if (index > 0 && !waitBeforeNextCollector()) {
                     break;
                 }
-                results.add(collect(collectors.get(index)));
+                results.add(collect(selected.get(index)));
             }
             return List.copyOf(results);
         } finally {

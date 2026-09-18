@@ -79,6 +79,10 @@ export const router = createBrowserRouter([
         lazy: () => import("@/routes/app/stores-page").then(({ StoresPage }) => ({ Component: StoresPage })),
       },
       {
+        path: "supermercados/:id",
+        lazy: () => import("@/routes/app/store-catalog-page").then(({ StoreCatalogPage }) => ({ Component: StoreCatalogPage })),
+      },
+      {
         path: "listas",
         lazy: () => import("@/routes/app/shopping-lists-page").then(({ ShoppingListsPage }) => ({
           Component: ShoppingListsPage,

@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "data": {
+    "id": 290,
+    "nome": "Royal Supermercados",
+    "ativo": true,
+    "store_id": null,
+    "em_manutencao": false,
+    "organizacao": {
+      "id": 255,
+      "nome": "Royale Empório",
+      "label": "royale-emporio",
+      "ativo": true,
+      "grupo": null,
+      "enderecoServidor": "royaleemporio.com.br"
+    }
+  }
+}

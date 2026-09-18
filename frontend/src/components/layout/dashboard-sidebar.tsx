@@ -94,7 +94,7 @@ export function DashboardSidebar({
                   title={collapsed ? item.label : undefined}
                   className={({ isActive }) =>
                     cn(
-                      "flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold transition-colors",
+                      "dashboard-nav-action flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#8e1612]",
                       isActive ? "bg-white text-[#991b16]" : "text-white/78 hover:bg-white/10 hover:text-white",
                       collapsed && "justify-center px-0",
@@ -116,7 +116,7 @@ export function DashboardSidebar({
           onClick={onLogout}
           title={collapsed ? "Sair" : undefined}
           className={cn(
-            "flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm font-semibold text-white/78 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white",
+            "dashboard-nav-action flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm font-semibold text-white/78 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white",
             collapsed && "justify-center px-0",
           )}
         >

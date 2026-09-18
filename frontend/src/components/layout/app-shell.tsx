@@ -1,5 +1,5 @@
 import { Menu } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar";
 import { Sheet } from "@/components/ui/sheet";
@@ -26,11 +26,21 @@ export function AppShell() {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
   const [collapsed, setCollapsed] = useState(() => window.localStorage.getItem(COLLAPSED_KEY) === "true");
 
   useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 64rem)");
+    const closeMobileMenu = () => {
+      if (desktop.matches) setMobileOpen(false);
+    };
+    desktop.addEventListener("change", closeMobileMenu);
+    return () => desktop.removeEventListener("change", closeMobileMenu);
+  }, []);
 
   if (!user) return null;
 
@@ -72,9 +82,16 @@ export function AppShell() {
       <div className={cn("min-h-screen transition-[padding] duration-200 motion-reduce:transition-none", collapsed ? "lg:pl-20" : "lg:pl-64")}>
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-border bg-white/95 px-4 backdrop-blur sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
-            <button type="button" className="icon-button lg:hidden" onClick={() => setMobileOpen(true)} aria-label="Abrir menu lateral">
-              <Menu className="size-5" aria-hidden />
-            </button>
+            <div className="lg:hidden">
+              <button ref={menuButton} type="button" className="icon-button" onClick={() => setMobileOpen(true)} aria-label="Abrir menu lateral" aria-expanded={mobileOpen}>
+                <Menu className="size-5" aria-hidden />
+              </button>
+            </div>
+            <div className="hidden lg:block">
+              <button type="button" className="icon-button" onClick={toggleCollapsed} aria-label={collapsed ? "Expandir navegação" : "Recolher navegação"} aria-expanded={!collapsed}>
+                <Menu className="size-5" aria-hidden />
+              </button>
+            </div>
             <p className="truncate font-semibold text-foreground">{currentPage}</p>
           </div>
           <div className="min-w-0 text-right">
@@ -90,8 +107,14 @@ export function AppShell() {
         </main>
       </div>
 
-      <Sheet open={mobileOpen} onOpenChange={setMobileOpen} title="Menu da Gomo" side="left">
-        <div className="-m-5 mt-0 h-[calc(100%+1.25rem)] bg-[#981d18]">
+      <Sheet
+        open={mobileOpen}
+        onOpenChange={setMobileOpen}
+        title="Menu da Gomo"
+        side="left"
+        bodyClassName="mt-5 -mx-5 -mb-5 overflow-hidden bg-[#981d18]"
+        onCloseAutoFocus={(event) => { event.preventDefault(); menuButton.current?.focus(); }}
+      >
           <DashboardSidebar
             collapsed={false}
             role={user.role}
@@ -99,7 +122,6 @@ export function AppShell() {
             onNavigate={() => setMobileOpen(false)}
             onLogout={() => void handleLogout()}
           />
-        </div>
       </Sheet>
     </div>
   );

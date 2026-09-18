@@ -3,16 +3,23 @@ package br.com.supermercados.prices.collection.nagumo;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import org.springframework.core.annotation.Order;
 
 import br.com.supermercados.prices.collection.CollectedCatalog;
 import br.com.supermercados.prices.collection.CollectedStore;
+import br.com.supermercados.prices.collection.CollectedProduct;
 import br.com.supermercados.prices.collection.CollectorMetadata;
 import br.com.supermercados.prices.collection.SupermarketCollector;
 
 @Component
+@Order(10)
 @ConditionalOnProperty(
         name = "app.collection.nagumo.enabled",
         havingValue = "true",
@@ -57,23 +64,29 @@ public class NagumoCollector implements SupermarketCollector {
 
     @Override
     public CollectedCatalog collect() {
-        NagumoCatalogResponse externalCatalog = client.fetch();
+        List<NagumoCatalogResponse> externalCatalogs = client.fetch();
         Instant collectedAt = clock.instant();
-        Instant validUntil = collectedAt.atZone(properties.getZone())
-                .toLocalDate().plusDays(1)
-                .atStartOfDay(properties.getZone()).toInstant();
-        NagumoProductParser.ParsedProducts parsed = parser.parse(externalCatalog, validUntil);
-        if (parsed.products().isEmpty()) {
+        Instant validUntil = null;
+        Map<String, CollectedProduct> products = new LinkedHashMap<>();
+        List<String> warnings = new ArrayList<>();
+        int foundCount = 0;
+        for (NagumoCatalogResponse externalCatalog : externalCatalogs) {
+            NagumoProductParser.ParsedProducts parsed = parser.parse(externalCatalog, validUntil);
+            foundCount += externalCatalog.foundCount();
+            warnings.addAll(parsed.warnings());
+            parsed.products().forEach(product -> products.putIfAbsent(product.sourceReference(), product));
+        }
+        if (foundCount > 0 && products.isEmpty()) {
             throw new IllegalStateException("Nenhum produto válido foi retornado pela Nagumo");
         }
 
         CollectedStore store = new CollectedStore(
-                properties.getStoreName(),
+                "Nagumo Ponte Alta (" + properties.getStoreName() + ")",
                 properties.getAddress(),
                 properties.getLatitude(),
                 properties.getLongitude(),
                 true);
-        return new CollectedCatalog(store, parsed.products(), externalCatalog.foundCount(),
-                collectedAt, parsed.warnings());
+        return new CollectedCatalog(store, List.copyOf(products.values()), foundCount,
+                collectedAt, warnings);
     }
 }

@@ -69,10 +69,10 @@ class NagumoCollectorTest {
 
         CollectedCatalog catalog = collector.collect();
 
-        assertThat(storeRequests).hasValue(3);
+        assertThat(storeRequests).hasValue(4);
         assertThat(sessionCookieReceived).isTrue();
         assertThat(storeSelected).isTrue();
-        assertThat(catalog.store().name()).isEqualTo("036-V.REDONDA");
+        assertThat(catalog.store().name()).isEqualTo("Nagumo Ponte Alta (036-V.REDONDA)");
         assertThat(catalog.foundCount()).isEqualTo(3);
         assertThat(catalog.products()).hasSize(2);
         assertThat(catalog.warnings()).singleElement().asString().contains("266999", "preço normal");
@@ -81,7 +81,7 @@ class NagumoCollectorTest {
         assertThat(memberPrice.regularPrice()).isEqualByComparingTo("29.98");
         assertThat(memberPrice.promotionalPrice()).isEqualByComparingTo("19.98");
         assertThat(memberPrice.promotionCondition()).contains("Meu Nagumo");
-        assertThat(memberPrice.validUntil()).isEqualTo(Instant.parse("2026-09-18T03:00:00Z"));
+        assertThat(memberPrice.validUntil()).isNull();
 
         CollectedProduct publicPromotion = product(catalog, "nagumo:product:264455");
         assertThat(publicPromotion.regularPrice()).isEqualByComparingTo("35.95");

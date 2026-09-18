@@ -49,6 +49,18 @@ class NagumoProductParser {
         BigDecimal salesPrice = requiredPrice(product.path("price").path("sales").path("value"));
         BigDecimal listPrice = optionalPrice(product.path("price").path("list").path("value"));
         BigDecimal memberPrice = memberPrice(product.path("flagtypes"));
+        if (product.path("weighable").asBoolean()) {
+            if (!product.path("averageWeightNumber").isNumber()) {
+                throw new IllegalArgumentException("peso médio ausente ou inválido");
+            }
+            BigDecimal averageWeight = product.path("averageWeightNumber").decimalValue();
+            BigDecimal portionPrice = requiredPrice(product.path("price").path("quantityValue"));
+            if (averageWeight.signum() <= 0
+                    || salesPrice.multiply(averageWeight).setScale(2, RoundingMode.HALF_UP).compareTo(portionPrice) != 0) {
+                throw new IllegalArgumentException("preço por peso sem base de cálculo confirmada");
+            }
+            name += " (preço de 1 kg)";
+        }
 
         BigDecimal regularPrice = salesPrice;
         BigDecimal promotionalPrice = null;
@@ -64,9 +76,11 @@ class NagumoProductParser {
         String brand = optionalText(product, "brand");
         String description = firstText(product, "productAdditionalInfo", "shortDescription", "longDescription");
         String gtin = firstText(product, "gtin", "ean");
-        StockAvailability availability = product.path("available").asBoolean(false)
-                ? StockAvailability.AVAILABLE
-                : StockAvailability.UNAVAILABLE;
+        StockAvailability availability = StockAvailability.UNKNOWN;
+        if (product.path("available").isBoolean()) {
+            availability = product.path("available").asBoolean()
+                    ? StockAvailability.AVAILABLE : StockAvailability.UNAVAILABLE;
+        }
 
         return new CollectedProduct(
                 "nagumo:product:" + id,
