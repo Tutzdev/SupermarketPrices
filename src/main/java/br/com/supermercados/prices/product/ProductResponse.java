@@ -19,7 +19,9 @@ public record ProductResponse(
         UUID sourceId,
         String sourceReference,
         Instant collectedAt,
-        Instant updatedAt) {
+        Instant updatedAt,
+        String imageUrl,
+        String originUrl) {
 
     public static ProductResponse from(Product product) {
         return new ProductResponse(
@@ -37,6 +39,8 @@ public record ProductResponse(
                 product.getSourceId(),
                 product.getSourceReference(),
                 product.getCollectedAt(),
-                product.getUpdatedAt());
+                product.getUpdatedAt(),
+                product.getImageUrl(),
+                product.getOriginUrl());
     }
 }

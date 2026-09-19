@@ -62,6 +62,8 @@ export interface Product {
   quantity: number | null;
   category: string | null;
   packageDescription: string | null;
+  imageUrl: string | null;
+  originUrl: string | null;
   sourceId: string;
   sourceReference: string;
   collectedAt: string;
@@ -100,6 +102,7 @@ export interface PriceRecord {
   sourceId: string;
   sourceReference: string;
   originType: "SOURCE" | "USER_CONTRIBUTION";
+  originUrl: string | null;
   contributionId: string | null;
 }
 
@@ -122,7 +125,18 @@ export interface ProductComparison {
     storeId: string;
     storeName: string;
     price: PriceQuote;
+    measurementPrice: MeasurementPrice | null;
   }>;
+}
+
+export interface MeasurementPrice {
+  amount: number;
+  unit: string;
+}
+
+export interface ProductOffers {
+  productId: string;
+  offers: ProductComparison["stores"]["content"];
 }
 
 export interface ShoppingListSummary {

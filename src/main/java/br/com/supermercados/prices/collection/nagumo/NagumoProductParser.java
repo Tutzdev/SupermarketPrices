@@ -94,7 +94,13 @@ class NagumoProductParser {
                 promotionCondition,
                 validUntil,
                 promotionalPrice == null ? null : validUntil,
-                availability);
+                availability,
+                publicUrl(product.path("images").path("medium").path(0).path("src").path("disUrl").asString(null)),
+                publicUrl(optionalText(product, "productShowFullUrl")));
+    }
+
+    private String publicUrl(String value) {
+        return value != null && value.startsWith("https://") ? value : null;
     }
 
     private BigDecimal memberPrice(JsonNode flags) {

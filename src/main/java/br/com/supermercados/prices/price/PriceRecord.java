@@ -72,6 +72,9 @@ public class PriceRecord {
     @Column(nullable = false, length = 16)
     private StockAvailability availability;
 
+    @Column(length = 2048)
+    private String originUrl;
+
     static PriceRecord from(PriceObservation observation, Instant recordedAt) {
         return from(observation, recordedAt, PriceOriginType.SOURCE, null);
     }
@@ -104,8 +107,13 @@ public class PriceRecord {
         record.promotionValidUntil = toDatabasePrecision(observation.promotionValidUntil());
         record.promotionCondition = cleanOptional(observation.promotionCondition());
         record.availability = observation.availability();
+        record.originUrl = observation.originUrl();
 
         return record;
+    }
+
+    void enrichOrigin(String publicUrl) {
+        if (originUrl == null) originUrl = publicUrl;
     }
 
     boolean hasSameObservation(PriceRecord other) {

@@ -1,5 +1,7 @@
 package br.com.supermercados.prices.collection.royal;
 
+import br.com.supermercados.prices.collection.vip.VipProductParser;
+
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
@@ -23,7 +25,7 @@ public class RoyalCollector implements SupermarketCollector {
 
     private final RoyalProperties properties;
     private final RoyalClient client;
-    private final RoyalProductParser parser;
+    private final VipProductParser parser;
     private final Clock clock;
 
     @Override
@@ -37,7 +39,7 @@ public class RoyalCollector implements SupermarketCollector {
     @Override
     public CollectedCatalog collect() {
         RoyalClient.Catalog catalog = client.fetch();
-        RoyalProductParser.ParsedProducts parsed = parser.parse(catalog.products());
+        VipProductParser.ParsedProducts parsed = parser.parse(catalog.products(), "royal", "Royal", properties.getBaseUrl());
         if (!catalog.products().isEmpty() && parsed.products().isEmpty()) {
             throw new IllegalStateException("Nenhum produto válido no catálogo Royal recebido");
         }

@@ -78,6 +78,10 @@ public class PriceService {
             throw new ApiException(HttpStatus.CONFLICT,
                     "A referência da fonte já identifica outra observação de preço.");
         }
+        if (persisted.getOriginUrl() == null && candidate.getOriginUrl() != null
+                && prices.fillMissingOrigin(persisted.getId(), candidate.getOriginUrl()) > 0) {
+            persisted.enrichOrigin(candidate.getOriginUrl());
+        }
         alertEvaluator.evaluate(persisted.getId());
         return PriceRecordResponse.from(persisted);
     }

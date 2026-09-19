@@ -45,6 +45,7 @@ $env:SPRING_MAIL_PORT = '1025'
 $env:ADMIN_BOOTSTRAP_EMAIL = ''
 $env:SUBSCRIBER_BOOTSTRAP_EMAIL = ''
 $env:DEBUG = 'false'
+$env:APP_COLLECTION_ARCHIVE_DIRECTORY = Join-Path $projectRoot '.local/catalog-snapshots'
 $env:LOGGING_LEVEL_ORG_HIBERNATE_SQL = 'WARN'
 $env:JAVA_TOOL_OPTIONS = "$env:JAVA_TOOL_OPTIONS -Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE -Dspring.devtools.restart.enabled=false".Trim()
 

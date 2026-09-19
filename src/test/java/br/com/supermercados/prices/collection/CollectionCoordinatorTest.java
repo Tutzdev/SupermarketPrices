@@ -27,7 +27,7 @@ class CollectionCoordinatorTest {
         when(ingestion.ingest(any(), any())).thenReturn(new CollectionResult(
                 UUID.randomUUID(), UUID.randomUUID(), 0, 0, 0, 0, 0, null));
         when(runs.finish(any(), any())).thenReturn(response(selected.metadata(), CollectionStatus.SUCCESS));
-        var coordinator = new CollectionCoordinator(List.of(selected, untouched), ingestion, runs, Duration.ZERO);
+        var coordinator = new CollectionCoordinator(List.of(selected, untouched), ingestion, runs, mock(CollectedCatalogArchive.class), Duration.ZERO);
 
         assertThat(coordinator.collectSelected("selected")).hasSize(1);
         assertThat(selected.collected).isTrue();
@@ -53,7 +53,7 @@ class CollectionCoordinatorTest {
         when(runs.finish(any(), any())).thenReturn(completed);
 
         List<CollectionRunResponse> results = new CollectionCoordinator(
-                List.of(failing, successful), ingestion, runs, Duration.ZERO).collectAll();
+                List.of(failing, successful), ingestion, runs, mock(CollectedCatalogArchive.class), Duration.ZERO).collectAll();
 
         assertThat(results).extracting(CollectionRunResponse::status)
                 .containsExactly(CollectionStatus.FAILED, CollectionStatus.SUCCESS);

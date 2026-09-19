@@ -70,7 +70,8 @@ public class CollectedCatalogIngestionService {
                         sourceId, collectedProduct.sourceReference(), catalog.collectedAt());
                 ProductObservation observation = new ProductObservation(
                         collectedProduct.gtin(), collectedProduct.name(), collectedProduct.brand(),
-                        collectedProduct.description(), null, null, collectedProduct.category(), source);
+                        collectedProduct.description(), null, null, collectedProduct.category(), source,
+                        collectedProduct.imageUrl(), collectedProduct.originUrl());
                 ProductIngestionResult ingestion = products.ingestWithOutcome(observation);
                 if (ingestion.outcome() == ProductIngestionOutcome.CREATED) {
                     result.createdCount++;
@@ -126,7 +127,7 @@ public class CollectedCatalogIngestionService {
                         collectedPrice.productId(), catalog.storeId(), catalog.sourceId(), sourceReference,
                         product.regularPrice(), product.promotionalPrice(), "BRL",
                         collectedCatalog.collectedAt(), product.validUntil(),
-                        product.promotionValidUntil(), product.promotionCondition(), product.availability()));
+                        product.promotionValidUntil(), product.promotionCondition(), product.availability(), product.originUrl()));
                 if (existingReferences.contains(sourceReference)) {
                     result.skippedCount++;
                 } else {

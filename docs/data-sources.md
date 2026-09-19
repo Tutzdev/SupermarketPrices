@@ -1,5 +1,7 @@
 # Fontes de dados e ingestão
 
+A expansão de 18/09/2026, com novas unidades, protocolos, limites e operação, está documentada em [volta-redonda-expansion.md](volta-redonda-expansion.md). O recorte de duas fontes abaixo é o registro do MVP anterior.
+
 O banco inicial contém somente o estado e as quatro cidades autorizadas pelo escopo. Não há fontes comerciais, lojas, produtos, estoques ou preços pré-cadastrados. Uma fonte, rede e loja são criadas somente depois de uma coleta real bem-sucedida. Os registros sintéticos usados nos testes estão exclusivamente em `src/test`.
 
 As interfaces `ProductDataProvider`, `StoreDataProvider` e `PriceDataProvider` continuam definindo consultas paginadas. Os coletores automáticos implementam `SupermarketCollector` e entregam um catálogo normalizado ao mesmo domínio de ingestão. A ausência de uma integração não é convertida em dados inventados.

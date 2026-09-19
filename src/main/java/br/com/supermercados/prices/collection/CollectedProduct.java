@@ -17,5 +17,14 @@ public record CollectedProduct(
         String promotionCondition,
         Instant validUntil,
         Instant promotionValidUntil,
-        StockAvailability availability) {
+        StockAvailability availability,
+        String imageUrl,
+        String originUrl) {
+
+    public CollectedProduct(String sourceReference, String name, String gtin, String brand,
+            String description, String category, BigDecimal regularPrice, BigDecimal promotionalPrice,
+            String promotionCondition, Instant validUntil, Instant promotionValidUntil, StockAvailability availability) {
+        this(sourceReference, name, gtin, brand, description, category, regularPrice, promotionalPrice,
+                promotionCondition, validUntil, promotionValidUntil, availability, null, null);
+    }
 }

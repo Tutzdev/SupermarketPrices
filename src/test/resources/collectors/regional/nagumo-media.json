@@ -1,0 +1,95 @@
+{
+  "id": "676519",
+  "productName": "Coca-Cola Sem Açúcar 2L",
+  "brand": "COCA COLA",
+  "shortDescription": {},
+  "longDescription": {},
+  "productAdditionalInfo": null,
+  "availability": {
+    "messages": [
+      "Em estoque"
+    ],
+    "inStockDate": null
+  },
+  "available": true,
+  "images": {
+    "large": [
+      {
+        "alt": "https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp",
+        "url": "/on/demandware.static/-/Sites-storefront-catalog-ngm/pt_BR/v1789767028975/https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp",
+        "index": "0",
+        "title": "Coca-Cola Sem Açúcar 2L",
+        "absURL": "https://www.nagumo.com.br/on/demandware.static/-/Sites-storefront-catalog-ngm/pt_BR/v1789767028975/https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp",
+        "src": {
+          "disUrl": "https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp"
+        }
+      }
+    ],
+    "medium": [
+      {
+        "alt": "https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp",
+        "url": "/on/demandware.static/-/Sites-storefront-catalog-ngm/pt_BR/v1789767028975/https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp",
+        "index": "0",
+        "title": "Coca-Cola Sem Açúcar 2L",
+        "absURL": "https://www.nagumo.com.br/on/demandware.static/-/Sites-storefront-catalog-ngm/pt_BR/v1789767028975/https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp",
+        "src": {
+          "disUrl": "https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp"
+        }
+      }
+    ],
+    "small": [
+      {
+        "alt": "https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp",
+        "url": "/on/demandware.static/-/Sites-storefront-catalog-ngm/pt_BR/v1789767028975/https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp",
+        "index": "0",
+        "title": "Coca-Cola Sem Açúcar 2L",
+        "absURL": "https://www.nagumo.com.br/on/demandware.static/-/Sites-storefront-catalog-ngm/pt_BR/v1789767028975/https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp",
+        "src": {
+          "disUrl": "https://assetsmn.s3.us-east-1.amazonaws.com/assets/ofertas-ecommerce/676519.webp"
+        }
+      }
+    ]
+  },
+  "price": {
+    "sales": {
+      "value": 11.98,
+      "currency": "BRL",
+      "formatted": "R$ 11,98",
+      "decimalPrice": "11.98"
+    },
+    "list": null,
+    "priceDiff": {
+      "value": 0,
+      "currency": "BRL",
+      "formatted": "R$ 0,00",
+      "decimalPrice": "0.00"
+    },
+    "quantityValue": 0,
+    "quantityValueFormatted": "0.0"
+  },
+  "tags": [],
+  "isAccelerator": false,
+  "acceleratorRule": null,
+  "acceleratorBgColor": "#5c4d96",
+  "acceleratorTextColor": "#ffffff",
+  "flagImage": "https://www.nagumo.com.br/on/demandware.static/-/Sites/default/dw0eeff146/meunagumo.png",
+  "productShowQuickView": "https://www.nagumo.com.br/on/demandware.store/Sites-Nagumo-Site/pt_BR/Product-ShowQuickView?pid=676519",
+  "productShowFullUrl": "https://www.nagumo.com.br/categoria/departamentos/bebidas/nao-alcoolicas/refrigerante/coca-cola-sem-a%C3%A7%C3%BAcar-2l-676519.html",
+  "productMeasureValue": "unity",
+  "isPerpetual": false,
+  "ATSInCurrentStore": 1157,
+  "ATSInGenerealStock": 50471,
+  "currentDevice": "mobile",
+  "promotionDiscount": null,
+  "customAttributes": {},
+  "isWishlisted": false,
+  "productObs": null,
+  "weighable": null,
+  "averageWeight": "2,130",
+  "averageWeightDisplay": "2.1kg",
+  "averageWeightNumber": 2.13,
+  "datasheet": null,
+  "averageWeightFormatted": "2,13kg",
+  "reorderProductModel": false,
+  "imageDescription": null
+}

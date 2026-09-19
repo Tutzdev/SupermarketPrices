@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.supermercados.prices.common.PageResponse;
 import br.com.supermercados.prices.location.LocationService;
 import br.com.supermercados.prices.price.PricePolicy;
+import br.com.supermercados.prices.price.MeasurementPrice;
 import br.com.supermercados.prices.price.PriceRecord;
 import br.com.supermercados.prices.price.PriceRecordRepository;
 import br.com.supermercados.prices.product.ProductService;
@@ -78,9 +79,11 @@ public class ShoppingComparisonService {
         Page<StoreResponse> availableStores = stores.findActiveStores(cityId, pageable);
         Map<UUID, Map<UUID, PriceRecord>> latestPricesByStore = latestPrices(
                 availableStores, List.of(productId));
-        Page<ProductStoreComparison> comparisons = availableStores.map(store ->
-                new ProductStoreComparison(store.id(), store.name(), pricePolicy.quote(
-                        latestPricesByStore.getOrDefault(store.id(), Map.of()).get(productId), comparedAt)));
+        Page<ProductStoreComparison> comparisons = availableStores.map(store -> {
+            var quote = pricePolicy.quote(latestPricesByStore.getOrDefault(store.id(), Map.of()).get(productId), comparedAt);
+            return new ProductStoreComparison(store.id(), store.name(), quote,
+                    MeasurementPrice.calculate(quote.unitPrice(), product.getQuantity(), product.getUnit()));
+        });
 
         return new ProductComparisonResponse(productId, product.getName(), cityId, CURRENCY, comparedAt,
                 PageResponse.from(comparisons));

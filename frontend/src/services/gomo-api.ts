@@ -11,6 +11,7 @@ import type {
   Product,
   ProductSearchFacets,
   ProductComparison,
+  ProductOffers,
   ShoppingList,
   ShoppingListComparison,
   ShoppingListItem,
@@ -81,6 +82,8 @@ export const catalogApi = {
   productFilters: (query: string, signal?: AbortSignal) =>
     apiRequest<ProductSearchFacets>(`/products/filters?${queryString({ query })}`, { authenticated: false, signal }),
   product: (id: string) => apiRequest<Product>(`/products/${id}`, { authenticated: false }),
+  offers: (ids: string[], cityId: string, signal?: AbortSignal) =>
+    apiRequest<ProductOffers[]>(`/products/offers?${queryString({ ids: ids.join(","), cityId })}`, { authenticated: false, signal }),
   stores: (cityId?: string, page = 0, size = 100) =>
     apiRequest<PageResponse<Store>>(`/stores?${queryString({ cityId, page, size })}`, {
       authenticated: false,

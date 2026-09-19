@@ -48,6 +48,7 @@ class PricePersistenceTests {
     @Autowired ShoppingListService lists;
     @Autowired ProductService products;
     @Autowired JdbcTemplate jdbc;
+    @Autowired jakarta.persistence.EntityManager entityManager;
     @Autowired br.com.supermercados.prices.store.StoreCatalogService storeCatalog;
 
     @DynamicPropertySource
@@ -107,6 +108,27 @@ class PricePersistenceTests {
         assertThatThrownBy(() -> prices.appendObservation(
                 observation(STORE_A, PRODUCT_A, "same-event", "3.20", collectedAt)))
                 .isInstanceOf(ApiException.class);
+    }
+
+    @Test
+    void persistsPublicOriginAndEnrichesAnIdenticalLegacyObservationWithoutChangingItsTimestamp() {
+        Instant collected = Instant.now().minusSeconds(5).truncatedTo(ChronoUnit.MICROS);
+        var previous = prices.appendObservation(observation(STORE_A, PRODUCT_A, "legacy-origin", "3.10", collected));
+        String origin = "https://example.com/public-product";
+        for (String reference : new String[] {"legacy-origin", "new-origin"}) {
+            prices.appendObservation(new PriceObservation(PRODUCT_A, STORE_A, SOURCE, reference,
+                    new BigDecimal("3.10"), null, "BRL", collected, null, null, null,
+                    StockAvailability.UNKNOWN, origin));
+        }
+        entityManager.flush();
+        entityManager.clear();
+        var history = prices.findHistory(PRODUCT_A, STORE_A, PageRequest.of(0, 20));
+        assertThat(history.totalElements()).isEqualTo(2);
+        assertThat(history.content()).allSatisfy(record -> {
+            assertThat(record.originUrl()).isEqualTo(origin);
+            assertThat(record.collectedAt()).isEqualTo(collected);
+        });
+        assertThat(history.content()).anyMatch(record -> record.id().equals(previous.id()));
     }
 
     @Test

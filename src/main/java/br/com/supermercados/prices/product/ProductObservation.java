@@ -18,5 +18,12 @@ public record ProductObservation(
         @Size(max = 30) String unit,
         @Positive @Digits(integer = 10, fraction = 4) BigDecimal quantity,
         @Size(max = 120) String category,
-        @NotNull @Valid SourceObservation source) {
+        @NotNull @Valid SourceObservation source,
+        @Size(max = 2048) String imageUrl,
+        @Size(max = 2048) String originUrl) {
+
+    public ProductObservation(String gtin, String name, String brand, String description, String unit,
+            BigDecimal quantity, String category, SourceObservation source) {
+        this(gtin, name, brand, description, unit, quantity, category, source, null, null);
+    }
 }

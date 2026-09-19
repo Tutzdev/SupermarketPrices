@@ -49,7 +49,7 @@ export function ShoppingListDetailPage() {
         <div className="border-b border-border p-5"><h2 className="font-bold">Itens da lista</h2>
           <form className="mt-4 space-y-4" onSubmit={(event) => { event.preventDefault(); if (productId && Number(quantity) > 0) addItem.mutate(); }}>
             <ProductPicker id="list-product" value={productId} onChange={setProductId} excludedIds={list.data.items.map((item) => item.productId)} />
-            <div className="flex items-end gap-3"><TextField id="list-quantity" label="Quantidade" type="number" min="0.001" max="999999" step="0.001" required value={quantity} onChange={(event) => setQuantity(event.target.value)} /><NativeButton type="submit" loading={addItem.isPending} disabled={!productId}><Plus className="size-4" aria-hidden />Adicionar</NativeButton></div>
+            <div className="flex items-end gap-3"><TextField id="list-quantity" label="Quantidade" type="number" min="1" max="999999" step="1" required value={quantity} onChange={(event) => setQuantity(event.target.value)} /><NativeButton type="submit" loading={addItem.isPending} disabled={!productId}><Plus className="size-4" aria-hidden />Adicionar</NativeButton></div>
           </form><p role="status" className="mt-3 text-sm text-success">{addedName ? `${addedName} adicionado à lista.` : ""}</p><InlineError>{addItem.error?.message}</InlineError>
         </div>
         {!list.data.items.length ? <div className="p-5"><EmptyState title="Lista vazia" description="Busque produtos de qualquer parte do catálogo para começar." /></div> : <ul className="divide-y divide-border">{list.data.items.map((item) => <ListItemRow key={`${item.id}-${item.quantity}`} listId={id} item={item} onSaved={invalidate} />)}</ul>}
@@ -70,7 +70,7 @@ function ListItemRow({ listId, item, onSaved }: { listId: string; item: Shopping
   const remove = useMutation({ mutationFn: () => shoppingListApi.removeItem(listId, item.id), onSuccess: onSaved });
   return <li className="p-5"><Link to={`/app/produtos/${item.productId}`} className="font-semibold hover:text-primary">{item.productName}</Link>
     <form className="mt-3 flex flex-wrap items-end gap-3" onSubmit={(event) => { event.preventDefault(); update.mutate(); }}>
-      <div className="w-28"><TextField id={`quantity-${item.id}`} label="Quantidade" aria-label={`Quantidade de ${item.productName}`} type="number" min="0.001" max="999999" step="0.001" required value={quantity} onChange={(event) => setQuantity(event.target.value)} /></div>
+      <div className="w-28"><TextField id={`quantity-${item.id}`} label="Quantidade" aria-label={`Quantidade de ${item.productName}`} type="number" min="1" max="999999" step="1" required value={quantity} onChange={(event) => setQuantity(event.target.value)} /></div>
       <NativeButton type="submit" variant="secondary" size="sm" loading={update.isPending} disabled={Number(quantity) === item.quantity || remove.isPending}>Salvar quantidade</NativeButton>
       <NativeButton variant="ghost" size="icon" loading={remove.isPending} disabled={update.isPending} aria-label={`Remover ${item.productName}`} onClick={() => remove.mutate()}><Trash2 className="size-4" aria-hidden /></NativeButton>
     </form><InlineError>{(update.error ?? remove.error)?.message}</InlineError>

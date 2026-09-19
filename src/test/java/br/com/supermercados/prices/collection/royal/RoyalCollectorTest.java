@@ -3,6 +3,8 @@ package br.com.supermercados.prices.collection.royal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import br.com.supermercados.prices.collection.vip.VipProductParser;
+
 import java.time.Clock;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -122,31 +124,31 @@ class RoyalCollectorTest {
     void parserPreservesUnknownStockMissingGtinConditionalPromotionAndDuplicate() throws Exception {
         ObjectNode product = (ObjectNode) server.fixture("royal-yoki-1.json").path("data").path("produtos").get(0);
         product.put("disponivel", false);
-        var parser = new RoyalProductParser();
-        var unavailable = parser.parse(List.of(product)).products().getFirst();
+        var parser = new VipProductParser();
+        var unavailable = parser.parse(List.of(product), "royal", "Royal").products().getFirst();
         assertThat(unavailable.availability()).isEqualTo(StockAvailability.UNAVAILABLE);
         product.remove("disponivel");
-        assertThat(parser.parse(List.of(product)).products().getFirst().availability()).isEqualTo(StockAvailability.UNKNOWN);
+        assertThat(parser.parse(List.of(product), "royal", "Royal").products().getFirst().availability()).isEqualTo(StockAvailability.UNKNOWN);
         product.putNull("codigo_barras");
-        assertThat(parser.parse(List.of(product)).products().getFirst().gtin()).isNull();
+        assertThat(parser.parse(List.of(product), "royal", "Royal").products().getFirst().gtin()).isNull();
         List<JsonNode> duplicates = List.of(product, product.deepCopy());
-        assertThat(parser.parse(duplicates).products()).hasSize(1);
+        assertThat(parser.parse(duplicates, "royal", "Royal").products()).hasSize(1);
         product.remove("preco");
-        assertThat(parser.parse(List.of(product)).warnings()).singleElement().asString().contains("preço");
+        assertThat(parser.parse(List.of(product), "royal", "Royal").warnings()).singleElement().asString().contains("preço");
 
         List<JsonNode> entries = new ArrayList<>();
         server.fixture("royal-yoki-1.json").path("data").path("produtos").forEach(entries::add);
         ObjectNode offered = (ObjectNode) entries.stream().filter(node -> node.path("em_oferta").asBoolean())
                 .findFirst().orElseThrow();
-        assertThat(parser.parse(List.of(offered)).products().getFirst().promotionalPrice()).isPositive();
+        assertThat(parser.parse(List.of(offered), "royal", "Royal").products().getFirst().promotionalPrice()).isPositive();
         ((ObjectNode) offered.path("oferta")).put("quantidade_minima", 2);
-        var conditional = parser.parse(List.of(offered)).products().getFirst();
+        var conditional = parser.parse(List.of(offered), "royal", "Royal").products().getFirst();
         assertThat(conditional.promotionCondition()).contains("quantidade mínima 2");
         assertThat(conditional.promotionValidUntil()).isNull();
     }
 
     private RoyalCollector collector() {
         return new RoyalCollector(properties, new RoyalClient(properties, JsonMapper.builder().build()),
-                new RoyalProductParser(), Clock.systemUTC());
+                new VipProductParser(), Clock.systemUTC());
     }
 }

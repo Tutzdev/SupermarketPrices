@@ -251,6 +251,36 @@ class ApiIntegrationTests {
     }
 
     @Test
+    @Sql("/fixtures/catalog.sql")
+    void batchOffersExcludeUnavailablePricesAndCalculatePricePerKilo() throws Exception {
+        jdbc.update("update products set quantity = 500, unit = 'G' where id = ?", UUID.fromString(PRODUCT_ID));
+        for (int store = 201; store <= 202; store++) {
+            jdbc.update("""
+                    insert into price_records (id, product_id, store_id, source_id, source_reference,
+                        origin_type, regular_price, currency, collected_at, recorded_at, availability)
+                    values (?, ?, ?, '00000000-0000-0000-0000-000000000101', ?, 'SOURCE', 8,
+                        'BRL', current_timestamp, current_timestamp, ?)
+                    """, UUID.randomUUID(), UUID.fromString(PRODUCT_ID),
+                    UUID.fromString("00000000-0000-0000-0000-000000000" + store), "batch-test-" + store,
+                    store == 201 ? "AVAILABLE" : "UNAVAILABLE");
+        }
+
+        mvc.perform(get("/api/v1/products/offers").param("ids", PRODUCT_ID, SECOND_PRODUCT_ID).param("cityId", rioCityId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].offers", hasSize(1)))
+                .andExpect(jsonPath("$[0].offers[0].price.unitPrice").value(8))
+                .andExpect(jsonPath("$[0].offers[0].measurementPrice.amount").value(16))
+                .andExpect(jsonPath("$[0].offers[0].measurementPrice.unit").value("KG"))
+                .andExpect(jsonPath("$[1].offers").isEmpty());
+        mvc.perform(get("/api/v1/products/offers").param("cityId", rioCityId()))
+                .andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/products/offers").param("ids",
+                        java.util.Collections.nCopies(101, PRODUCT_ID).toArray(String[]::new)).param("cityId", rioCityId()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void regularUserCannotAccessAdministrativeOperations() throws Exception {
         String token = registerAndLogin();
 

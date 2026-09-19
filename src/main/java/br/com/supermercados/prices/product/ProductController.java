@@ -2,6 +2,7 @@ package br.com.supermercados.prices.product;
 
 import java.util.UUID;
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,12 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductOfferService productOffers;
+
+    @GetMapping("/offers")
+    public List<ProductOffers> offers(@RequestParam List<UUID> ids, @RequestParam UUID cityId) {
+        return productOffers.findOffers(ids, cityId);
+    }
 
     @GetMapping
     public PageResponse<ProductResponse> search(

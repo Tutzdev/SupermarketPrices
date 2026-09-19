@@ -44,6 +44,36 @@ class ProductNormalizerTest {
         assertThat(product.packageDescription()).isEqualTo("16 X 30 M");
     }
 
+    @Test
+    void convertsExplicitLitresAndKeepsMultipackPricePerBottle() {
+        var observation = new ProductObservation(null, "Bebida Teste 1 litro", "Teste", null,
+                "L", new java.math.BigDecimal("1"), null, new SourceObservation(UUID.randomUUID(), "synthetic", Instant.EPOCH));
+        var normalized = ProductNormalizer.normalize(observation);
+        assertThat(normalized.quantity()).isEqualByComparingTo("1000");
+        assertThat(normalized.unit()).isEqualTo("ML");
+
+        var multipack = normalize("Cerveja Original One Way Multipack 12x300ml", "Original");
+        assertThat(multipack.quantity()).isEqualByComparingTo("12");
+        assertThat(multipack.unit()).isEqualTo("UN");
+        assertThat(ProductNormalizer.describesSamePackage("Arroz Teste 5KG", "5.0 kg")).isTrue();
+        assertThat(ProductNormalizer.describesSamePackage("Arroz Teste 15KG", "5 kg")).isFalse();
+    }
+
+    @Test
+    void usesTheReceivedUnitCountInTakeThreePayTwoPackages() {
+        var product = normalize("Detergente Harpic Leve 3 Pague 2 Unidades", "Harpic");
+        assertThat(product.quantity()).isEqualByComparingTo("3");
+        assertThat(product.unit()).isEqualTo("UN");
+    }
+
+    @Test
+    void doesNotTreatANumberedCandleVariantAsItsPackageQuantity() {
+        assertThat(normalize("Vela Aniversario Romana Azul N.0 Un", "Romana").quantity()).isNull();
+        assertThat(normalize("Vela Aniversario Romana Azul N.9 Un", "Romana").quantity()).isNull();
+        assertThat(normalize("Vela Aniversario Numero 9 Com 12 Unidades", "Romana").quantity())
+                .isEqualByComparingTo("12");
+    }
+
     private ProductNormalizer.NormalizedProduct normalize(String name, String brand) {
         ProductObservation observation = new ProductObservation(
                 null, name, brand, null, null, null, null,

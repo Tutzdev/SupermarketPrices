@@ -1,0 +1,207 @@
+{
+  "data": {
+    "search": {
+      "products": {
+        "edges": [
+          {
+            "node": {
+              "additionalProperty": [],
+              "advertisement": null,
+              "brand": {
+                "brandName": "Coca-Cola",
+                "name": "Coca-Cola"
+              },
+              "deliveryPromiseBadges": null,
+              "gtin": "7894900701753",
+              "hasSpecifications": false,
+              "image": [
+                {
+                  "alternateName": "Refrigerante Coca-Cola Zero 1,5L",
+                  "url": "https://hortifrutibr.vtexassets.com/arquivos/ids/174462/Refrigerante-Coca-Cola-Zero-Pet-15l.jpg.jpg?v=639094529440600000"
+                }
+              ],
+              "isVariantOf": {
+                "name": "Refrigerante Coca-Cola Zero 1,5L",
+                "productGroupID": "121193",
+                "skuVariants": {
+                  "activeVariations": {},
+                  "allVariantsByName": {},
+                  "availableVariations": {},
+                  "slugsMap": {},
+                  "allVariantProducts": [
+                    {
+                      "name": "Refrigerante Coca-Cola Zero 1,5L",
+                      "productID": "121193"
+                    }
+                  ]
+                },
+                "hasVariant": [
+                  {
+                    "description": "<span>Refrescante e equilibrada, a </span><strong>Coca-Cola Zero 1,5L</strong><span> oferece o sabor inconfundível da Coca-Cola, agora sem adição de açúcares. Ideal para acompanhar refeições em família, encontros e momentos de descontração, garante o mesmo sabor marcante com zero calorias. </span><br /><br /><span>Sua embalagem de 1,5 litro é prática e ideal para compartilhar. </span><strong>Peça agora a sua Coca-Cola Zero 1,5L e desfrute do sabor clássico sem abrir mão do bem-estar!</strong><br /><br /><strong>Alérgicos</strong><span>: Não contém glúten.</span>",
+                    "gtin": "7894900701753",
+                    "name": "Refrigerante Coca-Cola Zero 1,5L",
+                    "productID": "121193",
+                    "releaseDate": "1762992000000",
+                    "sku": "121193",
+                    "slug": "refrigerante-coca-cola-zero-1-5l-121193",
+                    "unitMultiplier": 1
+                  }
+                ]
+              },
+              "name": "Refrigerante Coca-Cola Zero 1,5L",
+              "offers": {
+                "lowPrice": 8.39,
+                "lowPriceWithTaxes": 8.39,
+                "offers": [
+                  {
+                    "availability": "https://schema.org/InStock",
+                    "listPrice": 8.39,
+                    "listPriceWithTaxes": 8.39,
+                    "price": 8.39,
+                    "priceWithTaxes": 8.39,
+                    "quantity": 10000,
+                    "seller": {
+                      "identifier": "hortifrutibraterradohf"
+                    },
+                    "itemCondition": "https://schema.org/NewCondition",
+                    "priceCurrency": "BRL",
+                    "priceValidUntil": "2027-09-18T23:46:19Z",
+                    "sellingPrice": 8.39
+                  }
+                ],
+                "highPrice": 8.39,
+                "offerCount": 1,
+                "priceCurrency": "BRL"
+              },
+              "id": "121193",
+              "sku": "121193",
+              "slug": "refrigerante-coca-cola-zero-1-5l-121193",
+              "unitMultiplier": 1,
+              "attachments": [
+                {
+                  "id": 3,
+                  "name": "Observação"
+                },
+                {
+                  "id": 6,
+                  "name": "weight"
+                }
+              ],
+              "clusterHighlights": [],
+              "commertialOffer": {
+                "discountHighlights": []
+              },
+              "description": "<span>Refrescante e equilibrada, a </span><strong>Coca-Cola Zero 1,5L</strong><span> oferece o sabor inconfundível da Coca-Cola, agora sem adição de açúcares. Ideal para acompanhar refeições em família, encontros e momentos de descontração, garante o mesmo sabor marcante com zero calorias. </span><br /><br /><span>Sua embalagem de 1,5 litro é prática e ideal para compartilhar. </span><strong>Peça agora a sua Coca-Cola Zero 1,5L e desfrute do sabor clássico sem abrir mão do bem-estar!</strong><br /><br /><strong>Alérgicos</strong><span>: Não contém glúten.</span>",
+              "specifications": [
+                {
+                  "name": "sellerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          {
+            "node": {
+              "additionalProperty": [],
+              "advertisement": null,
+              "brand": {
+                "brandName": "Coca-Cola",
+                "name": "Coca-Cola"
+              },
+              "deliveryPromiseBadges": null,
+              "gtin": "7894900701517",
+              "hasSpecifications": false,
+              "image": [
+                {
+                  "alternateName": "Refrigerante Coca-Cola Zero Açúcar 2L",
+                  "url": "https://hortifrutibr.vtexassets.com/arquivos/ids/176679/Refrigerante-Coca-Cola-Zero-Acucar-2L.jpg?v=639057196644730000"
+                }
+              ],
+              "isVariantOf": {
+                "name": "Refrigerante Coca-Cola Zero Açúcar 2L",
+                "productGroupID": "124426",
+                "skuVariants": {
+                  "activeVariations": {},
+                  "allVariantsByName": {},
+                  "availableVariations": {},
+                  "slugsMap": {},
+                  "allVariantProducts": [
+                    {
+                      "name": "Refrigerante Coca-Cola Zero Açúcar 2L",
+                      "productID": "124426"
+                    }
+                  ]
+                },
+                "hasVariant": [
+                  {
+                    "description": "<span>Refrescante e irresistível, a </span><strong>Coca-Cola Zero Açúcar 2L</strong><span> traz o sabor original da Coca-Cola, agora sem adição de açúcares. Ideal para acompanhar refeições, festas e momentos de lazer, entrega a mesma experiência marcante com leveza e zero calorias. </span><br /><br /><span>Perfeita para quem busca equilíbrio entre sabor e bem-estar, é uma escolha prática e versátil para o dia a dia. </span><strong>Garanta já a sua Coca-Cola Zero Açúcar 2L e sinta o prazer de um sabor clássico sem culpa!</strong><br /><br /><span>Não contém glúten.</span>",
+                    "gtin": "7894900701517",
+                    "name": "Refrigerante Coca-Cola Zero Açúcar 2L",
+                    "productID": "124426",
+                    "releaseDate": "1762992000000",
+                    "sku": "124426",
+                    "slug": "refrigerante-coca-cola-zero-acucar-2l-124426",
+                    "unitMultiplier": 1
+                  }
+                ]
+              },
+              "name": "Refrigerante Coca-Cola Zero Açúcar 2L",
+              "offers": {
+                "lowPrice": 10.49,
+                "lowPriceWithTaxes": 10.49,
+                "offers": [
+                  {
+                    "availability": "https://schema.org/InStock",
+                    "listPrice": 10.49,
+                    "listPriceWithTaxes": 10.49,
+                    "price": 10.49,
+                    "priceWithTaxes": 10.49,
+                    "quantity": 10000,
+                    "seller": {
+                      "identifier": "hortifrutibraterradohf"
+                    },
+                    "itemCondition": "https://schema.org/NewCondition",
+                    "priceCurrency": "BRL",
+                    "priceValidUntil": "2027-09-18T23:46:19Z",
+                    "sellingPrice": 10.49
+                  }
+                ],
+                "highPrice": 10.49,
+                "offerCount": 1,
+                "priceCurrency": "BRL"
+              },
+              "id": "124426",
+              "sku": "124426",
+              "slug": "refrigerante-coca-cola-zero-acucar-2l-124426",
+              "unitMultiplier": 1,
+              "attachments": [
+                {
+                  "id": 3,
+                  "name": "Observação"
+                },
+                {
+                  "id": 6,
+                  "name": "weight"
+                }
+              ],
+              "clusterHighlights": [],
+              "commertialOffer": {
+                "discountHighlights": []
+              },
+              "description": "<span>Refrescante e irresistível, a </span><strong>Coca-Cola Zero Açúcar 2L</strong><span> traz o sabor original da Coca-Cola, agora sem adição de açúcares. Ideal para acompanhar refeições, festas e momentos de lazer, entrega a mesma experiência marcante com leveza e zero calorias. </span><br /><br /><span>Perfeita para quem busca equilíbrio entre sabor e bem-estar, é uma escolha prática e versátil para o dia a dia. </span><strong>Garanta já a sua Coca-Cola Zero Açúcar 2L e sinta o prazer de um sabor clássico sem culpa!</strong><br /><br /><span>Não contém glúten.</span>",
+              "specifications": [
+                {
+                  "name": "sellerId",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        ],
+        "pageInfo": {
+          "totalCount": 10
+        }
+      }
+    }
+  }
+}

@@ -3,15 +3,22 @@ package br.com.supermercados.prices.product;
 import java.math.BigDecimal;
 import java.text.Normalizer;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class ProductNormalizer {
 
+    private static final Pattern PROMOTIONAL_UNIT_COUNT = Pattern.compile(
+            "(?i)\\bLEVE\\s*(\\d+)\\s*PAGUE\\s*\\d+\\b");
+    private static final Pattern NUMBERED_VARIANT = Pattern.compile(
+            "(?iu)\\b(?:N[.º°]?|N[ÚU]MERO)\\s*\\d+\\b");
     private static final Pattern EXPLICIT_UNIT_COUNT = Pattern.compile(
             "(?i)(\\d+(?:[.,]\\d+)?)\\s*(?:UNIDADES?|UN\\.?)\\b");
     private static final Pattern PACKAGE_COUNT = Pattern.compile(
             "(?i)(?:C/|COM|PACK|KIT|PACOTE)\\s*(\\d+)\\b");
+    private static final Pattern MULTIPACK_COUNT = Pattern.compile(
+            "(?i)\\b(\\d+)\\s*[X×]\\s*\\d+(?:[.,]\\d+)?\\s*(?:KG|G|ML|L)\\b");
     private static final Pattern MEASUREMENT = Pattern.compile(
             "(?i)(\\d+(?:[.,]\\d+)?)\\s*"
                     + "(QUILOGRAMAS?|QUILOS?|KG|GRAMAS?|G|MILILITROS?|ML|LITROS?|L|METROS?|M)\\b");
@@ -32,6 +39,13 @@ public final class ProductNormalizer {
         String unit = observation.unit() == null || observation.unit().isBlank()
                 ? packageDetails.unit()
                 : observation.unit().strip().toUpperCase(Locale.ROOT);
+        if (quantity != null && "KG".equals(unit)) {
+            quantity = quantity.multiply(BigDecimal.valueOf(1000));
+            unit = "G";
+        } else if (quantity != null && "L".equals(unit)) {
+            quantity = quantity.multiply(BigDecimal.valueOf(1000));
+            unit = "ML";
+        }
 
         return new NormalizedProduct(normalizedName, normalizedBrand,
                 quantity, unit, packageDetails.description());
@@ -44,13 +58,27 @@ public final class ProductNormalizer {
                 .replaceAll(" ").strip();
     }
 
+    public static boolean describesSamePackage(String name, String measurement) {
+        PackageDetails existing = parsePackage(name);
+        PackageDetails supplied = parsePackage(measurement);
+        return existing.quantity() != null && supplied.quantity() != null
+                && existing.quantity().compareTo(supplied.quantity()) == 0
+                && Objects.equals(existing.unit(), supplied.unit());
+    }
+
     private static String normalizeOptionalText(String value) {
         return value == null || value.isBlank() ? null : normalizeText(value);
     }
 
     private static PackageDetails parsePackage(String name) {
         Measurement measurement = lastMeasurement(name);
-        BigDecimal unitCount = firstValue(EXPLICIT_UNIT_COUNT.matcher(name));
+        BigDecimal unitCount = firstValue(PROMOTIONAL_UNIT_COUNT.matcher(name));
+        if (unitCount == null) {
+            unitCount = firstValue(EXPLICIT_UNIT_COUNT.matcher(NUMBERED_VARIANT.matcher(name).replaceAll(" ")));
+        }
+        if (unitCount == null) {
+            unitCount = firstValue(MULTIPACK_COUNT.matcher(name));
+        }
         if (unitCount == null) {
             unitCount = firstValue(PACKAGE_COUNT.matcher(name));
         }

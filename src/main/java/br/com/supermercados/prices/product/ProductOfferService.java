@@ -1,0 +1,58 @@
+package br.com.supermercados.prices.product;
+
+import java.time.Clock;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.com.supermercados.prices.common.ApiException;
+import br.com.supermercados.prices.comparison.ProductStoreComparison;
+import br.com.supermercados.prices.price.MeasurementPrice;
+import br.com.supermercados.prices.price.PricePolicy;
+import br.com.supermercados.prices.price.PriceRecordRepository;
+import br.com.supermercados.prices.store.StoreService;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class ProductOfferService {
+
+    private final ProductRepository products;
+    private final StoreService stores;
+    private final PriceRecordRepository prices;
+    private final PricePolicy policy;
+    private final Clock clock;
+
+    public List<ProductOffers> findOffers(List<UUID> productIds, UUID cityId) {
+        if (productIds.isEmpty() || productIds.size() > 100) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Consulte entre 1 e 100 produtos por página");
+        }
+        var catalog = products.findAllById(productIds).stream().collect(Collectors.toMap(Product::getId, product -> product));
+        var markets = stores.findAllActiveStores(cityId, 5000).stream().collect(Collectors.toMap(store -> store.id(), store -> store));
+        Map<UUID, List<ProductStoreComparison>> offers = new HashMap<>();
+        if (!catalog.isEmpty() && !markets.isEmpty()) {
+            var now = clock.instant();
+            for (var record : prices.findLatestForStoresAndProducts(markets.keySet(), catalog.keySet())) {
+                var quote = policy.quote(record, now);
+                if (quote.unitPrice() == null) continue;
+                var product = catalog.get(record.getProductId());
+                var store = markets.get(record.getStoreId());
+                offers.computeIfAbsent(product.getId(), ignored -> new java.util.ArrayList<>())
+                        .add(new ProductStoreComparison(store.id(), store.name(), quote,
+                                MeasurementPrice.calculate(quote.unitPrice(), product.getQuantity(), product.getUnit())));
+            }
+        }
+        return productIds.stream().distinct().map(id -> new ProductOffers(id,
+                offers.getOrDefault(id, List.of()).stream()
+                        .sorted(Comparator.comparing((ProductStoreComparison offer) -> offer.price().unitPrice())
+                                .thenComparing(ProductStoreComparison::storeName)).toList())).toList();
+    }
+}

@@ -52,6 +52,12 @@ public class Product {
     @Column(length = 120)
     private String packageDescription;
 
+    @Column(length = 2048)
+    private String imageUrl;
+
+    @Column(length = 2048)
+    private String originUrl;
+
     @Column(nullable = false)
     private UUID sourceId;
 
@@ -91,6 +97,8 @@ public class Product {
         quantity = normalized.quantity();
         category = cleanOptional(observation.category());
         packageDescription = normalized.packageDescription();
+        if (observation.imageUrl() != null) imageUrl = publicUrl(observation.imageUrl());
+        if (observation.originUrl() != null) originUrl = publicUrl(observation.originUrl());
         sourceId = observation.source().sourceId();
         sourceReference = observation.source().sourceReference();
         collectedAt = observation.source().collectedAt();
@@ -99,5 +107,21 @@ public class Product {
 
     private String cleanOptional(String value) {
         return value == null || value.isBlank() ? null : value.strip();
+    }
+
+    void enrichMedia(ProductObservation observation) {
+        if (imageUrl == null && observation.imageUrl() != null) {
+            imageUrl = publicUrl(observation.imageUrl());
+            originUrl = publicUrl(observation.originUrl());
+        }
+    }
+
+    private String publicUrl(String value) {
+        if (value == null || value.isBlank()) return null;
+        java.net.URI uri = java.net.URI.create(value.replace(" ", "%20"));
+        if (!"https".equals(uri.getScheme()) || uri.getHost() == null || uri.getUserInfo() != null) {
+            throw new IllegalArgumentException("A origem do produto deve ser uma URL HTTPS pública");
+        }
+        return uri.toString();
     }
 }

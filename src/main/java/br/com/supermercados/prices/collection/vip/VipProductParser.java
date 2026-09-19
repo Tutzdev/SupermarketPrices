@@ -1,7 +1,8 @@
-package br.com.supermercados.prices.collection.royal;
+package br.com.supermercados.prices.collection.vip;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,27 +17,31 @@ import br.com.supermercados.prices.product.Gtin;
 import tools.jackson.databind.JsonNode;
 
 @Component
-class RoyalProductParser {
+public class VipProductParser {
 
-    ParsedProducts parse(List<JsonNode> entries) {
+    public ParsedProducts parse(List<JsonNode> entries, String sourcePrefix, String sourceName) {
+        return parse(entries, sourcePrefix, sourceName, null);
+    }
+
+    public ParsedProducts parse(List<JsonNode> entries, String sourcePrefix, String sourceName, URI website) {
         Map<String, CollectedProduct> products = new LinkedHashMap<>();
         List<String> warnings = new ArrayList<>();
         for (JsonNode entry : entries) {
             try {
-                CollectedProduct product = parseProduct(entry);
+                CollectedProduct product = parseProduct(entry, sourcePrefix, sourceName, website);
                 CollectedProduct previous = products.putIfAbsent(product.sourceReference(), product);
                 if (previous != null && !previous.equals(product)) {
                     throw new IllegalArgumentException("produto repetido com conteúdo divergente");
                 }
             } catch (IllegalArgumentException exception) {
-                warnings.add("Produto Royal " + entry.path("produto_id").asString("sem identificador")
+                warnings.add("Produto " + sourceName + " " + entry.path("produto_id").asString("sem identificador")
                         + " ignorado: " + exception.getMessage());
             }
         }
         return new ParsedProducts(List.copyOf(products.values()), List.copyOf(warnings));
     }
 
-    private CollectedProduct parseProduct(JsonNode entry) {
+    private CollectedProduct parseProduct(JsonNode entry, String sourcePrefix, String sourceName, URI website) {
         String id = required(entry, "produto_id");
         String name = required(entry, "descricao");
         if (!"UN".equals(required(entry, "unidade_sigla"))
@@ -58,7 +63,7 @@ class RoyalProductParser {
                 if (offer.path("tipo_oferta_id").asInt() != 1
                         || offer.path("quantidade_minima").asInt() > 1
                         || !"G".equals(offer.path("categoria").asString())) {
-                    condition = "Oferta Royal: " + offer.path("nome").asString("condição específica")
+                    condition = "Oferta " + sourceName + ": " + offer.path("nome").asString("condição específica")
                             + "; quantidade mínima " + offer.path("quantidade_minima").asString("não informada");
                 }
             }
@@ -72,12 +77,18 @@ class RoyalProductParser {
         try {
             gtin = Gtin.normalize(entry.path("codigo_barras").asString(null));
         } catch (ApiException exception) {
-            // Royal also puts internal ERP codes in codigo_barras; these are not universal identifiers.
+            // The platform also puts internal ERP codes in codigo_barras; these are not universal identifiers.
             gtin = null;
         }
         String brand = entry.path("marca").isString() ? entry.path("marca").asString(null) : null;
-        return new CollectedProduct("royal:product:" + id, name, gtin, brand, null,
-                null, regular, promotion, condition, null, null, availability);
+        String filename = entry.path("imagem").asString("");
+        String image = filename.matches("[A-Za-z0-9_-]+\\.(?:jpg|jpeg|png|webp)")
+                ? "https://produto-assets-vipcommerce-com-br.br-se1.magaluobjects.com/250x250/" + filename : null;
+        String slug = entry.path("link").asString("");
+        String origin = website != null && "https".equals(website.getScheme()) && id.matches("[0-9]+") && slug.matches("[a-z0-9-]+")
+                ? website.resolve("/produto/" + id + "/" + slug).toString() : null;
+        return new CollectedProduct(sourcePrefix + ":product:" + id, name, gtin, brand, null,
+                null, regular, promotion, condition, null, null, availability, image, origin);
     }
 
     private String required(JsonNode node, String field) {
@@ -100,6 +111,6 @@ class RoyalProductParser {
         }
     }
 
-    record ParsedProducts(List<CollectedProduct> products, List<String> warnings) {
+    public record ParsedProducts(List<CollectedProduct> products, List<String> warnings) {
     }
 }

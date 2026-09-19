@@ -23,6 +23,7 @@ public class ProductIngestionService {
     private final ObservationValidator validator;
     private final Clock clock;
     private final VerifiedProductMappings verifiedMappings;
+    private final ExactProductMatcher exactMatcher;
 
     @Transactional
     public ProductResponse ingest(ProductObservation observation) {
@@ -49,11 +50,13 @@ public class ProductIngestionService {
             return updateReferencedProduct(existingReference.orElseThrow(), observation, gtin);
         }
 
-        Optional<Product> identifiedProduct = verifiedProduct.or(() -> findByGtin(gtin));
+        Optional<Product> identifiedProduct = verifiedProduct.or(() -> findByGtin(gtin))
+                .or(() -> exactMatcher.find(observation, gtin));
         identifiedProduct.ifPresent(product -> validateIdentity(product, gtin));
         Product product = identifiedProduct.orElseGet(
                 () -> productRepository.save(new Product(observation, gtin, clock.instant())));
         product.assignGtin(gtin);
+        product.enrichMedia(observation);
         referenceRepository.save(new ProductSourceReference(product.getId(), observation.source()));
 
         ProductIngestionOutcome outcome = identifiedProduct.isPresent()
@@ -73,6 +76,7 @@ public class ProductIngestionService {
 
         product.assignGtin(gtin);
 
+        product.enrichMedia(observation);
         if (product.getSourceId().equals(observation.source().sourceId())
                 && product.getSourceReference().equals(observation.source().sourceReference())) {
             product.updateDetails(observation, clock.instant());

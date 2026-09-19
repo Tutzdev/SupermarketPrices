@@ -21,6 +21,7 @@ public class CollectionCoordinator {
     private final List<SupermarketCollector> collectors;
     private final CollectedCatalogIngestionService ingestion;
     private final CollectionRunService runs;
+    private final CollectedCatalogArchive archive;
     private final Duration collectorInterval;
     private final AtomicBoolean running = new AtomicBoolean();
 
@@ -28,6 +29,7 @@ public class CollectionCoordinator {
             List<SupermarketCollector> collectors,
             CollectedCatalogIngestionService ingestion,
             CollectionRunService runs,
+            CollectedCatalogArchive archive,
             @Value("${app.collection.collector-interval:PT2S}") Duration collectorInterval) {
         if (collectorInterval.isNegative()) {
             throw new IllegalArgumentException("Intervalo entre coletores não pode ser negativo");
@@ -35,6 +37,7 @@ public class CollectionCoordinator {
         this.collectors = List.copyOf(collectors);
         this.ingestion = ingestion;
         this.runs = runs;
+        this.archive = archive;
         this.collectorInterval = collectorInterval;
     }
 
@@ -43,6 +46,14 @@ public class CollectionCoordinator {
     }
 
     public List<CollectionRunResponse> collectSelected(String collectorCode) {
+        return collectSelected(collectorCode, false);
+    }
+
+    public List<CollectionRunResponse> replayArchived(String collectorCode) {
+        return collectSelected(collectorCode, true);
+    }
+
+    private List<CollectionRunResponse> collectSelected(String collectorCode, boolean replay) {
         List<SupermarketCollector> selected = collectorCode == null ? collectors : collectors.stream()
                 .filter(collector -> collector.metadata().code().equals(collectorCode)).toList();
         if (selected.isEmpty() && collectorCode != null) {
@@ -58,7 +69,7 @@ public class CollectionCoordinator {
                 if (index > 0 && !waitBeforeNextCollector()) {
                     break;
                 }
-                results.add(collect(selected.get(index)));
+                results.add(collect(selected.get(index), replay));
             }
             return List.copyOf(results);
         } finally {
@@ -66,13 +77,20 @@ public class CollectionCoordinator {
         }
     }
 
-    private CollectionRunResponse collect(SupermarketCollector collector) {
+    private CollectionRunResponse collect(SupermarketCollector collector, boolean replay) {
         CollectorMetadata metadata = collector.metadata();
         CollectionRunResponse run = runs.start(metadata);
         LOGGER.info("Coleta {} iniciada para {}", run.id(), metadata.code());
 
         try {
-            CollectedCatalog catalog = collector.collect();
+            CollectedCatalog catalog = replay ? archive.read(metadata) : collector.collect();
+            if (!replay) {
+                try {
+                    archive.save(metadata, catalog);
+                } catch (RuntimeException exception) {
+                    LOGGER.warn("Arquivo opcional da coleta {} indisponível: {}", metadata.code(), exception.getMessage());
+                }
+            }
             CollectionRunResponse completed = runs.finish(
                     run.id(), ingestion.ingest(metadata, catalog));
             LOGGER.info("Coleta {} finalizada para {}: status={}, encontrados={}, criados={}, "
